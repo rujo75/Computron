@@ -8,16 +8,15 @@
       :selected-item-keys="[currentItem.id]"
       selection-mode="single"
       class="panel-list"
-      @item-click="onNavBarItemClick"
+      @item-click="onNavigationItemClick"
     />
   </div>
 </template>
-<!-- :selected-item-keys="[currentItem.id]" -->
 
 <script>
 import { DxList } from "devextreme-vue/list";
 import ArrayStore from "devextreme/data/array_store";
-import { NavigationData } from "./../../data/navigation.js";
+import { MenuData } from "./../../data/menus.js";
 
 export default {
   components: {
@@ -27,15 +26,16 @@ export default {
     return {
       dataSource: {
         store: new ArrayStore({
-          data: NavigationData,
+          data: MenuData.items,
           key: "id"
         })
       },
-      currentItem: NavigationData[0]
+      currentItem: MenuData.items[0]
     };
   },
+  computed: {},
   methods: {
-    onNavBarItemClick(e) {
+    onNavigationItemClick(e) {
       if (e.itemData.link) {
         if (this.$route.path !== e.itemData.link) {
           this.$router.push(e.itemData.link);

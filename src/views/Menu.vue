@@ -1,7 +1,8 @@
 <template>
   <div style="width: 450px">
+    <!--<div>{{ id }}</div>-->
     <DxList
-      :data-source="navigation"
+      :data-source="getMenuData"
       :active-state-enabled="true"
       :hover-state-enabled="true"
       :focus-state-enabled="true"
@@ -30,17 +31,31 @@
 <script>
 import { DxList } from "devextreme-vue/list";
 import { DxButton } from "devextreme-vue";
-import { SystemParametersMenuData } from "./../../data/menus.js";
+import { MenuData } from "./../data/menus.js";
 
 export default {
+  props: {
+    id: String
+  },
   components: {
     DxList,
     DxButton
   },
   data() {
-    return {
-      navigation: SystemParametersMenuData
-    };
+    return {};
+  },
+  computed: {
+    getMenuData() {
+      console.log("Menu id: " + this.id);
+      //console.log(menuData);
+      let result = this.findMenuById(MenuData, this.id);
+      console.log(result);
+      if (result != null) {
+        return result.items;
+      } else {
+        return [];
+      }
+    }
   },
   methods: {
     getItemFavouritesIcon(item) {
@@ -56,7 +71,44 @@ export default {
           this.$router.push(e.itemData.link);
         }
       }
+    },
+    findMenuById(object, id) {
+      // Early return
+      if (object.id === id) {
+        return object;
+      }
+      var result, p;
+      for (p in object) {
+        if (object.hasOwnProperty(p) && typeof object[p] === "object") {
+          result = this.findMenuById(object[p], id);
+          if (result) {
+            return result;
+          }
+        }
+      }
+      return result;
+    },
+    deepSearch(object, key, predicate) {
+      // Example:
+      // let result = this.deepSearch(menuData, "id", (k, v) => v === "2.1.2");
+      if (object.hasOwnProperty(key) && predicate(key, object[key]) === true)
+        return object;
+
+      for (let i = 0; i < Object.keys(object).length; i++) {
+        if (typeof object[Object.keys(object)[i]] === "object") {
+          let o = this.deepSearch(
+            object[Object.keys(object)[i]],
+            key,
+            predicate
+          );
+          if (o != null) return o;
+        }
+      }
+      return null;
     }
+  },
+  mounted() {
+    //console.log("Menu Id: " + this.id);
   }
 };
 </script>

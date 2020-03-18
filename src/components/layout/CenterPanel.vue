@@ -23,7 +23,7 @@
 <script>
 import { DxToolbar, DxMenu, DxItem } from "devextreme-vue/toolbar";
 import Breadcrumb from "./Breadcrumb.vue";
-import GeneralLedgerMenu from "./../menus/GeneralLedgerMenu.vue";
+//import GeneralLedgerMenu from "./../menus/GeneralLedgerMenu.vue";
 import {
   GeneralLedgerMenuData,
   SystemAdministratorMenuData
@@ -35,8 +35,8 @@ export default {
     DxToolbar,
     DxMenu,
     DxItem,
-    Breadcrumb,
-    GeneralLedgerMenu
+    Breadcrumb
+    //GeneralLedgerMenu
   },
   data() {
     return {
