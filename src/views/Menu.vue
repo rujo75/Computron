@@ -123,6 +123,10 @@ export default {
   border: none;
 }
 
+.panel-list >>> .dx-empty-message {
+  border: none;
+}
+
 .item-template {
   padding: 8px 10px;
 }
