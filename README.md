@@ -1,2 +1,0 @@
-# Computron
-Created with CodeSandbox
