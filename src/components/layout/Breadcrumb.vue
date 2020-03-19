@@ -12,55 +12,7 @@ export default {
     DxToolbar
   },
   data() {
-    return {
-      dataSource: [
-        {
-          location: "before",
-          widget: "dxDropDownButton",
-          options: {
-            icon: "fas fa-layer-group",
-            splitButton: true,
-            useSelectMode: false,
-            focusStateEnabled: false,
-            text: "General Ledger",
-            stylingMode: "text",
-            displayExpr: "text",
-            keyExpr: "id",
-            dropDownOptions: { width: 280 },
-            items: [
-              {
-                id: "2.1",
-                text: "System Parameters",
-                icon: "fas fa-folder-open",
-                link: "/Menu/2.1",
-                favourite: false
-              },
-              {
-                id: "2.2",
-                text: "Posting Account Structure",
-                icon: "fas fa-folder-open",
-                link: "/Menu/2.2",
-                favourite: false
-              },
-              {
-                id: "2.3",
-                text: "Posting Account Maintenance",
-                icon: "fas fa-folder-open",
-                link: "/Menu/2.3",
-                favourite: false
-              },
-              {
-                id: "2.4",
-                text: "Transaction Parameters",
-                icon: "fas fa-folder-open",
-                link: "/Menu/2.4",
-                favourite: false
-              }
-            ]
-          }
-        }
-      ]
-    };
+    return {};
   },
   computed: {
     getBreadcrumbDataSource: {
@@ -91,12 +43,18 @@ export default {
                 useSelectMode: false,
                 focusStateEnabled: false,
                 text: menuDetails.text,
+                link: menuDetails.link,
                 stylingMode: "text",
                 displayExpr: "text",
                 keyExpr: "id",
                 disabled: disabled,
                 dropDownOptions: { width: 280 },
-                items: menuDetails.items
+                items: menuDetails.items,
+                onButtonClick: this.onButtonClick.bind(this),
+                onItemClick: this.onItemClick.bind(this),
+                onClick: function() {
+                  alert("Breadcrumb Clicked!");
+                }
               }
             };
             result.push(newButton);
@@ -124,6 +82,20 @@ export default {
         }
       }
       return result;
+    },
+    onButtonClick(e) {
+      if (e.component.option("link")) {
+        if (this.$route.path !== e.component.option("link")) {
+          this.$router.push(e.component.option("link"));
+        }
+      }
+    },
+    onItemClick(e) {
+      if (e.itemData.link) {
+        if (this.$route.path !== e.itemData.link) {
+          this.$router.push(e.itemData.link);
+        }
+      }
     }
   }
 };

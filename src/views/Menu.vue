@@ -46,7 +46,7 @@ export default {
   },
   computed: {
     getMenuData() {
-      console.log("Menu id: " + this.id);
+      //console.log("Menu id: " + this.id);
       // save current menu id to breadcrumb list
       let breadcrumbIds = this.$store.getters.getBreadcrumbData;
       let menuIdPath = this.id.split(".");
@@ -58,7 +58,7 @@ export default {
 
       //console.log(menuData);
       let result = this.findMenuById(MenuData, this.id);
-      console.log(result);
+      //console.log(result);
       if (result != null) {
         return result.items;
       } else {
