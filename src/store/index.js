@@ -6,11 +6,13 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
   state: {
     sideNavMenuOpenState: true,
-    favouritesNavMenuOpenState: true
+    favouritesNavMenuOpenState: true,
+    breadcrumbData: []
   },
   getters: {
     getSideNavMenuOpenState: state => state.sideNavMenuOpenState,
-    getFavouritesNavMenuOpenState: state => state.favouritesNavMenuOpenState
+    getFavouritesNavMenuOpenState: state => state.favouritesNavMenuOpenState,
+    getBreadcrumbData: state => state.breadcrumbData
   },
   mutations: {
     toggleSideNavMenuOpenState: function(state) {
