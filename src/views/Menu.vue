@@ -18,9 +18,11 @@
           <DxButton
             :icon="getItemFavouritesIcon(item)"
             styling-mode="text"
+            :active-state-enabled="false"
             :focus-state-enabled="false"
             :width="24"
             :height="24"
+            @click="onNavigationItemButtonClick"
           />
         </div>
       </template>
@@ -80,6 +82,11 @@ export default {
           this.$router.push(e.itemData.link);
         }
       }
+    },
+    onNavigationItemButtonClick(e) {
+      alert("Menu Navigtion Button Clicked!");
+      //console.log(e);
+      e.event.stopPropagation();
     },
     findMenuById(object, id) {
       // Early return
