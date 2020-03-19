@@ -12,7 +12,7 @@
       <template #item="{ data: item }">
         <div class="item-template">
           <div class="item-icon">
-            <i class="dx-icon dx-list-item-icon" :class="item.icon"/>
+            <i class="dx-icon dx-list-item-icon" :class="item.icon" />
           </div>
           <div class="item-text">{{ item.text }}</div>
           <DxButton
@@ -47,6 +47,15 @@ export default {
   computed: {
     getMenuData() {
       console.log("Menu id: " + this.id);
+      // save current menu id to breadcrumb list
+      let breadcrumbIds = this.$store.getters.getBreadcrumbData;
+      let menuIdPath = this.id.split(".");
+      //console.log("menuIdPath.length: " + menuIdPath.length);
+      //console.log("breadcrumbIds.length: " + breadcrumbIds.length);
+      breadcrumbIds.splice(menuIdPath.length - 1, breadcrumbIds.length, {
+        id: this.id
+      });
+
       //console.log(menuData);
       let result = this.findMenuById(MenuData, this.id);
       console.log(result);
@@ -79,6 +88,7 @@ export default {
       }
       var result, p;
       for (p in object) {
+        // eslint-disable-next-line no-prototype-builtins
         if (object.hasOwnProperty(p) && typeof object[p] === "object") {
           result = this.findMenuById(object[p], id);
           if (result) {
@@ -91,6 +101,7 @@ export default {
     deepSearch(object, key, predicate) {
       // Example:
       // let result = this.deepSearch(menuData, "id", (k, v) => v === "2.1.2");
+      // eslint-disable-next-line no-prototype-builtins
       if (object.hasOwnProperty(key) && predicate(key, object[key]) === true)
         return object;
 
