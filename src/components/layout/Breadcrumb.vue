@@ -47,6 +47,13 @@ export default {
                 icon: "fas fa-folder-open",
                 link: "/Menu/2.3",
                 favourite: false
+              },
+              {
+                id: "2.4",
+                text: "Transaction Parameters",
+                icon: "fas fa-folder-open",
+                link: "/Menu/2.4",
+                favourite: false
               }
             ]
           }
