@@ -57,7 +57,7 @@
           :width="80"
           @click="saveFavourite"
         />
-        <dx-button text="Cancel" :width="80" class="margin-left-5" @click="hidePoupForm" />
+        <dx-button text="Cancel" :width="80" class="margin-left-10" @click="hidePoupForm" />
       </div>
     </dx-popup>
   </div>
@@ -269,9 +269,5 @@ export default {
 
 .item-template >>> .dx-button .dx-button-content {
   padding: 0px;
-}
-
-.margin-left-5 {
-  margin-left: 5px;
 }
 </style>

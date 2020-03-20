@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <NavBar/>
-    <Main/>
+    <NavBar />
+    <Main />
   </div>
 </template>
 
@@ -39,5 +39,9 @@ body {
   margin: 0;
   height: 100vh;
   width: 100vw;
+}
+
+.margin-left-10 {
+  margin-left: 10px;
 }
 </style>
