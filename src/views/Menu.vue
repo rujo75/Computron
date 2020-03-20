@@ -185,15 +185,22 @@ export default {
       return null;
     },
     loadFavourites() {
-      //console.log("loadFavourites");
+      console.log("loadFavourites");
       //console.log(this.getFavouritesListData);
       //this.saveToEditorOptions.items.push({ id: "3", text: "Item 3" });
       this.saveToEditorOptions.items.splice(
         0,
         this.saveToEditorOptions.items.length
       );
-      this.saveToEditorOptions.items = this.getFavouritesListData;
+      //this.saveToEditorOptions.items = this.getFavouritesListData;
       //console.log(this.saveToEditorOptions.items);
+      for (let i = 0; i < this.getFavouritesListData.length; i++) {
+        let newFavourite = {
+          id: this.getFavouritesListData[i].id,
+          text: this.getFavouritesListData[i].text
+        };
+        this.saveToEditorOptions.items.push(newFavourite);
+      }
     },
     saveFavourite() {
       var result = this.$refs["formFavourites"].instance.validate();
