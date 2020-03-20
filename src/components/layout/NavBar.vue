@@ -1,27 +1,24 @@
 <template>
   <dx-toolbar class="nav-toolbar">
-    <DxItem :options="sideNavButtonOptions" location="before" widget="dxButton"/>
+    <DxItem :options="sideNavButtonOptions" location="before" widget="dxButton" />
     <DxItem #default location="before" locate-in-menu="never">
       <div class="toolbar-label">
         <b>Avolin</b> Computron
       </div>
     </DxItem>
-    <DxItem :options="searchNavButtonOptions" location="after" widget="dxButton"/>
-    <DxItem :options="favouritesNavButtonOptions" location="after" widget="dxButton"/>
-    <DxItem :options="userProfileNavButtonOptions" location="after" widget="dxDropDownButton"/>
+    <DxItem :options="searchNavButtonOptions" location="after" widget="dxButton" />
+    <DxItem :options="favouritesNavButtonOptions" location="after" widget="dxButton" />
+    <DxItem :options="userProfileNavButtonOptions" location="after" widget="dxDropDownButton" />
   </dx-toolbar>
 </template>
 
 <script>
-import { DxDropDownButton } from "devextreme-vue";
-import { DxToolbar, DxMenu, DxItem } from "devextreme-vue/toolbar";
+import { DxToolbar, DxItem } from "devextreme-vue/toolbar";
 
 export default {
   name: "app",
   components: {
     DxToolbar,
-    DxDropDownButton,
-    DxMenu,
     DxItem
   },
   data() {
@@ -39,6 +36,7 @@ export default {
         icon: "fas fa-search",
         focusStateEnabled: false,
         stylingMode: "text",
+        hint: "Search",
         onClick: () => {
           alert("Search navigation button has been clicked!");
         }
@@ -47,6 +45,7 @@ export default {
         icon: "fas fa-star",
         focusStateEnabled: false,
         stylingMode: "text",
+        hint: "Favourites",
         onClick: () => {
           //alert("Favourites navigation menu button has been clicked!");
           this.$store.commit("toggleFavouritesNavMenuOpenState");

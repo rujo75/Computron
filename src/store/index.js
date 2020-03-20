@@ -7,12 +7,14 @@ export const store = new Vuex.Store({
   state: {
     sideNavMenuOpenState: true,
     favouritesNavMenuOpenState: true,
-    breadcrumbData: [{ id: "1" }]
+    breadcrumbData: [{ id: "1" }],
+    favouritesListData: []
   },
   getters: {
     getSideNavMenuOpenState: state => state.sideNavMenuOpenState,
     getFavouritesNavMenuOpenState: state => state.favouritesNavMenuOpenState,
-    getBreadcrumbData: state => state.breadcrumbData
+    getBreadcrumbData: state => state.breadcrumbData,
+    getFavouritesListData: state => state.favouritesListData
   },
   mutations: {
     toggleSideNavMenuOpenState: function (state) {
@@ -24,10 +26,22 @@ export const store = new Vuex.Store({
     setBreadcrumbData: function (state, data) {
       state.breadcrumbData = data;
     },
+    setFavouriteData: function (state, data) {
+      state.favouritesListData = data;
+    },
+    addFavouriteGroupData: function (state, data) {
+      state.favouritesListData.push(data);
+    },
   },
   actions: {
     setBreadcrumbData({ commit }, data) {
       commit("setBreadcrumbData", data);
+    },
+    setFavouriteData({ commit }, data) {
+      commit("setFavouriteData", data);
+    },
+    addFavouriteGroupData({ commit }, data) {
+      commit("addFavouriteGroupData", data);
     },
   }
 });

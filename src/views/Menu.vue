@@ -3,9 +3,9 @@
     <!--<div>{{ id }}</div>-->
     <DxList
       :data-source="getMenuData"
-      :active-state-enabled="true"
+      :active-state-enabled="false"
       :hover-state-enabled="true"
-      :focus-state-enabled="true"
+      :focus-state-enabled="false"
       class="panel-list"
       @item-click="onNavigationItemClick"
     >
@@ -18,6 +18,7 @@
           <DxButton
             :icon="getItemFavouritesIcon(item)"
             styling-mode="text"
+            :id="item.id"
             :active-state-enabled="false"
             :focus-state-enabled="false"
             :width="24"
@@ -27,13 +28,48 @@
         </div>
       </template>
     </DxList>
+    <dx-popup
+      :visible="showPopupForm"
+      :drag-enabled="true"
+      :close-on-outside-click="false"
+      :show-title="true"
+      :width="450"
+      :height="200"
+      class="popup"
+      title="Favourites"
+      @showing="loadFavourites"
+    >
+      <p>
+        <dx-form ref="formFavourites" :form-data="formData">
+          <dx-form-item
+            data-field="saveTo"
+            :validation-rules="validationRules.saveTo"
+            editor-type="dxSelectBox"
+            :editor-options="saveToEditorOptions"
+          />
+        </dx-form>
+      </p>
+      <div align="right">
+        <dx-button
+          text="OK"
+          type="success"
+          :use-submit-behavior="true"
+          :width="80"
+          @click="saveFavourite"
+        />
+        <dx-button text="Cancel" :width="80" class="margin-left-5" @click="hidePoupForm" />
+      </div>
+    </dx-popup>
   </div>
 </template>
 
 <script>
 import { DxList } from "devextreme-vue/list";
 import { DxButton } from "devextreme-vue";
+import { DxPopup } from "devextreme-vue/popup";
+import { DxForm, DxItem as DxFormItem } from "devextreme-vue/form";
 import { MenuData } from "./../data/menus.js";
+import { mapGetters } from "vuex";
 
 export default {
   props: {
@@ -41,16 +77,32 @@ export default {
   },
   components: {
     DxList,
-    DxButton
+    DxButton,
+    DxPopup,
+    DxForm,
+    DxFormItem
   },
   data() {
-    return {};
+    return {
+      formData: { id: "", saveTo: "" },
+      validationRules: {
+        saveTo: [{ type: "required", message: "Save to folder is required." }]
+      },
+      showPopupForm: false,
+      saveToEditorOptions: {
+        items: [{ id: "1", text: "Test Folder" }],
+        displayExpr: "text",
+        valueExpr: "id"
+      }
+    };
   },
   computed: {
+    ...mapGetters(["getBreadcrumbData", "getFavouritesListData"]),
+
     getMenuData() {
       //console.log("Menu id: " + this.id);
       // save current menu id to breadcrumb list
-      let breadcrumbIds = this.$store.getters.getBreadcrumbData;
+      let breadcrumbIds = this.getBreadcrumbData;
       let menuIdPath = this.id.split(".");
       //console.log("menuIdPath.length: " + menuIdPath.length);
       //console.log("breadcrumbIds.length: " + breadcrumbIds.length);
@@ -84,9 +136,17 @@ export default {
       }
     },
     onNavigationItemButtonClick(e) {
-      alert("Menu Navigtion Button Clicked!");
+      //alert("Menu Navigtion Button Clicked!");
       //console.log(e);
+      //console.log(e.element.id);
+      // find menu item by id
+      //let result = this.findMenuById(MenuData, e.element.id);
+      // update favourite flag if menu found
+      /*if (result != null) {
+        result.favourite = !result.favourite;
+      }*/
       e.event.stopPropagation();
+      this.showPopupForm = true;
     },
     findMenuById(object, id) {
       // Early return
@@ -123,6 +183,30 @@ export default {
         }
       }
       return null;
+    },
+    loadFavourites() {
+      //console.log("loadFavourites");
+      //console.log(this.getFavouritesListData);
+      //this.saveToEditorOptions.items.push({ id: "3", text: "Item 3" });
+      this.saveToEditorOptions.items.splice(
+        0,
+        this.saveToEditorOptions.items.length
+      );
+      this.saveToEditorOptions.items = this.getFavouritesListData;
+      //console.log(this.saveToEditorOptions.items);
+    },
+    saveFavourite() {
+      var result = this.$refs["formFavourites"].instance.validate();
+      //console.log(result);
+      if (result.isValid) {
+        this.hidePoupForm();
+      }
+    },
+    hidePoupForm() {
+      this.showPopupForm = false;
+    },
+    validateForm(e) {
+      e.component.validate();
     }
   },
   mounted() {
@@ -178,5 +262,9 @@ export default {
 
 .item-template >>> .dx-button .dx-button-content {
   padding: 0px;
+}
+
+.margin-left-5 {
+  margin-left: 5px;
 }
 </style>
