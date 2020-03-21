@@ -69,7 +69,9 @@ import { DxButton } from "devextreme-vue";
 import { DxPopup } from "devextreme-vue/popup";
 import { DxForm, DxItem as DxFormItem } from "devextreme-vue/form";
 import { MenuData } from "./../data/menus.js";
+import service from "./../data/favouritesGroups.js";
 import { mapGetters } from "vuex";
+import ArrayStore from "devextreme/data/array_store";
 
 export default {
   props: {
@@ -89,10 +91,20 @@ export default {
         saveTo: [{ type: "required", message: "Save to folder is required." }]
       },
       showPopupForm: false,
+      dataSource: {
+        store: new ArrayStore({
+          data: [{ id: "1", text: "Test" }],
+          key: "id"
+        })
+      },
       saveToEditorOptions: {
-        items: [{ id: "1", text: "Test Folder" }],
+        dataSource: this.dataSource,
         displayExpr: "text",
-        valueExpr: "id"
+        valueExpr: "id",
+        onOpened: function(e) {
+          //e.component.getDataSource().reload();
+          console.log(e.component.getDataSource());
+        }
       }
     };
   },
@@ -188,19 +200,37 @@ export default {
       console.log("loadFavourites");
       //console.log(this.getFavouritesListData);
       //this.saveToEditorOptions.items.push({ id: "3", text: "Item 3" });
-      this.saveToEditorOptions.items.splice(
+      /*this.saveToEditorOptions.items.splice(
         0,
         this.saveToEditorOptions.items.length
-      );
+      );*/
       //this.saveToEditorOptions.items = this.getFavouritesListData;
       //console.log(this.saveToEditorOptions.items);
-      for (let i = 0; i < this.getFavouritesListData.length; i++) {
+      /*for (let i = 0; i < this.getFavouritesListData.length; i++) {
         let newFavourite = {
           id: this.getFavouritesListData[i].id,
           text: this.getFavouritesListData[i].text
         };
         this.saveToEditorOptions.items.push(newFavourite);
-      }
+      }*/
+      //console.log(this.saveToEditorOptions.items);
+      /*this.$refs["formFavourites"].instance
+        .getEditor("saveTo")
+        .getDataSource()
+        .reload();
+      console.log(
+        this.$refs["formFavourites"].instance
+          .getEditor("saveTo")
+          .getDataSource()
+      );*/
+      //console.log(this.getFavouritesListData);
+      //this.data = this.getFavouritesListData;
+      //console.log(this.data);
+      service.setFavouritesGroups(this.getFavouritesListData);
+      //let result = service.getFavouritesGroups();
+      //console.log(result);
+      //this.dataSource.store.data = this.getFavouritesListData;
+      console.log(this.dataSource.store);
     },
     saveFavourite() {
       var result = this.$refs["formFavourites"].instance.validate();
