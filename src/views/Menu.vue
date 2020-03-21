@@ -29,7 +29,7 @@
       </template>
     </DxList>
     <dx-popup
-      :visible="showPopupForm"
+      ref="popupFavourites"
       :drag-enabled="true"
       :close-on-outside-click="false"
       :show-title="true"
@@ -37,7 +37,8 @@
       :height="200"
       class="popup"
       title="Favourites"
-      @showing="loadFavourites"
+      @shown="popupFormShown"
+      @hiding="popupFormHiding"
     >
       <p>
         <dx-form ref="formFavourites" :form-data="formData">
@@ -69,9 +70,7 @@ import { DxButton } from "devextreme-vue";
 import { DxPopup } from "devextreme-vue/popup";
 import { DxForm, DxItem as DxFormItem } from "devextreme-vue/form";
 import { MenuData } from "./../data/menus.js";
-import service from "./../data/favouritesGroups.js";
 import { mapGetters } from "vuex";
-import ArrayStore from "devextreme/data/array_store";
 
 export default {
   props: {
@@ -90,26 +89,19 @@ export default {
       validationRules: {
         saveTo: [{ type: "required", message: "Save to folder is required." }]
       },
-      showPopupForm: false,
-      dataSource: {
-        store: new ArrayStore({
-          data: [{ id: "1", text: "Test" }],
-          key: "id"
-        })
-      },
-      saveToEditorOptions: {
-        dataSource: this.dataSource,
-        displayExpr: "text",
-        valueExpr: "id",
-        onOpened: function(e) {
-          //e.component.getDataSource().reload();
-          console.log(e.component.getDataSource());
-        }
-      }
+      showPopupForm: false
     };
   },
   computed: {
-    ...mapGetters(["getBreadcrumbData", "getFavouritesListData"]),
+    ...mapGetters(["getBreadcrumbData", "getFavouritesData"]),
+
+    saveToEditorOptions() {
+      return {
+        dataSource: this.getFavouritesData,
+        displayExpr: "text",
+        valueExpr: "id"
+      };
+    },
 
     getMenuData() {
       //console.log("Menu id: " + this.id);
@@ -148,17 +140,8 @@ export default {
       }
     },
     onNavigationItemButtonClick(e) {
-      //alert("Menu Navigtion Button Clicked!");
-      //console.log(e);
-      //console.log(e.element.id);
-      // find menu item by id
-      //let result = this.findMenuById(MenuData, e.element.id);
-      // update favourite flag if menu found
-      /*if (result != null) {
-        result.favourite = !result.favourite;
-      }*/
       e.event.stopPropagation();
-      this.showPopupForm = true;
+      this.$refs["popupFavourites"].instance.show();
     },
     findMenuById(object, id) {
       // Early return
@@ -196,42 +179,6 @@ export default {
       }
       return null;
     },
-    loadFavourites() {
-      console.log("loadFavourites");
-      //console.log(this.getFavouritesListData);
-      //this.saveToEditorOptions.items.push({ id: "3", text: "Item 3" });
-      /*this.saveToEditorOptions.items.splice(
-        0,
-        this.saveToEditorOptions.items.length
-      );*/
-      //this.saveToEditorOptions.items = this.getFavouritesListData;
-      //console.log(this.saveToEditorOptions.items);
-      /*for (let i = 0; i < this.getFavouritesListData.length; i++) {
-        let newFavourite = {
-          id: this.getFavouritesListData[i].id,
-          text: this.getFavouritesListData[i].text
-        };
-        this.saveToEditorOptions.items.push(newFavourite);
-      }*/
-      //console.log(this.saveToEditorOptions.items);
-      /*this.$refs["formFavourites"].instance
-        .getEditor("saveTo")
-        .getDataSource()
-        .reload();
-      console.log(
-        this.$refs["formFavourites"].instance
-          .getEditor("saveTo")
-          .getDataSource()
-      );*/
-      //console.log(this.getFavouritesListData);
-      //this.data = this.getFavouritesListData;
-      //console.log(this.data);
-      service.setFavouritesGroups(this.getFavouritesListData);
-      //let result = service.getFavouritesGroups();
-      //console.log(result);
-      //this.dataSource.store.data = this.getFavouritesListData;
-      console.log(this.dataSource.store);
-    },
     saveFavourite() {
       var result = this.$refs["formFavourites"].instance.validate();
       //console.log(result);
@@ -240,10 +187,16 @@ export default {
       }
     },
     hidePoupForm() {
-      this.showPopupForm = false;
+      this.$refs["popupFavourites"].instance.hide();
     },
     validateForm(e) {
       e.component.validate();
+    },
+    popupFormShown() {
+      this.$refs["formFavourites"].instance.getEditor("saveTo").focus();
+    },
+    popupFormHiding() {
+      this.$refs["formFavourites"].instance.resetValues();
     }
   },
   mounted() {

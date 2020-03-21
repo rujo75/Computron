@@ -4,13 +4,11 @@
       <DxItem #default location="before" locate-in-menu="never">
         <div class="toolbar-label">Favourites</div>
       </DxItem>
-      <DxItem :options="addNavButtonOptions" location="after" widget="dxButton" />
-      <!--<DxItem :options="renameNavButtonOptions" location="before" widget="dxButton" />
-      <DxItem :options="deleteNavButtonOptions" location="before" widget="dxButton" />-->
+      <DxItem :options="createFolderNavButtonOptions" location="after" widget="dxButton" />
     </dx-toolbar>
     <div class="favourite-tree">
       <dx-tree-view
-        :items="getFavouritesListDataSource"
+        :items="getFavouritesData"
         key-expr="id"
         display-expr="text"
         width="100%"
@@ -23,7 +21,7 @@
       ></dx-tree-view>
     </div>
     <dx-popup
-      :visible="showPopupForm"
+      ref="popupFavouritesFolder"
       :drag-enabled="true"
       :close-on-outside-click="false"
       :show-title="true"
@@ -31,11 +29,13 @@
       :height="200"
       class="popup"
       title="Favourites Folder"
+      @shown="popupFormShown"
+      @hiding="popupFormHiding"
     >
       <p>
         <!--:on-content-ready="validateForm"-->
-        <dx-form ref="formFavouriteGroup" :form-data="formData">
-          <dx-form-item data-field="groupName" :validation-rules="validationRules.groupName" />
+        <dx-form ref="formFavouritesFolder" :form-data="formData">
+          <dx-form-item data-field="folderName" :validation-rules="validationRules.folderName" />
         </dx-form>
       </p>
       <div align="right">
@@ -44,7 +44,7 @@
           type="success"
           :use-submit-behavior="true"
           :width="80"
-          @click="saveFavouritesGroup"
+          @click="saveFavouritesFolder"
         />
         <dx-button text="Cancel" :width="80" class="margin-left-10" @click="hidePoupForm" />
       </div>
@@ -73,104 +73,68 @@ export default {
   },
   data() {
     return {
-      formData: { id: "", groupName: "" },
+      formData: { id: "", folderName: "" },
       validationRules: {
-        groupName: [{ type: "required", message: "Folder name is required." }]
+        folderName: [{ type: "required", message: "Folder name is required." }]
       },
-      showPopupForm: false,
-      addNavButtonOptions: {
+      createFolderNavButtonOptions: {
         icon: "fas fa-folder-plus",
         focusStateEnabled: false,
         text: "",
         hint: "Create new folder",
         stylingMode: "text",
         onClick: () => {
-          //alert("Add favourite group navigation button has been clicked!");
-          //this.addFavouriteGroup();
-          this.showPopupForm = true;
+          //alert("Create new favourites folder button has been clicked!");
+          this.$refs["popupFavouritesFolder"].instance.show();
         }
-      },
-      renameNavButtonOptions: {
-        icon: "fas fa-edit",
-        focusStateEnabled: false,
-        text: "Rename",
-        stylingMode: "text",
-        onClick: () => {
-          alert("Rename favourite group navigation button has been clicked!");
-        }
-      },
-      deleteNavButtonOptions: {
-        icon: "fas fa-trash-alt",
-        focusStateEnabled: false,
-        text: "Delete",
-        stylingMode: "text",
-        onClick: () => {
-          alert("Delete favourite group navigation button has been clicked!");
-        }
-      },
-      favouritesListData: [
-        {
-          id: "1",
-          text: "Month End Adjustments",
-          expanded: true,
-          icon: "fas fa-folder-open",
-          items: [
-            {
-              id: "1.1",
-              text: "On Line Transaction Entry",
-              icon: "fas fa-hand-point-up"
-            },
-            {
-              id: "1.2",
-              text: "Accrual/Reversal Entry",
-              icon: "fas fa-hand-point-up"
-            },
-            {
-              id: "1.3",
-              text: "Transaction Edit & Delete",
-              icon: "fas fa-file-alt"
-            },
-            {
-              id: "1.4",
-              text: "Trial Balance Report",
-              icon: "fas fa-file-invoice-dollar"
-            }
-          ]
-        }
-      ]
+      }
     };
   },
   computed: {
-    ...mapGetters(["getFavouritesListData"]),
-
-    getFavouritesListDataSource() {
-      return this.getFavouritesListData;
-    }
+    ...mapGetters(["getFavouritesData"])
   },
   methods: {
-    addFavouriteGroup(name) {
+    createNewFavouritesFolder(name) {
       const newId = getNewId();
-      this.$store.dispatch("addFavouriteGroupData", {
+      const newItemId = getNewId();
+      this.$store.dispatch("addFolderToFavouritesData", {
         id: newId,
         text: name,
         expanded: true,
-        icon: "fas fa-folder-open",
-        items: []
+        icon: "fas fa-folder",
+        items: [
+          {
+            id: newItemId,
+            text: "Company File Maintenance",
+            icon: "fas fa-cog"
+          }
+        ]
       });
     },
-    saveFavouritesGroup() {
-      var result = this.$refs["formFavouriteGroup"].instance.validate();
+    saveFavouritesFolder() {
+      var result = this.$refs["formFavouritesFolder"].instance.validate();
       //console.log(result);
       if (result.isValid) {
-        this.addFavouriteGroup(this.formData.groupName);
+        this.createNewFavouritesFolder(this.formData.folderName);
+        // Reset current values
+        //this.formData.id = "";
+        //this.formData.folderName = "";
         this.hidePoupForm();
       }
     },
     hidePoupForm() {
-      this.showPopupForm = false;
+      this.$refs["popupFavouritesFolder"].instance.hide();
     },
     validateForm(e) {
       e.component.validate();
+    },
+    popupFormShown() {
+      this.$refs["formFavouritesFolder"].instance
+        .getEditor("folderName")
+        .focus();
+    },
+    popupFormHiding() {
+      this.$refs["formFavouritesFolder"].instance.resetValues();
     }
   }
 };

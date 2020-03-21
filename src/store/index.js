@@ -7,14 +7,14 @@ export const store = new Vuex.Store({
   state: {
     sideNavMenuOpenState: true,
     favouritesNavMenuOpenState: true,
-    breadcrumbData: [{ id: "1" }],
-    favouritesListData: []
+    breadcrumbData: [],
+    favouritesData: []
   },
   getters: {
     getSideNavMenuOpenState: state => state.sideNavMenuOpenState,
     getFavouritesNavMenuOpenState: state => state.favouritesNavMenuOpenState,
     getBreadcrumbData: state => state.breadcrumbData,
-    getFavouritesListData: state => state.favouritesListData
+    getFavouritesData: state => state.favouritesData
   },
   mutations: {
     toggleSideNavMenuOpenState: function (state) {
@@ -26,22 +26,22 @@ export const store = new Vuex.Store({
     setBreadcrumbData: function (state, data) {
       state.breadcrumbData = data;
     },
-    setFavouriteData: function (state, data) {
-      state.favouritesListData = data;
+    setFavouritesData: function (state, data) {
+      state.favouritesData = data;
     },
-    addFavouriteGroupData: function (state, data) {
-      state.favouritesListData.push(data);
+    addFolderToFavouritesData: function (state, data) {
+      state.favouritesData.push(data);
     },
   },
   actions: {
     setBreadcrumbData({ commit }, data) {
       commit("setBreadcrumbData", data);
     },
-    setFavouriteData({ commit }, data) {
-      commit("setFavouriteData", data);
+    setFavouritesData({ commit }, data) {
+      commit("setFavouritesData", data);
     },
-    addFavouriteGroupData({ commit }, data) {
-      commit("addFavouriteGroupData", data);
+    addFolderToFavouritesData({ commit }, data) {
+      commit("addFolderToFavouritesData", data);
     },
   }
 });
