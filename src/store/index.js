@@ -32,6 +32,19 @@ export const store = new Vuex.Store({
     addFolderToFavouritesData: function (state, data) {
       state.favouritesData.push(data);
     },
+    addFavouriteToFavouritesData: function (state, data) {
+      // Find the folder
+      let index = state.favouritesData.findIndex(
+        obj => obj.id === data.folderId
+      );
+      //console.log("index: " + index)
+      //console.log(data.favourite)
+      // Add the favourite to the folder
+      let newFavourite = data.favourite
+      state.favouritesData[index].items.push(newFavourite)
+      //Vue.set(state.favouritesData[index].items, 0, data.favourite);
+      //console.log(state.favouritesData)
+    },
   },
   actions: {
     setBreadcrumbData({ commit }, data) {
@@ -42,6 +55,9 @@ export const store = new Vuex.Store({
     },
     addFolderToFavouritesData({ commit }, data) {
       commit("addFolderToFavouritesData", data);
+    },
+    addFoldeaddFavouriteToFavouritesDatarToFavouritesData({ commit }, data) {
+      commit("addFavouriteToFavouritesData", data);
     },
   }
 });

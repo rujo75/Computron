@@ -23,6 +23,7 @@
             :focus-state-enabled="false"
             :width="24"
             :height="24"
+            hint="Add to favourites"
             @click="onNavigationItemButtonClick"
           />
         </div>
@@ -71,6 +72,7 @@ import { DxPopup } from "devextreme-vue/popup";
 import { DxForm, DxItem as DxFormItem } from "devextreme-vue/form";
 import { MenuData } from "./../data/menus.js";
 import { mapGetters } from "vuex";
+import { getNewId } from "./../store/common.js";
 
 export default {
   props: {
@@ -88,8 +90,7 @@ export default {
       formData: { id: "", saveTo: "" },
       validationRules: {
         saveTo: [{ type: "required", message: "Save to folder is required." }]
-      },
-      showPopupForm: false
+      }
     };
   },
   computed: {
@@ -141,6 +142,8 @@ export default {
     },
     onNavigationItemButtonClick(e) {
       e.event.stopPropagation();
+      //console.log(e.element.id);
+      this.formData.id = e.element.id;
       this.$refs["popupFavourites"].instance.show();
     },
     findMenuById(object, id) {
@@ -183,6 +186,24 @@ export default {
       var result = this.$refs["formFavourites"].instance.validate();
       //console.log(result);
       if (result.isValid) {
+        //alert("folder id: " + this.formData.saveTo);
+        // Find menu by id
+        let menu = this.findMenuById(MenuData, this.formData.id);
+        //console.log(menu);
+        const newId = getNewId();
+        let data = {
+          folderId: this.formData.saveTo,
+          favourite: {
+            id: newId,
+            menuId: this.formData.id,
+            text: menu.text,
+            icon: menu.icon
+          }
+        };
+        this.$store.dispatch(
+          "addFoldeaddFavouriteToFavouritesDatarToFavouritesData",
+          data
+        );
         this.hidePoupForm();
       }
     },

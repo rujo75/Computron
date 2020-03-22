@@ -8,7 +8,8 @@
     </dx-toolbar>
     <div class="favourite-tree">
       <dx-tree-view
-        :items="getFavouritesData"
+        id="favouritesTree"
+        :items="favouritesData"
         key-expr="id"
         display-expr="text"
         width="100%"
@@ -18,7 +19,12 @@
         :hover-state-enabled="true"
         :focus-state-enabled="false"
         class="panel-tree"
-      ></dx-tree-view>
+      />
+      <dx-context-menu
+        :data-source="favouritesContextMenuItems"
+        :width="200"
+        target="#favouritesTree"
+      />
     </div>
     <dx-popup
       ref="popupFavouritesFolder"
@@ -57,6 +63,7 @@ import { DxToolbar, DxItem } from "devextreme-vue/toolbar";
 import { DxTreeView, DxButton } from "devextreme-vue";
 import { DxPopup } from "devextreme-vue/popup";
 import { DxForm, DxItem as DxFormItem } from "devextreme-vue/form";
+import { DxContextMenu } from "devextreme-vue/context-menu";
 import { mapGetters } from "vuex";
 import { getNewId } from "./../../store/common.js";
 
@@ -69,10 +76,12 @@ export default {
     DxButton,
     DxPopup,
     DxForm,
-    DxFormItem
+    DxFormItem,
+    DxContextMenu
   },
   data() {
     return {
+      favouritesData: [],
       formData: { id: "", folderName: "" },
       validationRules: {
         folderName: [{ type: "required", message: "Folder name is required." }]
@@ -91,23 +100,43 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getFavouritesData"])
+    ...mapGetters(["getFavouritesData"]),
+
+    favouritesContextMenuItems() {
+      return [
+        {
+          text: "Create new folder",
+          disabled: this.isCreateNewFavouriteFolderDisabled
+        },
+        { text: "Rename", disabled: this.isRenameFavouriteDisabled },
+        { text: "Delete", disabled: this.isDeleteFavouriteDisabled }
+      ];
+    },
+    isCreateNewFavouriteFolderDisabled() {
+      return false;
+    },
+    isRenameFavouriteDisabled() {
+      return true;
+    },
+    isDeleteFavouriteDisabled() {
+      return true;
+    }
   },
   methods: {
     createNewFavouritesFolder(name) {
       const newId = getNewId();
-      const newItemId = getNewId();
+      //const newItemId = getNewId();
       this.$store.dispatch("addFolderToFavouritesData", {
         id: newId,
         text: name,
         expanded: true,
         icon: "fas fa-folder",
         items: [
-          {
-            id: newItemId,
-            text: "Company File Maintenance",
-            icon: "fas fa-cog"
-          }
+          // {
+          //   id: newItemId,
+          //   text: "Company File Maintenance",
+          //   icon: "fas fa-cog"
+          // }
         ]
       });
     },
@@ -136,6 +165,18 @@ export default {
     popupFormHiding() {
       this.$refs["formFavouritesFolder"].instance.resetValues();
     }
+  },
+  watch: {
+    getFavouritesData: {
+      handler() {
+        //console.log("getFavouritesData changed!");
+        this.favouritesData = this._.map(this.getFavouritesData);
+      },
+      deep: true
+    }
+  },
+  created() {
+    this.favouritesData = this.getFavouritesData;
   }
 };
 </script>
