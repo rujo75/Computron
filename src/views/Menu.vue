@@ -197,7 +197,8 @@ export default {
             id: newId,
             menuId: this.formData.id,
             text: menu.text,
-            icon: menu.icon
+            icon: menu.icon,
+            isFolder: false
           }
         };
         this.$store.dispatch(

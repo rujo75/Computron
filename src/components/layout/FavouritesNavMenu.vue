@@ -19,11 +19,15 @@
         :hover-state-enabled="true"
         :focus-state-enabled="false"
         class="panel-tree"
+        @item-click="favouritesItemClick"
+        @item-context-menu="favouritesItemContextMenu"
       />
       <dx-context-menu
         :data-source="favouritesContextMenuItems"
         :width="200"
         target="#favouritesTree"
+        @item-click="favouritesContextItemClick"
+        @hiding="favouritesContextHiding"
       />
     </div>
     <dx-popup
@@ -81,6 +85,7 @@ export default {
   },
   data() {
     return {
+      favouritesPopupMode: "new",
       favouritesData: [],
       formData: { id: "", folderName: "" },
       validationRules: {
@@ -94,32 +99,60 @@ export default {
         stylingMode: "text",
         onClick: () => {
           //alert("Create new favourites folder button has been clicked!");
+          this.favouritesPopupMode = "new";
           this.$refs["popupFavouritesFolder"].instance.show();
         }
       }
     };
   },
   computed: {
-    ...mapGetters(["getFavouritesData"]),
+    ...mapGetters(["getFavouritesData", "getFavouritesSelectedItemData"]),
 
     favouritesContextMenuItems() {
+      //console.log(this.favouritesSelectedItemData);
       return [
         {
           text: "Create new folder",
+          icon: "fas fa-folder-plus",
           disabled: this.isCreateNewFavouriteFolderDisabled
         },
-        { text: "Rename", disabled: this.isRenameFavouriteDisabled },
-        { text: "Delete", disabled: this.isDeleteFavouriteDisabled }
+        {
+          text: "Rename",
+          icon: "fas fa-edit",
+          disabled: this.isRenameFavouriteDisabled
+        },
+        {
+          text: "Delete",
+          icon: "fas fa-trash-alt",
+          disabled: this.isDeleteFavouriteDisabled
+        }
       ];
     },
     isCreateNewFavouriteFolderDisabled() {
-      return false;
+      if (this.getFavouritesSelectedItemData) {
+        return false;
+      } else {
+        return false;
+      }
     },
     isRenameFavouriteDisabled() {
-      return true;
+      //console.log(this.getFavouritesSelectedItemData);
+      if (this.getFavouritesSelectedItemData) {
+        if (this.getFavouritesSelectedItemData.isFolder) {
+          return false;
+        } else {
+          return true;
+        }
+      } else {
+        return true;
+      }
     },
     isDeleteFavouriteDisabled() {
-      return true;
+      if (this.getFavouritesSelectedItemData) {
+        return false;
+      } else {
+        return true;
+      }
     }
   },
   methods: {
@@ -131,23 +164,25 @@ export default {
         text: name,
         expanded: true,
         icon: "fas fa-folder",
-        items: [
-          // {
-          //   id: newItemId,
-          //   text: "Company File Maintenance",
-          //   icon: "fas fa-cog"
-          // }
-        ]
+        isFolder: true,
+        items: []
       });
     },
     saveFavouritesFolder() {
       var result = this.$refs["formFavouritesFolder"].instance.validate();
       //console.log(result);
       if (result.isValid) {
-        this.createNewFavouritesFolder(this.formData.folderName);
-        // Reset current values
-        //this.formData.id = "";
-        //this.formData.folderName = "";
+        if (this.favouritesPopupMode === "new") {
+          // Create new folder
+          this.createNewFavouritesFolder(this.formData.folderName);
+        } else {
+          // Update folder
+          console.log(this.formData);
+          this.$store.dispatch("updateFolderInFavouritesData", {
+            id: this.formData.id,
+            text: this.formData.folderName
+          });
+        }
         this.hidePoupForm();
       }
     },
@@ -164,6 +199,37 @@ export default {
     },
     popupFormHiding() {
       this.$refs["formFavouritesFolder"].instance.resetValues();
+    },
+    favouritesItemClick(e) {
+      this.$store.dispatch("setFavouritesSelectedItemData", e.itemData);
+      //console.log(this.getFavouritesSelectedItemData);
+    },
+    favouritesItemContextMenu(e) {
+      this.$store.dispatch("setFavouritesSelectedItemData", e.itemData);
+      //console.log(e.itemData);
+    },
+    favouritesContextItemClick(e) {
+      //console.log(e.itemData);
+      if (e.itemData) {
+        if (e.itemData.text === "Create new folder") {
+          // Create new folder
+          this.favouritesPopupMode = "new";
+          this.$refs["popupFavouritesFolder"].instance.show();
+        } else if (e.itemData.text === "Rename") {
+          // Rename folder
+          this.favouritesPopupMode = "edit";
+          //console.log(this.getFavouritesSelectedItemData);
+          this.formData.id = this.getFavouritesSelectedItemData.id;
+          this.formData.folderName = this.getFavouritesSelectedItemData.text;
+          //console.log(this.formData);
+          this.$refs["popupFavouritesFolder"].instance.show();
+        } else if (e.itemData.text === "Delete") {
+          // Delete favourite item
+        }
+      }
+    },
+    favouritesContextHiding() {
+      this.$store.dispatch("setFavouritesSelectedItemData", null);
     }
   },
   watch: {
