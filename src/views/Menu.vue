@@ -201,10 +201,7 @@ export default {
             isFolder: false
           }
         };
-        this.$store.dispatch(
-          "addFoldeaddFavouriteToFavouritesDatarToFavouritesData",
-          data
-        );
+        this.$store.dispatch("addFavouriteToFavouritesData", data);
         this.hidePoupForm();
       }
     },

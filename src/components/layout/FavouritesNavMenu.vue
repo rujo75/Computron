@@ -225,6 +225,11 @@ export default {
           this.$refs["popupFavouritesFolder"].instance.show();
         } else if (e.itemData.text === "Delete") {
           // Delete favourite item
+          console.log(this.getFavouritesSelectedItemData);
+          this.$store.dispatch(
+            "deleteFavouriteFromFavouritesData",
+            this.getFavouritesSelectedItemData
+          );
         }
       }
     },

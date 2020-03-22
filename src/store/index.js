@@ -8,7 +8,7 @@ export const store = new Vuex.Store({
     sideNavMenuOpenState: true,
     favouritesNavMenuOpenState: true,
     breadcrumbData: [],
-    favouritesData: [],
+    favouritesData: [{ id: "334127A259764614B8B9A5E8551D6B13", text: "My Favourites", expanded: true, icon: "fas fa-folder", isFolder: true, items: [] }],
     favouritesSelectedItemData: null
   },
   getters: {
@@ -50,8 +50,33 @@ export const store = new Vuex.Store({
       // Add the favourite to the folder
       let newFavourite = data.favourite
       state.favouritesData[index].items.push(newFavourite)
-      //Vue.set(state.favouritesData[index].items, 0, data.favourite);
       //console.log(state.favouritesData)
+    },
+    deleteFavouriteFromFavouritesData: function (state, data) {
+      if (data.isFolder) {
+        // Folder passed in to delete. Find folder index in array
+        let index = state.favouritesData.findIndex(
+          obj => obj.id === data.id
+        );
+        // Delete folder if found in array
+        if (index >= 0) {
+          state.favouritesData.splice(index, 1)
+        }
+      } else {
+        //console.log(data)
+        //console.log(state.favouritesData)
+        // Iterate over all folders in favouritesData array
+        for (let folderIndex = 0; folderIndex < state.favouritesData.length; folderIndex++) {
+          // Iterate over all favourites in the current folder
+          for (let favouriteIndex = 0; favouriteIndex < state.favouritesData[folderIndex].items.length; favouriteIndex++) {
+            if (state.favouritesData[folderIndex].items[favouriteIndex].id === data.id) {
+              // Favourite found. Delete it from the array
+              //console.log("found")
+              state.favouritesData[folderIndex].items.splice(favouriteIndex, 1)
+            }
+          }
+        }
+      }
     },
     setFavouritesSelectedItemData: function (state, data) {
       state.favouritesSelectedItemData = data;
@@ -67,14 +92,17 @@ export const store = new Vuex.Store({
     addFolderToFavouritesData({ commit }, data) {
       commit("addFolderToFavouritesData", data);
     },
-    addFoldeaddFavouriteToFavouritesDatarToFavouritesData({ commit }, data) {
-      commit("addFavouriteToFavouritesData", data);
-    },
-    setFavouritesSelectedItemData({ commit }, data) {
-      commit("setFavouritesSelectedItemData", data);
-    },
     updateFolderInFavouritesData({ commit }, data) {
       commit("updateFolderInFavouritesData", data);
     },
+    addFavouriteToFavouritesData({ commit }, data) {
+      commit("addFavouriteToFavouritesData", data);
+    },
+    deleteFavouriteFromFavouritesData({ commit }, data) {
+      commit("deleteFavouriteFromFavouritesData", data);
+    },
+    setFavouritesSelectedItemData({ commit }, data) {
+      commit("setFavouritesSelectedItemData", data);
+    }
   }
 });
