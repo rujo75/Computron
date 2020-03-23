@@ -95,11 +95,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
-      "getBreadcrumbData",
-      "getFavouritesData",
-      "getLastSelectedFavouriteFolder"
-    ]),
+    ...mapGetters(["getFavouritesData", "getLastSelectedFavouriteFolder"]),
 
     saveToEditorOptions() {
       return {

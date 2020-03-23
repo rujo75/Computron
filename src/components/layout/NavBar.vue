@@ -44,10 +44,14 @@ export default {
         items: [
           { id: "1", name: "My Profile", icon: "fas fa-user" },
           { id: "2", name: "Sign Out", icon: "fas fa-sign-out-alt" }
-        ]
-        /*onItemClick: () => {
-          alert("User Profile navigation button has been clicked!");
-        }*/
+        ],
+        onItemClick: e => {
+          //console.log(e.itemData);
+          //alert("User navigation button has been clicked!");
+          if (e.itemData.name === "Sign Out") {
+            this.$store.dispatch("setSingInVisible", true);
+          }
+        }
       }
     };
   },

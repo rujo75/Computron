@@ -7,6 +7,7 @@ export const store = new Vuex.Store({
   state: {
     sideNavMenuOpenState: true,
     favouritesNavMenuOpenState: true,
+    singInVisible: true,
     breadcrumbData: [],
     favouritesData: [{ id: "334127A259764614B8B9A5E8551D6B13", text: "My Favourites", expanded: true, icon: "fas fa-folder", isFolder: true, items: [] }],
     favouritesSelectedItemData: null,
@@ -15,6 +16,7 @@ export const store = new Vuex.Store({
   getters: {
     getSideNavMenuOpenState: state => state.sideNavMenuOpenState,
     getFavouritesNavMenuOpenState: state => state.favouritesNavMenuOpenState,
+    getSignInVisible: state => state.singInVisible,
     getBreadcrumbData: state => state.breadcrumbData,
     getFavouritesData: state => state.favouritesData,
     getFavouritesSelectedItemData: state => state.favouritesSelectedItemData,
@@ -26,6 +28,9 @@ export const store = new Vuex.Store({
     },
     toggleFavouritesNavMenuOpenState: function (state) {
       state.favouritesNavMenuOpenState = !state.favouritesNavMenuOpenState;
+    },
+    setSingInVisible: function (state, data) {
+      state.singInVisible = data;
     },
     setBreadcrumbData: function (state, data) {
       state.breadcrumbData = data;
@@ -93,6 +98,9 @@ export const store = new Vuex.Store({
     },
     setFavouritesData({ commit }, data) {
       commit("setFavouritesData", data);
+    },
+    setSingInVisible({ commit }, data) {
+      commit("setSingInVisible", data);
     },
     addFolderToFavouritesData({ commit }, data) {
       commit("addFolderToFavouritesData", data);

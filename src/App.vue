@@ -2,18 +2,21 @@
   <div id="app">
     <NavBar />
     <Main />
+    <SignIn />
   </div>
 </template>
 
 <script>
 import NavBar from "./components/layout/NavBar";
 import Main from "./components/layout/Main";
+import SignIn from "./components/layout/SignIn";
 
 export default {
   name: "App",
   components: {
     NavBar,
-    Main
+    Main,
+    SignIn
   },
   mounted: function() {
     // Navigate to Home page
