@@ -203,7 +203,8 @@ export default {
             menuId: this.formData.id,
             text: menu.text,
             icon: menu.icon,
-            isFolder: false
+            isFolder: false,
+            link: menu.link
           }
         };
         //alert("saveTo: " + this.formData.saveTo);
@@ -225,6 +226,7 @@ export default {
     popupFormShowing() {
       // Select default value
       //console.log(this.getLastSelectedFavouriteFolder);
+      let folderSet = false;
       if (this.getLastSelectedFavouriteFolder) {
         // Check if folder still exists in array
         let index = this.getFavouritesData.findIndex(
@@ -232,6 +234,15 @@ export default {
         );
         if (index >= 0) {
           this.formData.saveTo = this.getLastSelectedFavouriteFolder;
+          folderSet = true;
+        }
+      }
+      if (!folderSet) {
+        // Default folder was not set. Set to first found in array
+        //console.log(this.getFavouritesData);
+        if (this.getFavouritesData) {
+          this.formData.saveTo = this.getFavouritesData[0].id;
+          folderSet = true;
         }
       }
     },
