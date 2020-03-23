@@ -111,16 +111,23 @@ export default {
 
     getMenuData() {
       //console.log("Menu id: " + this.id);
-      // save current menu id to breadcrumb list
-      let breadcrumbIds = this.getBreadcrumbData;
-      let menuIdPath = this.id.split(".");
-      //console.log("menuIdPath.length: " + menuIdPath.length);
-      //console.log("breadcrumbIds.length: " + breadcrumbIds.length);
-      breadcrumbIds.splice(menuIdPath.length - 1, breadcrumbIds.length, {
-        id: this.id
-      });
+      // Build new breadcrumb data path
+      const menuIdPath = this.id.split(".");
+      let newBreadcrumbPath = [];
+      let tempBreadcrumb = "";
+      for (let i = 0; i < menuIdPath.length; i++) {
+        if (i === 0) {
+          tempBreadcrumb = menuIdPath[0];
+        } else {
+          tempBreadcrumb += "." + menuIdPath[i];
+        }
+        newBreadcrumbPath.push({ id: tempBreadcrumb });
+      }
+      // Save new breadcrumb data path
+      this.$store.dispatch("setBreadcrumbData", newBreadcrumbPath);
 
       //console.log(menuData);
+      // Get menu items
       let result = this.findMenuById(MenuData, this.id);
       //console.log(result);
       if (result != null) {

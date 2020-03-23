@@ -212,24 +212,6 @@ export default {
         if (e.itemData.link) {
           // Check new link is different from current link
           if (this.$route.path !== e.itemData.link) {
-            // Update breadcrumb for new link
-            //console.log(this.getBreadcrumbData);
-            // Example: [ { id: "2" }, { id: "2.1" } ]
-            const menuId = e.itemData.menuId;
-            const menuIdPath = menuId.split(".");
-            let newBreadcrumbPath = [];
-            let tempBreadcrumb = "";
-            for (let i = 0; i < menuIdPath.length; i++) {
-              if (i === 0) {
-                tempBreadcrumb = menuIdPath[0];
-              } else {
-                tempBreadcrumb += "." + menuIdPath[i];
-              }
-              newBreadcrumbPath.push({ id: tempBreadcrumb });
-            }
-            //.log(newBreadcrumbPath);
-            // Update breadcrumb data
-            //this.$store.dispatch("setBreadcrumbData", newBreadcrumbPath);
             // Re-route to new link
             this.$router.push(e.itemData.link);
           }
