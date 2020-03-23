@@ -38,6 +38,7 @@
       :height="200"
       class="popup"
       title="Favourites"
+      @showing="popupFormShowing"
       @shown="popupFormShown"
       @hiding="popupFormHiding"
     >
@@ -94,7 +95,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getBreadcrumbData", "getFavouritesData"]),
+    ...mapGetters([
+      "getBreadcrumbData",
+      "getFavouritesData",
+      "getLastSelectedFavouriteFolder"
+    ]),
 
     saveToEditorOptions() {
       return {
@@ -201,7 +206,13 @@ export default {
             isFolder: false
           }
         };
+        //alert("saveTo: " + this.formData.saveTo);
         this.$store.dispatch("addFavouriteToFavouritesData", data);
+        // Save the last folder selection for later use
+        this.$store.dispatch(
+          "setLastSelectedFavouriteFolder",
+          this.formData.saveTo
+        );
         this.hidePoupForm();
       }
     },
@@ -211,7 +222,21 @@ export default {
     validateForm(e) {
       e.component.validate();
     },
+    popupFormShowing() {
+      // Select default value
+      //console.log(this.getLastSelectedFavouriteFolder);
+      if (this.getLastSelectedFavouriteFolder) {
+        // Check if folder still exists in array
+        let index = this.getFavouritesData.findIndex(
+          obj => obj.id === this.getLastSelectedFavouriteFolder
+        );
+        if (index >= 0) {
+          this.formData.saveTo = this.getLastSelectedFavouriteFolder;
+        }
+      }
+    },
     popupFormShown() {
+      // Set focus to input field
       this.$refs["formFavourites"].instance.getEditor("saveTo").focus();
     },
     popupFormHiding() {
