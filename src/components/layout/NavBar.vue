@@ -1,19 +1,20 @@
 <template>
   <dx-toolbar class="nav-toolbar">
-    <DxItem :options="sideNavButtonOptions" location="before" widget="dxButton" />
+    <DxItem :options="getSideNavButtonOptions" location="before" widget="dxButton" />
     <DxItem #default location="before" locate-in-menu="never">
       <div class="toolbar-label">
         <b>Avolin</b> Computron
       </div>
     </DxItem>
     <DxItem :options="searchNavButtonOptions" location="after" widget="dxButton" />
-    <DxItem :options="favouritesNavButtonOptions" location="after" widget="dxButton" />
+    <DxItem :options="getFavouritesNavButtonOptions" location="after" widget="dxButton" />
     <DxItem :options="userProfileNavButtonOptions" location="after" widget="dxDropDownButton" />
   </dx-toolbar>
 </template>
 
 <script>
 import { DxToolbar, DxItem } from "devextreme-vue/toolbar";
+import { mapGetters } from "vuex";
 
 export default {
   name: "app",
@@ -23,15 +24,6 @@ export default {
   },
   data() {
     return {
-      sideNavButtonOptions: {
-        icon: "fas fa-bars",
-        focusStateEnabled: false,
-        stylingMode: "text",
-        onClick: () => {
-          //alert("Side navigation menu button has been clicked!");
-          this.$store.commit("toggleSideNavMenuOpenState");
-        }
-      },
       searchNavButtonOptions: {
         icon: "fas fa-search",
         focusStateEnabled: false,
@@ -39,16 +31,6 @@ export default {
         hint: "Search",
         onClick: () => {
           alert("Search navigation button has been clicked!");
-        }
-      },
-      favouritesNavButtonOptions: {
-        icon: "fas fa-star",
-        focusStateEnabled: false,
-        stylingMode: "text",
-        hint: "Favourites",
-        onClick: () => {
-          //alert("Favourites navigation menu button has been clicked!");
-          this.$store.commit("toggleFavouritesNavMenuOpenState");
         }
       },
       userProfileNavButtonOptions: {
@@ -70,16 +52,48 @@ export default {
     };
   },
   computed: {
-    navMenuStylingMode: {
-      get: function() {
-        if (this.$store.getters.getSideNavMenuOpenState) {
-          console.log("contained");
-          return "contained";
-        } else {
-          console.log("text");
-          return "text";
-        }
+    ...mapGetters(["getSideNavMenuOpenState", "getFavouritesNavMenuOpenState"]),
+
+    getSideNavMenuStylingMode() {
+      if (this.getSideNavMenuOpenState) {
+        console.log("contained");
+        return "contained";
+      } else {
+        console.log("text");
+        return "text";
       }
+    },
+    getFavouritesNavMenuStylingMode() {
+      if (this.getFavouritesNavMenuOpenState) {
+        console.log("contained");
+        return "contained";
+      } else {
+        console.log("text");
+        return "text";
+      }
+    },
+    getSideNavButtonOptions() {
+      return {
+        icon: "fas fa-bars",
+        focusStateEnabled: false,
+        stylingMode: this.getSideNavMenuStylingMode,
+        onClick: () => {
+          //alert("Side navigation menu button has been clicked!");
+          this.$store.commit("toggleSideNavMenuOpenState");
+        }
+      };
+    },
+    getFavouritesNavButtonOptions() {
+      return {
+        icon: "fas fa-star",
+        focusStateEnabled: false,
+        stylingMode: this.getFavouritesNavMenuStylingMode,
+        hint: "Favourites",
+        onClick: () => {
+          //alert("Favourites navigation menu button has been clicked!");
+          this.$store.commit("toggleFavouritesNavMenuOpenState");
+        }
+      };
     }
   }
 };
