@@ -65,6 +65,8 @@ export default {
 .panel-list >>> .dx-list-item-content {
   padding-left: 10px;
   text-align: left;
+  height: 46px;
+  vertical-align: middle;
 }
 
 .panel-list >>> .dx-list-item {

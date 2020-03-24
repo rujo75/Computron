@@ -18,7 +18,7 @@ export const MenuData = {
               id: "2.1.1",
               text: "Company Maintenance",
               icon: "fas fa-cog",
-              link: "/CompanyMaintenance",
+              link: "/CompanyMaintenanceList/2.1.1",
               favourite: false, items: []
             },
             {
