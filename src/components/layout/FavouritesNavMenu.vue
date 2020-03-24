@@ -13,7 +13,7 @@
         key-expr="id"
         display-expr="text"
         width="100%"
-        height="100%"
+        height="calc(100vh - 139px)"
         no-data-text="No favourites to display"
         :active-state-enabled="false"
         :hover-state-enabled="true"

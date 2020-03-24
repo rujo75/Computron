@@ -265,7 +265,7 @@ export default {
 
 <style scoped>
 .panel-list {
-  height: calc(100vh - 96px);
+  height: calc(100vh - 119px);
   padding: 10px;
 }
 

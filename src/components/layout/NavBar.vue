@@ -6,7 +6,12 @@
         <b>Avolin</b> Computron
       </div>
     </DxItem>
-    <DxItem :options="searchNavButtonOptions" location="after" widget="dxButton" />
+    <DxItem
+      :options="searchNavButtonOptions"
+      location="after"
+      widget="dxButton"
+      class="nav-button"
+    />
     <DxItem :options="getFavouritesNavButtonOptions" location="after" widget="dxButton" />
     <DxItem :options="userProfileNavButtonOptions" location="after" widget="dxDropDownButton" />
   </dx-toolbar>

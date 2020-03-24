@@ -10,7 +10,7 @@
     :width="400"
     :height="250"
     class="popup"
-    title="Sign In"
+    title="Computron"
     @shown="popupFormShown"
     @hiding="popupFormHiding"
   >

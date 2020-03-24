@@ -2,6 +2,7 @@
   <div id="app">
     <NavBar />
     <Main />
+    <StatusBar />
     <SignIn />
   </div>
 </template>
@@ -9,6 +10,7 @@
 <script>
 import NavBar from "./components/layout/NavBar";
 import Main from "./components/layout/Main";
+import StatusBar from "./components/layout/StatusBar";
 import SignIn from "./components/layout/SignIn";
 
 export default {
@@ -16,6 +18,7 @@ export default {
   components: {
     NavBar,
     Main,
+    StatusBar,
     SignIn
   },
   mounted: function() {

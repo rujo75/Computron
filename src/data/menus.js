@@ -16,14 +16,14 @@ export const MenuData = {
           items: [
             {
               id: "2.1.1",
-              text: "Company File Maintenance",
+              text: "Company Maintenance",
               icon: "fas fa-cog",
-              link: "/Menu/2.1.1",
+              link: "/CompanyMaintenance",
               favourite: false, items: []
             },
             {
               id: "2.1.2",
-              text: "Company File Inq/List",
+              text: "Company Inquiry/List",
               icon: "fas fa-file-alt",
               link: "/Menu/2.1.2",
               favourite: false, items: []

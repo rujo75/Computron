@@ -7,10 +7,10 @@
     :opened="sideNavMenuOpenState"
     :close-on-outside-click="closeOnOutsideClick"
     template="listMenu"
-    height="100%"
+    height="calc(100vh - 72px)"
   >
     <template #listMenu>
-      <SideNavMenu/>
+      <SideNavMenu />
     </template>
     <div id="content" class="dx-theme-background-color">
       <dx-drawer
@@ -21,12 +21,12 @@
         :opened="favouritesNavMenuOpenState"
         :close-on-outside-click="closeOnOutsideClick"
         template="listMenu"
-        height="100%"
+        height="calc(100vh - 72px)"
       >
         <template #listMenu>
-          <FavouritesNavMenu/>
+          <FavouritesNavMenu />
         </template>
-        <CenterPanel id="content"/>
+        <CenterPanel id="content" />
       </dx-drawer>
     </div>
   </dx-drawer>

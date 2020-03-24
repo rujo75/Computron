@@ -49,8 +49,9 @@ export default {
 
 <style scoped>
 .panel-list {
-  height: calc(100vh - 48px);
+  height: calc(100vh - 72px);
   width: 250px;
+  /* padding: 4px 0px; */
   /* border-right: 1px solid rgba(221, 221, 221); */
   border-right: 1px solid rgba(77, 77, 77);
 }
