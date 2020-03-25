@@ -10,7 +10,7 @@
     :width="400"
     :height="250"
     class="popup"
-    title="Computron"
+    title="Computron Financial"
     @shown="popupFormShown"
     @hiding="popupFormHiding"
   >

@@ -23,65 +23,44 @@ export const MenuData = {
             },
             {
               id: "2.1.2",
-              text: "Company Inquiry/List",
-              icon: "fas fa-file-alt",
+              text: "Company Parameters Maintenance",
+              icon: "fas fa-cog",
               link: "/Menu/2.1.2",
               favourite: false, items: []
             },
             {
               id: "2.1.3",
-              text: "Company Parameters Maintenance",
+              text: "End of Period/End of Year",
               icon: "fas fa-cog",
               link: "/Menu/2.1.3",
               favourite: false, items: []
             },
             {
               id: "2.1.4",
-              text: "Parameters Inquiry/List",
-              icon: "fas fa-file-alt",
+              text: "Calendar Maintenance Menu",
+              icon: "fas fa-folder-open",
               link: "/Menu/2.1.4",
               favourite: false, items: []
             },
             {
               id: "2.1.5",
-              text: "End of Period/End of Year",
-              icon: "fas fa-cog",
+              text: "Currency Maintenance Menu",
+              icon: "fas fa-folder-open",
               link: "/Menu/2.1.5",
               favourite: false, items: []
             },
             {
               id: "2.1.6",
-              text: "Calendar Maintenance Menu",
-              icon: "fas fa-folder-open",
+              text: "Data Class Maintenance",
+              icon: "fas fa-cog",
               link: "/Menu/2.1.6",
               favourite: false, items: []
             },
             {
               id: "2.1.7",
-              text: "Currency Maintenance Menu",
-              icon: "fas fa-folder-open",
-              link: "/Menu/2.1.7",
-              favourite: false, items: []
-            },
-            {
-              id: "2.1.8",
-              text: "Data Class Maintenance",
-              icon: "fas fa-cog",
-              link: "/Menu/2.1.8",
-              favourite: false, items: []
-            },
-            {
-              id: "2.1.9",
-              text: "Data Class Inquiry/List",
-              icon: "fas fa-file-alt",
-              link: "/Menu/2.1.9",
-              favourite: false, items: []
-            },
-            {
-              id: "2.1.10",
               text: "Auto Balance PAI Maintenance",
               icon: "fas fa-folder-open",
-              link: "/Menu/2.1.10",
+              link: "/Menu/2.1.7",
               favourite: false, items: []
             }
           ]

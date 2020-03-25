@@ -3,6 +3,7 @@
     <dx-data-grid
       ref="gridCompanies"
       :data-source="dataSource"
+      key-expr="id"
       :remote-operations="false"
       :allow-column-resizing="true"
       :column-min-width="50"
@@ -10,8 +11,10 @@
       :column-auto-width="true"
       :row-alternation-enabled="false"
       :hover-state-enabled="true"
-      :selection="{ mode: 'single' }"
       :show-borders="true"
+      :focused-row-enabled="true"
+      :auto-navigate-to-focused-row="true"
+      :focused-row-key.sync="focusedRowKey"
       width="100%"
       height="calc(100vh - 139px)"
       @toolbar-preparing="onToolbarPreparing($event);"
@@ -26,7 +29,6 @@
       <dx-load-panel :enabled="false" />
       <dx-group-panel :visible="false" />
       <dx-search-panel :visible="true" :width="250" />
-      <dx-selection mode="single" />
     </dx-data-grid>
   </div>
 </template>
@@ -37,8 +39,8 @@ import {
   DxColumn,
   DxLoadPanel,
   DxGroupPanel,
-  DxSearchPanel,
-  DxSelection
+  DxSearchPanel
+  //DxSelection
 } from "devextreme-vue/data-grid";
 
 export default {
@@ -51,22 +53,24 @@ export default {
     DxColumn,
     DxLoadPanel,
     DxGroupPanel,
-    DxSearchPanel,
-    DxSelection
+    DxSearchPanel
+    //DxSelection
   },
   data() {
     return {
       dataSource: [
-        { companyNo: "001", companyName: "City of Melbourne" },
-        { companyNo: "010", companyName: "Library Leaders" },
-        { companyNo: "021", companyName: "Waste Management" },
+        { id: "1", companyNo: "001", companyName: "City of Melbourne" },
+        { id: "2", companyNo: "010", companyName: "Library Leaders" },
+        { id: "3", companyNo: "021", companyName: "Waste Management" },
         {
+          id: "4",
           companyNo: "024",
           companyName: "Health & Environment Service Managment"
         },
-        { companyNo: "032", companyName: "Parking" }
+        { id: "5", companyNo: "032", companyName: "Parking" }
       ],
-      pageSizes: [10, 15, 20, 25, 50, 100]
+      pageSizes: [10, 15, 20, 25, 50, 100],
+      focusedRowKey: null
     };
   },
   methods: {
@@ -113,7 +117,8 @@ export default {
     }
   },
   mounted() {
-    console.log("Menu Id: " + this.id);
+    //console.log("Menu Id: " + this.id);
+    // Set breadcrumb path
     const menuIdPath = this.id.split(".");
     let newBreadcrumbPath = [];
     let tempBreadcrumb = "";
@@ -127,11 +132,10 @@ export default {
     }
     // Save new breadcrumb data path
     this.$store.dispatch("setBreadcrumbData", newBreadcrumbPath);
-    /* this.$store.dispatch("setBreadcrumbData", [
-      { id: "2" },
-      { id: "2.1" },
-      { id: "2.1.1" }
-    ]); */
+    // Focus on first row if we have any records
+    if (this.dataSource.length > 0) {
+      this.focusedRowKey = this.dataSource[0].id;
+    }
   }
 };
 </script>

@@ -3,7 +3,7 @@
     <DxItem :options="getSideNavButtonOptions" location="before" widget="dxButton" />
     <DxItem #default location="before" locate-in-menu="never">
       <div class="toolbar-label">
-        <b>Avolin</b> Computron
+        <b>Computron</b> Financial
       </div>
     </DxItem>
     <DxItem
