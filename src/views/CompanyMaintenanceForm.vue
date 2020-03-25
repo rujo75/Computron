@@ -30,9 +30,15 @@
           />
         </dx-group-item>
         <dx-group-item caption="Company Contact Details" :col-count="2">
-          <dx-form-item data-field="telephoneNo" :editor-options="telephoneNoEditorOptions" />
-          <dx-form-item data-field="faxNo" :editor-options="telephoneNoEditorOptions" />
-          <dx-form-item data-field="mobileNo" :editor-options="mobileNoEditorOptions" />
+          <dx-form-item data-field="telephoneNo" :editor-options="telephoneNoEditorOptions">
+            <dx-label text="Telephone" />
+          </dx-form-item>
+          <dx-form-item data-field="faxNo" :editor-options="telephoneNoEditorOptions">
+            <dx-label text="Fax" />
+          </dx-form-item>
+          <dx-form-item data-field="mobileNo" :editor-options="mobileNoEditorOptions">
+            <dx-label text="Mobile" />
+          </dx-form-item>
           <dx-form-item data-field="emailAddress" />
         </dx-group-item>
         <dx-group-item caption="Other Company Details" :col-count="2">

@@ -19,12 +19,92 @@
       height="calc(100vh - 139px)"
       @toolbar-preparing="onToolbarPreparing($event);"
     >
+      <dx-state-storing :enabled="true" type="localStorage" storage-key="storageCompaniesList" />
+      <dx-export
+        :enabled="true"
+        :allow-export-selected-data="false"
+        file-name="Company Maintenance List"
+      />
+      <dx-column-chooser :enabled="true" />
       <dx-column data-field="companyNo" caption="Company No" data-type="string" :width="120" />
       <dx-column
         data-field="companyName"
         caption="Company Name"
         data-type="string"
         :min-width="200"
+      />
+      <dx-column
+        data-field="companyCode"
+        caption="Company Code"
+        data-type="string"
+        :width="130"
+        :visible="false"
+      />
+      <dx-column
+        data-field="addressLine1"
+        caption="Address Line 1"
+        data-type="string"
+        :width="200"
+        :visible="false"
+      />
+      <dx-column
+        data-field="addressLine2"
+        caption="Address Line 2"
+        data-type="string"
+        :width="200"
+        :visible="false"
+      />
+      <dx-column data-field="city" caption="City" data-type="string" :width="120" :visible="false" />
+      <dx-column
+        data-field="state"
+        caption="State"
+        data-type="string"
+        :width="120"
+        :visible="false"
+      />
+      <dx-column
+        data-field="postcode"
+        caption="Postcode"
+        data-type="string"
+        :width="90"
+        :visible="false"
+      />
+      <dx-column
+        data-field="country"
+        caption="Country"
+        data-type="string"
+        :width="120"
+        :visible="false"
+      />
+      <dx-column
+        data-field="telephoneNo"
+        caption="Telephone"
+        data-type="string"
+        :width="120"
+        :visible="false"
+      />
+      <dx-column data-field="faxNo" caption="Fax" data-type="string" :width="120" :visible="false" />
+      <dx-column
+        data-field="mobileNo"
+        caption="Mobile"
+        data-type="string"
+        :width="120"
+        :visible="false"
+      />
+      <dx-column
+        data-field="emailAddress"
+        caption="Email Address"
+        data-type="string"
+        :width="200"
+        :visible="false"
+      />
+      <dx-column data-field="taxNo" caption="ABN" data-type="string" :width="130" :visible="false" />
+      <dx-column
+        data-field="dunsNo"
+        caption="Duns No"
+        data-type="string"
+        :width="130"
+        :visible="false"
       />
       <dx-load-panel :enabled="false" />
       <dx-group-panel :visible="false" />
@@ -39,7 +119,10 @@ import {
   DxColumn,
   DxLoadPanel,
   DxGroupPanel,
-  DxSearchPanel
+  DxSearchPanel,
+  DxColumnChooser,
+  DxStateStoring,
+  DxExport
   //DxSelection
 } from "devextreme-vue/data-grid";
 
@@ -53,21 +136,105 @@ export default {
     DxColumn,
     DxLoadPanel,
     DxGroupPanel,
-    DxSearchPanel
+    DxSearchPanel,
+    DxColumnChooser,
+    DxStateStoring,
+    DxExport
     //DxSelection
   },
   data() {
     return {
       dataSource: [
-        { id: "1", companyNo: "001", companyName: "City of Melbourne" },
-        { id: "2", companyNo: "010", companyName: "Library Leaders" },
-        { id: "3", companyNo: "021", companyName: "Waste Management" },
+        {
+          id: "1",
+          companyNo: "001",
+          companyName: "City of Melbourne",
+          companyCode: "COM",
+          addressLine1: "100 Burk Steet",
+          addressLine2: "",
+          city: "Melbourne",
+          state: "VIC",
+          postcode: "3000",
+          country: "AUS",
+          telephoneNo: "0392003776",
+          faxNo: "",
+          mobileNo: "0488711256",
+          taxNo: "12345678901",
+          dunsNo: "",
+          emailAddress: "helpdesk@melbourne.vic.gov.au"
+        },
+        {
+          id: "2",
+          companyNo: "010",
+          companyName: "Library Leaders",
+          companyCode: "LIB LEAD",
+          addressLine1: "",
+          addressLine2: "",
+          city: "",
+          state: "",
+          postcode: "",
+          country: "",
+          telephoneNo: "",
+          faxNo: "",
+          mobileNo: "",
+          taxNo: "",
+          dunsNo: "",
+          emailAddress: ""
+        },
+        {
+          id: "3",
+          companyNo: "021",
+          companyName: "Waste Management",
+          companyCode: "WSTE MGMNT",
+          addressLine1: "",
+          addressLine2: "",
+          city: "",
+          state: "",
+          postcode: "",
+          country: "",
+          telephoneNo: "",
+          faxNo: "",
+          mobileNo: "",
+          taxNo: "",
+          dunsNo: "",
+          emailAddress: ""
+        },
         {
           id: "4",
           companyNo: "024",
-          companyName: "Health & Environment Service Managment"
+          companyName: "Health & Environment Service Managment",
+          companyCode: "",
+          addressLine1: "",
+          addressLine2: "",
+          city: "",
+          state: "",
+          postcode: "",
+          country: "",
+          telephoneNo: "",
+          faxNo: "",
+          mobileNo: "",
+          taxNo: "",
+          dunsNo: "",
+          emailAddress: ""
         },
-        { id: "5", companyNo: "032", companyName: "Parking" }
+        {
+          id: "5",
+          companyNo: "032",
+          companyName: "Parking",
+          companyCode: "",
+          addressLine1: "",
+          addressLine2: "",
+          city: "",
+          state: "",
+          postcode: "",
+          country: "",
+          telephoneNo: "",
+          faxNo: "",
+          mobileNo: "",
+          taxNo: "",
+          dunsNo: "",
+          emailAddress: ""
+        }
       ],
       pageSizes: [10, 15, 20, 25, 50, 100],
       focusedRowKey: null
