@@ -33,7 +33,13 @@
         file-name="Company Maintenance List"
       />
       <dx-column-chooser :enabled="true" />
-      <dx-column data-field="companyNo" caption="Company No" data-type="string" :width="120" />
+      <dx-column
+        data-field="companyNo"
+        caption="Company No"
+        data-type="string"
+        :width="120"
+        calculate-display-value="companyNoFormatted"
+      />
       <dx-column
         data-field="companyName"
         caption="Company Name"
@@ -171,7 +177,8 @@ export default {
       dataSource: [
         {
           id: "1",
-          companyNo: "001",
+          companyNo: "1",
+          companyNoFormatted: "001",
           companyName: "City of Melbourne",
           companyCode: "COM",
           addressLine1: "100 Burk Steet",
@@ -192,7 +199,8 @@ export default {
         },
         {
           id: "2",
-          companyNo: "010",
+          companyNo: "10",
+          companyNoFormatted: "010",
           companyName: "Library Leaders",
           companyCode: "LIB LEAD",
           addressLine1: "",
@@ -210,7 +218,8 @@ export default {
         },
         {
           id: "3",
-          companyNo: "021",
+          companyNo: "21",
+          companyNoFormatted: "021",
           companyName: "Waste Management",
           companyCode: "WSTE MGMNT",
           addressLine1: "",
@@ -228,8 +237,9 @@ export default {
         },
         {
           id: "4",
-          companyNo: "024",
-          companyName: "Health & Environment Service Managment",
+          companyNo: "24",
+          companyNoFormatted: "024",
+          companyName: "Health & Environment Service Management",
           companyCode: "",
           addressLine1: "",
           addressLine2: "",
@@ -246,7 +256,8 @@ export default {
         },
         {
           id: "5",
-          companyNo: "032",
+          companyNo: "32",
+          companyNoFormatted: "032",
           companyName: "Parking",
           companyCode: "",
           addressLine1: "",
