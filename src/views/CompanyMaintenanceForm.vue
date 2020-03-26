@@ -5,7 +5,7 @@
       <dx-item :options="cancelNavButtonOptions" location="before" widget="dxButton" />
     </dx-toolbar>
     <div class="widget-container">
-      <dx-form ref="formCompanies" :form-data="formData" :scrolling-enabled="true" class="form">
+      <dx-form ref="formCompanies" :form-data="getFormData" :scrolling-enabled="true" class="form">
         <dx-group-item :col-count="2">
           <dx-form-item data-field="companyNo" :editor-options="{disabled: true}" />
         </dx-group-item>
@@ -60,6 +60,7 @@ import {
   DxGroupItem,
   DxLabel
 } from "devextreme-vue/form";
+import { mapGetters } from "vuex";
 
 export default {
   name: "app",
@@ -149,6 +150,9 @@ export default {
         mask: "000 000 000"
       }
     };
+  },
+  computed: {
+    ...mapGetters(["getFormData"])
   }
 };
 </script>

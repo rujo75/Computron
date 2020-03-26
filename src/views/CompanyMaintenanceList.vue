@@ -18,8 +18,15 @@
       width="100%"
       height="calc(100vh - 139px)"
       @toolbar-preparing="onToolbarPreparing($event);"
+      @focused-row-changed="onFocusedRowChanged"
+      @row-dbl-click="onRowDblClick"
     >
-      <dx-state-storing :enabled="true" type="localStorage" storage-key="storageCompaniesList" />
+      <dx-state-storing
+        :enabled="true"
+        :saving-timeout="100"
+        type="localStorage"
+        storage-key="storageCompaniesList"
+      />
       <dx-export
         :enabled="true"
         :allow-export-selected-data="false"
@@ -82,14 +89,23 @@
         data-type="string"
         :width="120"
         :visible="false"
+        calculate-display-value="telephoneNoFormatted"
       />
-      <dx-column data-field="faxNo" caption="Fax" data-type="string" :width="120" :visible="false" />
+      <dx-column
+        data-field="faxNo"
+        caption="Fax"
+        data-type="string"
+        :width="120"
+        :visible="false"
+        calculate-display-value="faxNoFormatted"
+      />
       <dx-column
         data-field="mobileNo"
         caption="Mobile"
         data-type="string"
         :width="120"
         :visible="false"
+        calculate-display-value="mobileNoFormatted"
       />
       <dx-column
         data-field="emailAddress"
@@ -98,13 +114,21 @@
         :width="200"
         :visible="false"
       />
-      <dx-column data-field="taxNo" caption="ABN" data-type="string" :width="130" :visible="false" />
+      <dx-column
+        data-field="taxNo"
+        caption="ABN"
+        data-type="string"
+        :width="130"
+        :visible="false"
+        calculate-display-value="taxNoFormatted"
+      />
       <dx-column
         data-field="dunsNo"
         caption="Duns No"
         data-type="string"
         :width="130"
         :visible="false"
+        calculate-display-value="dunsNoFormatted"
       />
       <dx-load-panel :enabled="false" />
       <dx-group-panel :visible="false" />
@@ -157,9 +181,12 @@ export default {
           postcode: "3000",
           country: "AUS",
           telephoneNo: "0392003776",
+          telephoneNoFormatted: "(03) 9200 3776",
           faxNo: "",
           mobileNo: "0488711256",
+          mobileNoFormatted: "0488 711 256",
           taxNo: "12345678901",
+          taxNoFormatted: "12 345 678 901",
           dunsNo: "",
           emailAddress: "helpdesk@melbourne.vic.gov.au"
         },
@@ -240,6 +267,7 @@ export default {
       focusedRowKey: null
     };
   },
+  computed: {},
   methods: {
     onToolbarPreparing(e) {
       e.toolbarOptions.items.unshift(
@@ -251,6 +279,7 @@ export default {
             stylingMode: "text",
             text: "Create",
             focusStateEnabled: false,
+            disabled: true,
             onClick: () => {
               this.$router.push("/CompanyMaintenanceForm");
             }
@@ -276,14 +305,26 @@ export default {
             icon: "fas fa-trash-alt",
             stylingMode: "text",
             text: "Delete",
-            focusStateEnabled: false
+            focusStateEnabled: false,
+            disabled: true
             //onClick: this.refreshDataGrid.bind(this)
           }
         }
       );
+    },
+    onFocusedRowChanged(e) {
+      //var data = e.row && e.row.data;
+      //console.log(data);
+      //console.log(e.row);
+      //console.log(e.row.data);
+      this.$store.dispatch("setFormData", e.row.data);
+    },
+    onRowDblClick() {
+      this.$router.push("/CompanyMaintenanceForm");
     }
   },
   mounted() {
+    //console.log("mounted");
     //console.log("Menu Id: " + this.id);
     // Set breadcrumb path
     const menuIdPath = this.id.split(".");
@@ -299,10 +340,17 @@ export default {
     }
     // Save new breadcrumb data path
     this.$store.dispatch("setBreadcrumbData", newBreadcrumbPath);
+
     // Focus on first row if we have any records
-    if (this.dataSource.length > 0) {
+    if (this.dataSource.length > 0 && this.focusedRowKey === null) {
       this.focusedRowKey = this.dataSource[0].id;
     }
+  },
+  created() {
+    //console.log("created");
+  },
+  destroyed() {
+    //console.log("destroyed");
   }
 };
 </script>

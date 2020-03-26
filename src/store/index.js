@@ -11,7 +11,8 @@ export const store = new Vuex.Store({
     breadcrumbData: [],
     favouritesData: [{ id: "334127A259764614B8B9A5E8551D6B13", text: "My Favourites", expanded: true, icon: "fas fa-folder", isFolder: true, items: [] }],
     favouritesSelectedItemData: null,
-    lastSelectedFavouriteFolder: null
+    lastSelectedFavouriteFolder: null,
+    formData: null
   },
   getters: {
     getSideNavMenuOpenState: state => state.sideNavMenuOpenState,
@@ -20,7 +21,8 @@ export const store = new Vuex.Store({
     getBreadcrumbData: state => state.breadcrumbData,
     getFavouritesData: state => state.favouritesData,
     getFavouritesSelectedItemData: state => state.favouritesSelectedItemData,
-    getLastSelectedFavouriteFolder: state => state.lastSelectedFavouriteFolder
+    getLastSelectedFavouriteFolder: state => state.lastSelectedFavouriteFolder,
+    getFormData: state => state.formData
   },
   mutations: {
     toggleSideNavMenuOpenState: function (state) {
@@ -91,6 +93,9 @@ export const store = new Vuex.Store({
     setLastSelectedFavouriteFolder: function (state, data) {
       state.lastSelectedFavouriteFolder = data;
     },
+    setFormData: function (state, data) {
+      state.formData = data;
+    }
   },
   actions: {
     setBreadcrumbData({ commit }, data) {
@@ -120,5 +125,8 @@ export const store = new Vuex.Store({
     setLastSelectedFavouriteFolder({ commit }, data) {
       commit("setLastSelectedFavouriteFolder", data);
     },
+    setFormData({ commit }, data) {
+      commit("setFormData", data);
+    }
   }
 });
