@@ -1,7 +1,7 @@
 <template>
   <dx-popup
     ref="popupSignIn"
-    :visible="getSignInVisible"
+    :visible="currentUser === null"
     :drag-enabled="false"
     :close-on-outside-click="false"
     :show-title="true"
@@ -41,6 +41,7 @@ import { DxPopup } from "devextreme-vue/popup";
 import { DxForm, DxItem as DxFormItem } from "devextreme-vue/form";
 import { DxButton } from "devextreme-vue";
 import { mapGetters } from "vuex";
+import { store } from "../../store/store";
 
 export default {
   name: "app",
@@ -52,7 +53,6 @@ export default {
   },
   data() {
     return {
-      popupVisible: false,
       backgroundColour: "rgb(42,42,42)",
       formData: { username: "", password: "" },
       validationRules: {
@@ -63,7 +63,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getSignInVisible"])
+    ...mapGetters(["getSignInVisible", "currentUser"])
   },
   methods: {
     popupFormShown() {
@@ -73,10 +73,11 @@ export default {
       this.$refs["formSignIn"].instance.resetValues();
     },
     signIn() {
-      this.hidePoupForm();
-    },
-    hidePoupForm() {
-      this.$store.dispatch("setSingInVisible", false);
+      const user = {
+        email: this.formData.username,
+        password: this.formData.password
+      };
+      store.dispatch("signIn", user);
     }
   }
 };

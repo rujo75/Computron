@@ -1,5 +1,6 @@
 import firebase from "firebase/app"
 import "firebase/firestore"
+import "firebase/auth";
 
 const config = {
     apiKey: "AIzaSyCR-1xBn6MXF50cCDDR8Eq5-9gLQ5aUoYM",
@@ -11,13 +12,11 @@ const config = {
     appId: "1:1075511443334:web:fa8818053ce9c174207607"
 }
 
-firebase.initializeApp(config)
+firebase.initializeApp(config);
+const db = firebase.firestore();
+const settings = { timestampsInSnapshots: true };
+db.settings(settings);
 
-const db = firebase.firestore()
-
-export const dbCompaniesRef = db.collection("companies")
-
-// add to script section
-// import { dbCompaniesRef } from "../firebase";
-// add code to save data
-// dbCompaniesRef.add(this.company)
+export const firebaseAuth = firebase.auth();
+//export const dbUsersRef = db.collection("users");
+//export const dbCompaniesRef = db.collection("companies");

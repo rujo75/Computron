@@ -20,6 +20,7 @@
 <script>
 import { DxToolbar, DxItem } from "devextreme-vue/toolbar";
 import { mapGetters } from "vuex";
+import { store } from "../../store/store";
 
 export default {
   name: "app",
@@ -54,7 +55,8 @@ export default {
           //console.log(e.itemData);
           //alert("User navigation button has been clicked!");
           if (e.itemData.name === "Sign Out") {
-            this.$store.dispatch("setSingInVisible", true);
+            // store.dispatch("setSingInVisible", true);
+            store.dispatch("signOut");
           }
         }
       }
@@ -88,7 +90,7 @@ export default {
         stylingMode: this.getSideNavMenuStylingMode,
         onClick: () => {
           //alert("Side navigation menu button has been clicked!");
-          this.$store.commit("toggleSideNavMenuOpenState");
+          store.commit("toggleSideNavMenuOpenState");
         }
       };
     },
@@ -100,7 +102,7 @@ export default {
         hint: "Favourites",
         onClick: () => {
           //alert("Favourites navigation menu button has been clicked!");
-          this.$store.commit("toggleFavouritesNavMenuOpenState");
+          store.commit("toggleFavouritesNavMenuOpenState");
         }
       };
     }
