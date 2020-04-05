@@ -5,6 +5,7 @@ import Menu from "@/views/Menu";
 import CompanyMaintenanceList from "@/views/CompanyMaintenanceList";
 import CompanyMaintenanceForm from "@/views/CompanyMaintenanceForm";
 import UserProfileMaintenanceList from "@/views/UserProfileMaintenanceList";
+import UserProfileMaintenanceForm from "@/views/UserProfileMaintenanceForm";
 
 Vue.use(Router);
 
@@ -38,6 +39,11 @@ const router = new Router({
       props: true,
       name: "UserProfileMaintenanceList",
       component: UserProfileMaintenanceList
+    },
+    {
+      path: "/UserProfileMaintenanceForm",
+      name: "UserProfileMaintenanceForm",
+      component: UserProfileMaintenanceForm
     },
   ]
 });

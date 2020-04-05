@@ -37,6 +37,13 @@
       <dx-column data-field="email" caption="Email" data-type="string" :width="250" />
       <dx-column data-field="firstname" caption="First Name" data-type="string" :width="150" />
       <dx-column data-field="lastname" caption="Last Name" data-type="string" :width="150" />
+      <dx-column
+        data-field="enabled"
+        caption="Enabled"
+        data-type="boolean"
+        :width="80"
+        :visible="false"
+      />
       <dx-load-panel :enabled="false" />
       <dx-group-panel :visible="false" />
       <dx-search-panel :visible="true" :width="250" />
