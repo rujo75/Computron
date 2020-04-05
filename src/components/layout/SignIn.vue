@@ -16,7 +16,9 @@
   >
     <p>
       <dx-form ref="formSignIn" :form-data="formData">
-        <dx-form-item data-field="username" :validation-rules="validationRules.username" />
+        <dx-form-item data-field="username" :validation-rules="validationRules.username">
+          <dx-label text="Email" />
+        </dx-form-item>
         <dx-form-item
           data-field="password"
           :validation-rules="validationRules.password"
@@ -38,7 +40,7 @@
 
 <script>
 import { DxPopup } from "devextreme-vue/popup";
-import { DxForm, DxItem as DxFormItem } from "devextreme-vue/form";
+import { DxForm, DxItem as DxFormItem, DxLabel } from "devextreme-vue/form";
 import { DxButton } from "devextreme-vue";
 import { mapGetters } from "vuex";
 import { store } from "../../store/store";
@@ -49,7 +51,8 @@ export default {
     DxButton,
     DxPopup,
     DxForm,
-    DxFormItem
+    DxFormItem,
+    DxLabel
   },
   data() {
     return {

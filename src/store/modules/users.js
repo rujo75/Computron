@@ -1,11 +1,16 @@
 import { firebaseAuth } from "../../firebase";
+import { firestoreAction } from "vuexfire";
+import { dbUsersRef } from "../../firebase";
+import notify from 'devextreme/ui/notify';
 
 const state = {
-    currentUser: null
+    currentUser: null,
+    users: []
 };
 
 const getters = {
-    currentUser: state => state.currentUser
+    currentUser: state => state.currentUser,
+    getUsers: state => state.users
 };
 
 const mutations = {
@@ -22,6 +27,9 @@ const mutations = {
 };
 
 const actions = {
+    setUsersRef: firestoreAction(context => {
+        return context.bindFirestoreRef("users", dbUsersRef.orderBy("lastname"));
+    }),
     signIn: async ({ commit }, user) => {
         try {
             const userData = await firebaseAuth.signInWithEmailAndPassword(
@@ -29,13 +37,14 @@ const actions = {
                 user.password
             );
             commit("userStatus", userData.user);
+            console.log(userData.user)
         } catch (error) {
             const errorCode = error.code;
             const errorMessage = error.message;
             if (errorCode === "auth/wrong-password") {
-                alert("Wrong password!");
+                notify("Wrong password!", "error", 5000);
             } else {
-                alert(errorMessage);
+                notify(errorMessage, "error", 5000);
             }
         }
     },
@@ -44,7 +53,8 @@ const actions = {
         try {
             await firebaseAuth.signOut();
         } catch (error) {
-            alert(`Error signing out, ${error}`);
+            const errorMessage = error.message;
+            notify(errorMessage, "error", 5000);
         }
         commit("userStatus", null);
     }

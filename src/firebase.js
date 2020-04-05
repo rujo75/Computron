@@ -18,5 +18,5 @@ const settings = { timestampsInSnapshots: true };
 db.settings(settings);
 
 export const firebaseAuth = firebase.auth();
-//export const dbUsersRef = db.collection("users");
+export const dbUsersRef = db.collection("users");
 //export const dbCompaniesRef = db.collection("companies");

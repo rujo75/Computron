@@ -1,7 +1,7 @@
 <template>
   <div class="grid-panel">
     <dx-data-grid
-      ref="gridCompanies"
+      ref="grid"
       :data-source="dataSource"
       key-expr="id"
       :remote-operations="false"

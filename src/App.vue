@@ -12,6 +12,7 @@ import NavBar from "./components/layout/NavBar";
 import Main from "./components/layout/Main";
 import StatusBar from "./components/layout/StatusBar";
 import SignIn from "./components/layout/SignIn";
+import { dbUsersRef } from "./firebase";
 
 export default {
   name: "App",
@@ -21,7 +22,10 @@ export default {
     StatusBar,
     SignIn
   },
-  mounted: function() {
+  created() {
+    this.$store.dispatch("setUsersRef", dbUsersRef);
+  },
+  mounted() {
     // Navigate to Home page
     if (this.$route.path !== "/") {
       this.$router.push("/");

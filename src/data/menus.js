@@ -428,6 +428,137 @@ export const MenuData = {
       icon: "fas fa-file-invoice-dollar",
       link: "/Menu/13",
       items: []
+    },
+    {
+      id: "14",
+      text: "Administration",
+      icon: "fas fa-cogs",
+      link: "/Menu/14",
+      items: [
+        {
+          id: "14.1",
+          text: "System Parameters",
+          icon: "fas fa-folder-open",
+          link: "/Menu/14.1",
+          favourite: false,
+          items: [
+            {
+              id: "14.1.1",
+              text: "Company Maintenance",
+              icon: "fas fa-cog",
+              link: "/CompanyMaintenanceList/14.1.1",
+              favourite: false, items: []
+            },
+            {
+              id: "14.1.2",
+              text: "Company Parameters Maintenance",
+              icon: "fas fa-cog",
+              link: "/Menu/14.1.2",
+              favourite: false, items: []
+            },
+            {
+              id: "14.1.3",
+              text: "End of Period/End of Year",
+              icon: "fas fa-cog",
+              link: "/Menu/14.1.3",
+              favourite: false, items: []
+            },
+            {
+              id: "14.1.4",
+              text: "Calendar Maintenance Menu",
+              icon: "fas fa-folder-open",
+              link: "/Menu/14.1.4",
+              favourite: false, items: []
+            },
+            {
+              id: "14.1.5",
+              text: "Currency Maintenance Menu",
+              icon: "fas fa-folder-open",
+              link: "/Menu/14.1.5",
+              favourite: false, items: []
+            },
+            {
+              id: "14.1.6",
+              text: "Data Class Maintenance",
+              icon: "fas fa-cog",
+              link: "/Menu/14.1.6",
+              favourite: false, items: []
+            },
+            {
+              id: "14.1.7",
+              text: "Auto Balance PAI Maintenance",
+              icon: "fas fa-folder-open",
+              link: "/Menu/14.1.7",
+              favourite: false, items: []
+            }
+          ]
+        },
+        {
+          id: "14.2",
+          text: "System Administrator",
+          icon: "fas fa-folder-open",
+          link: "/Menu/14.2",
+          favourite: false,
+          items: [
+            {
+              id: "14.2.1",
+              text: "Global Environment Maintenance",
+              icon: "fas fa-file-alt",
+              link: "/Menu/14.2.1",
+              favourite: false, items: []
+            },
+            {
+              id: "14.2.2",
+              text: "General Ledger Audit Report",
+              icon: "fas fa-file-invoice-dollar",
+              link: "/Menu/14.2.2",
+              favourite: false, items: []
+            },
+            {
+              id: "14.2.3",
+              text: "Owner Code Maintenance",
+              icon: "fas fa-cog",
+              link: "/Menu/14.2.3",
+              favourite: false, items: []
+            },
+            {
+              id: "14.2.4",
+              text: "User Profile Maintenance",
+              icon: "fas fa-cog",
+              link: "/UserProfileMaintenanceList/14.2.4",
+              favourite: false, items: []
+            },
+            {
+              id: "14.2.5",
+              text: "Profile Security Report",
+              icon: "fas fa-cog",
+              link: "/Menu/14.2.5",
+              favourite: false, items: []
+            },
+            {
+              id: "14.2.6",
+              text: "Journal Security by User",
+              icon: "fas fa-file-alt",
+              link: "/Menu/14.2.6",
+              favourite: false, items: []
+            },
+            {
+              id: "14.2.7",
+              text: "Transfer Audit Processing",
+              icon: "fas fa-folder-open",
+              link: "/Menu/14.2.7",
+              favourite: false, items: []
+            },
+            {
+              id: "14.2.8",
+              text: "Account Data Verification Report",
+              icon: "fas fa-file-invoice-dollar",
+              link: "/Menu/14.2.8",
+              favourite: false, items: []
+            },
+          ]
+        }
+      ]
     }
   ]
 };
