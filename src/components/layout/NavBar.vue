@@ -12,7 +12,12 @@
       widget="dxButton"
       class="nav-button"
     />
-    <DxItem :options="getFavouritesNavButtonOptions" location="after" widget="dxButton" />
+    <DxItem
+      :options="getFavouritesNavButtonOptions"
+      location="after"
+      widget="dxButton"
+      cssClass="button-icon"
+    />
     <DxItem :options="userProfileNavButtonOptions" location="after" widget="dxDropDownButton" />
   </dx-toolbar>
 </template>
@@ -97,6 +102,7 @@ export default {
     getFavouritesNavButtonOptions() {
       return {
         icon: "fas fa-star",
+        cssClass: "button-icon",
         focusStateEnabled: false,
         stylingMode: this.getFavouritesNavMenuStylingMode,
         hint: "Favourites",
@@ -122,6 +128,11 @@ export default {
   padding: 5px 10px;
   /* border-bottom: 1px solid rgba(221, 221, 221); */
   border-bottom: 1px solid rgba(77, 77, 77);
+}
+
+.button-icon >>> .dx-button-content .dx-icon {
+  font-size: 16px;
+  color: red;
 }
 </style>
 
