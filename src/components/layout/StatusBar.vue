@@ -1,5 +1,5 @@
 <template>
-  <dx-toolbar class="status-toolbar" :height="26">
+  <dx-toolbar class="status-toolbar dx-theme-border-color" :height="26">
     <DxItem #default location="after" locate-in-menu="never">
       <div class="toolbar-label">Version 1.0</div>
     </DxItem>
@@ -29,9 +29,7 @@ export default {
 .dx-toolbar {
   /* background-color: rgba(191, 191, 191, 0.15); */
   padding: 1px 10px;
-  /* border-bottom: 1px solid rgba(221, 221, 221); */
-  border-top: 1px solid rgba(77, 77, 77);
-  /* border-bottom: 1px solid rgba(77, 77, 77); */
+  border-top: 1px solid;
 }
 
 .status-toolbar >>> .dx-toolbar-items-container {

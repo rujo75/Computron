@@ -1,70 +1,96 @@
 <template>
   <div class="home-panel">
     <div class="container">
-      <div class="my-card">
-        <div class="card-header">
-          <!--<a class="waves-effect waves-dark btn-flat" style="width: 100%">CHART OF ACCOUNTS</a>-->
+      <div class="my-card dx-theme-border-color">
+        <div class="card-header dx-theme-border-color">
           <dx-button
             width="100%"
-            text="CHART OF ACCOUNTS"
+            text="Chart of Accounts"
             type="normal"
             styling-mode="text"
+            class="card-header-text"
             :focus-state-enabled="false"
           />
         </div>
         <div class="card-main">
           <i class="material-icons">account_tree</i>
           <div class="main-description">Manage accounts used by the organization.</div>
-          <!--<a class="btn-floating waves-effect waves-light red">
-            <i class="material-icons">add</i>
-          </a>-->
-          <dx-button icon="fas fa-star" :focus-state-enabled="false" class="button-icon" />
+          <dx-button
+            icon="fas fa-star"
+            :focus-state-enabled="false"
+            styling-mode="text"
+            hint="Add to favourites"
+          />
         </div>
       </div>
-      <div class="my-card">
-        <div class="card-header">
-          <!--<a class="waves-effect waves-dark btn-flat" style="width: 100%">TAX RATES</a>-->
-          <dx-button width="100%" text="TAX RATES" type="normal" styling-mode="text" />
+      <div class="my-card dx-theme-border-color">
+        <div class="card-header dx-theme-border-color">
+          <dx-button
+            width="100%"
+            text="Tax Rates"
+            type="normal"
+            styling-mode="text"
+            class="card-header-text"
+            :focus-state-enabled="false"
+          />
         </div>
         <div class="card-main">
-          <i class="material-icons">emoji_symbols</i>
+          <i class="fas fa-percentage"></i>
           <div class="main-description">Manage tax rates used by the organisation.</div>
-          <!--<a class="btn-floating waves-effect waves-light red">
-            <i class="material-icons">add</i>
-          </a>-->
-          <dx-button icon="fas fa-star" :focus-state-enabled="false" class="button-icon" />
+          <dx-button
+            icon="fas fa-star"
+            :focus-state-enabled="false"
+            styling-mode="text"
+            hint="Add to favourites"
+          />
         </div>
       </div>
-      <div class="my-card">
-        <div class="card-header">
-          <!--<a class="waves-effect waves-dark btn-flat" style="width: 100%">SUPPLIERS</a>-->
-          <dx-button width="100%" text="SUPPLIERS" type="normal" styling-mode="text" />
+      <div class="my-card dx-theme-border-color">
+        <div class="card-header dx-theme-border-color">
+          <dx-button
+            width="100%"
+            text="Suppliers"
+            type="normal"
+            styling-mode="text"
+            class="card-header-text"
+            :focus-state-enabled="false"
+          />
         </div>
         <div class="card-main">
           <i class="material-icons">business</i>
           <div
             class="main-description"
           >Manage suppliers that supplie goods and services to the organization.</div>
-          <!--<a class="btn-floating waves-effect waves-light red">
-            <i class="material-icons">add</i>
-          </a>-->
-          <dx-button icon="fas fa-star" :focus-state-enabled="false" class="button-icon" />
+          <dx-button
+            icon="fas fa-star"
+            :focus-state-enabled="false"
+            styling-mode="text"
+            hint="Add to favourites"
+          />
         </div>
       </div>
-      <div class="my-card">
-        <div class="card-header">
-          <!--<a class="waves-effect waves-dark btn-flat" style="width: 100%">CUSTOMERS</a>-->
-          <dx-button width="100%" text="CUSTOMERS" type="normal" styling-mode="text" />
+      <div class="my-card dx-theme-border-color">
+        <div class="card-header dx-theme-border-color">
+          <dx-button
+            width="100%"
+            text="Customers"
+            type="normal"
+            styling-mode="text"
+            class="card-header-text"
+            :focus-state-enabled="false"
+          />
         </div>
         <div class="card-main">
           <i class="material-icons">store</i>
           <div
             class="main-description"
           >Manage customers that buy goods or services from the organisation.</div>
-          <!--<a class="btn-floating waves-effect waves-light red">
-            <i class="material-icons">add</i>
-          </a>-->
-          <dx-button icon="fas fa-star" :focus-state-enabled="false" class="button-icon" />
+          <dx-button
+            icon="fas fa-star"
+            :focus-state-enabled="false"
+            styling-mode="text"
+            hint="Add to favourites"
+          />
         </div>
       </div>
     </div>
@@ -104,7 +130,7 @@ export default {
 }
 
 .my-card {
-  border: 1px solid rgba(77, 77, 77); /* Set up Border */
+  border: 1px solid; /* Set up Border */
   /*border-radius: 4px;*/ /* Slightly Curve edges */
   overflow: hidden; /* Fixes the corners */
   display: flex; /* Children use Flexbox */
@@ -112,14 +138,16 @@ export default {
 }
 
 .my-card:hover {
-  box-shadow: 0 0 0 1px; /*#F05B41;*/
+  box-shadow: 0 0 0 1px;
 }
 
 .card-header {
-  text-align: center;
+  border-bottom: 1px solid;
+}
+
+.card-header-text {
+  /*font-weight: bold;*/
   font-size: 16px;
-  font-weight: 600;
-  border-bottom: 1px solid rgba(77, 77, 77);
 }
 
 .card-main {
@@ -129,20 +157,12 @@ export default {
   grid-template-columns: 40px auto 36px;
 }
 
-.material-icons {
+.material-icons,
+.fas {
   font-size: 36px;
 }
 
 .main-description {
   font-size: 14px;
-}
-
-.card-main > a {
-  flex: none;
-  margin-left: 15px;
-}
-
-.button-icon >>> .dx-button-content .dx-icon {
-  font-size: 16px;
 }
 </style>

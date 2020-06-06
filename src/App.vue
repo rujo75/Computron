@@ -54,4 +54,9 @@ body {
 .margin-left-10 {
   margin-left: 10px;
 }
+
+.dx-button .fa-star {
+  font-size: 16px;
+  /*color: red;*/
+}
 </style>

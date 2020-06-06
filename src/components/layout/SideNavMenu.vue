@@ -7,7 +7,7 @@
       :focus-state-enabled="true"
       :selected-item-keys="[currentItem.id]"
       selection-mode="single"
-      class="panel-list"
+      class="panel-list dx-theme-border-color"
       @item-click="onNavigationItemClick"
     />
   </div>
@@ -51,9 +51,7 @@ export default {
 .panel-list {
   height: calc(100vh - 72px);
   width: 250px;
-  /* padding: 4px 0px; */
-  /* border-right: 1px solid rgba(221, 221, 221); */
-  border-right: 1px solid rgba(77, 77, 77);
+  border-right: 1px solid;
 }
 
 .panel-list >>> .dx-list-item-icon-container {

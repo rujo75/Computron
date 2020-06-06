@@ -366,7 +366,7 @@ export const MenuData = {
       link: "/Menu/4",
       items: []
     },
-    {
+    /*{
       id: "5",
       text: "Time Billing",
       icon: "fas fa-clock",
@@ -386,7 +386,7 @@ export const MenuData = {
       icon: "fas fa-hand-holding-usd",
       link: "/Menu/7",
       items: []
-    },
+    },*/
     {
       id: "8",
       text: "Fixed Assets",
@@ -394,7 +394,7 @@ export const MenuData = {
       link: "/Menu/8",
       items: []
     },
-    {
+    /*{
       id: "9",
       text: "Universal Utilities",
       icon: "fas fa-cog",
@@ -414,7 +414,7 @@ export const MenuData = {
       icon: "fas fa-project-diagram",
       link: "/Menu/11",
       items: []
-    },
+    },*/
     {
       id: "12",
       text: "Inventory",

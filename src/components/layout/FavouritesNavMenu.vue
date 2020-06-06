@@ -1,6 +1,6 @@
 <template>
-  <div class="favourites-panel">
-    <dx-toolbar class="favourites-toolbar">
+  <div class="favourites-panel dx-theme-border-color">
+    <dx-toolbar class="favourites-toolbar dx-theme-border-color">
       <DxItem #default location="before" locate-in-menu="never">
         <div class="toolbar-label">Favourites</div>
       </DxItem>
@@ -270,8 +270,7 @@ export default {
 .favourites-panel {
   height: calc(100vh - 49px);
   width: 350px;
-  /* border-left: 1px solid rgba(221, 221, 221); */
-  border-left: 1px solid rgba(77, 77, 77);
+  border-left: 1px solid;
 }
 
 .favourite-tree {
@@ -289,8 +288,7 @@ export default {
 .dx-toolbar {
   /* background-color: rgba(191, 191, 191, 0.15); */
   padding: 5px 10px;
-  /* border-bottom: 1px solid rgba(221, 221, 221); */
-  border-bottom: 1px solid rgba(77, 77, 77);
+  border-bottom: 1px solid;
 }
 
 .panel-tree >>> .dx-icon {
