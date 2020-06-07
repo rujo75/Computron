@@ -427,7 +427,40 @@ export const MenuData = {
       text: "Reports",
       icon: "fas fa-file-invoice-dollar",
       link: "/Menu/13",
-      items: []
+      items: [
+        {
+          id: "13.1",
+          text: "Chart of Accounts",
+          description: "Manage accounts used by the organization.",
+          icon: "fas fa-project-diagram",
+          link: "/Menu/13.1",
+          favourite: false,
+        },
+        {
+          id: "13.2",
+          text: "Tax Rates",
+          description: "Manage tax rates used by the organisation.",
+          icon: "fas fa-percent",
+          link: "/Menu/13.2",
+          favourite: false,
+        },
+        {
+          id: "13.3",
+          text: "Suppliers",
+          description: "Manage suppliers that supplie goods and services to the organization.",
+          icon: "fas fa-building",
+          link: "/Menu/13.3",
+          favourite: false,
+        },
+        {
+          id: "13.4",
+          text: "Customers",
+          description: "Manage customers that buy goods or services from the organisation.",
+          icon: "fas fa-store-alt",
+          link: "/Menu/13.4",
+          favourite: false,
+        }
+      ]
     },
     {
       id: "14",

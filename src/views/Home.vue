@@ -1,113 +1,258 @@
 <template>
   <div class="home-panel">
     <div class="container">
-      <div class="my-card dx-theme-border-color">
+      <div class="my-card dx-theme-border-color" v-for="item in getMenuItems" :key="item.id">
         <div class="card-header dx-theme-border-color">
           <dx-button
             width="100%"
-            text="Chart of Accounts"
+            :text="item.text"
             type="normal"
             styling-mode="text"
             class="card-header-text"
             :focus-state-enabled="false"
+            :id="item.id"
+            @click="onHeaderButtonClick"
           />
         </div>
         <div class="card-main">
-          <i class="material-icons">account_tree</i>
-          <div class="main-description">Manage accounts used by the organization.</div>
+          <i v-bind:class="item.icon"></i>
+          <div class="main-description">{{ item.description }}</div>
           <dx-button
-            icon="fas fa-star"
+            :icon="getItemFavouritesIcon(item)"
             :focus-state-enabled="false"
+            :id="item.id"
             styling-mode="text"
             hint="Add to favourites"
+            @click="onAddToFavouritesButtonClick"
           />
         </div>
       </div>
-      <div class="my-card dx-theme-border-color">
-        <div class="card-header dx-theme-border-color">
+      <dx-popup
+        ref="popupFavourites"
+        :drag-enabled="true"
+        :close-on-outside-click="false"
+        :show-title="true"
+        :width="450"
+        :height="200"
+        class="popup"
+        title="Add to Favourites"
+        @showing="popupFormShowing"
+        @shown="popupFormShown"
+        @hiding="popupFormHiding"
+      >
+        <p>
+          <dx-form ref="formFavourites" :form-data="formData">
+            <dx-form-item
+              data-field="saveTo"
+              :validation-rules="validationRules.saveTo"
+              editor-type="dxSelectBox"
+              :editor-options="saveToEditorOptions"
+            />
+          </dx-form>
+        </p>
+        <div align="right">
           <dx-button
-            width="100%"
-            text="Tax Rates"
-            type="normal"
-            styling-mode="text"
-            class="card-header-text"
-            :focus-state-enabled="false"
+            text="OK"
+            type="success"
+            :use-submit-behavior="true"
+            :width="80"
+            @click="saveFavourite"
           />
+          <dx-button text="Cancel" :width="80" class="margin-left-10" @click="hidePoupForm" />
         </div>
-        <div class="card-main">
-          <i class="fas fa-percentage"></i>
-          <div class="main-description">Manage tax rates used by the organisation.</div>
-          <dx-button
-            icon="fas fa-star"
-            :focus-state-enabled="false"
-            styling-mode="text"
-            hint="Add to favourites"
-          />
-        </div>
-      </div>
-      <div class="my-card dx-theme-border-color">
-        <div class="card-header dx-theme-border-color">
-          <dx-button
-            width="100%"
-            text="Suppliers"
-            type="normal"
-            styling-mode="text"
-            class="card-header-text"
-            :focus-state-enabled="false"
-          />
-        </div>
-        <div class="card-main">
-          <i class="material-icons">business</i>
-          <div
-            class="main-description"
-          >Manage suppliers that supplie goods and services to the organization.</div>
-          <dx-button
-            icon="fas fa-star"
-            :focus-state-enabled="false"
-            styling-mode="text"
-            hint="Add to favourites"
-          />
-        </div>
-      </div>
-      <div class="my-card dx-theme-border-color">
-        <div class="card-header dx-theme-border-color">
-          <dx-button
-            width="100%"
-            text="Customers"
-            type="normal"
-            styling-mode="text"
-            class="card-header-text"
-            :focus-state-enabled="false"
-          />
-        </div>
-        <div class="card-main">
-          <i class="material-icons">store</i>
-          <div
-            class="main-description"
-          >Manage customers that buy goods or services from the organisation.</div>
-          <dx-button
-            icon="fas fa-star"
-            :focus-state-enabled="false"
-            styling-mode="text"
-            hint="Add to favourites"
-          />
-        </div>
-      </div>
+      </dx-popup>
     </div>
   </div>
 </template>
 
 <script>
 import { DxButton } from "devextreme-vue";
+import { DxPopup } from "devextreme-vue/popup";
+import { DxForm, DxItem as DxFormItem } from "devextreme-vue/form";
+import { MenuData } from "./../data/menus.js";
+import { mapGetters } from "vuex";
+import { getNewId } from "./../store/common.js";
 
 export default {
-  components: { DxButton },
+  components: { DxButton, DxPopup, DxForm, DxFormItem },
   data() {
-    return {};
+    return {
+      id: "13",
+      formData: { id: "", saveTo: "" },
+      validationRules: {
+        saveTo: [{ type: "required", message: "Save to folder is required." }]
+      }
+    };
   },
-  methods: {},
+  computed: {
+    ...mapGetters(["getFavouritesData", "getLastSelectedFavouriteFolder"]),
+
+    saveToEditorOptions() {
+      return {
+        dataSource: this.getFavouritesData,
+        displayExpr: "text",
+        valueExpr: "id"
+      };
+    },
+    getMenuItems() {
+      //console.log("Menu id: " + this.id);
+      // Build new breadcrumb data path
+      const menuIdPath = this.id.split(".");
+      let newBreadcrumbPath = [];
+      let tempBreadcrumb = "";
+      for (let i = 0; i < menuIdPath.length; i++) {
+        if (i === 0) {
+          tempBreadcrumb = menuIdPath[0];
+        } else {
+          tempBreadcrumb += "." + menuIdPath[i];
+        }
+        newBreadcrumbPath.push({ id: tempBreadcrumb });
+      }
+      // Save new breadcrumb data path
+      this.$store.dispatch("setBreadcrumbData", newBreadcrumbPath);
+
+      //console.log(menuData);
+      // Get menu items
+      let result = this.findMenuById(MenuData, this.id);
+      //console.log(result);
+      if (result != null) {
+        return result.items;
+      } else {
+        return [];
+      }
+    }
+  },
+  methods: {
+    getItemFavouritesIcon(item) {
+      if (item.favourite) {
+        return "fas fa-star";
+      } else {
+        return "far fa-star";
+      }
+    },
+    onHeaderButtonClick(e) {
+      //console.log(e.element);
+      let menu = this.findMenuById(MenuData, e.element.id);
+      if (menu.link) {
+        if (this.$route.path !== menu.link) {
+          this.$router.push(menu.link);
+        }
+      }
+    },
+    onAddToFavouritesButtonClick(e) {
+      e.event.stopPropagation();
+      //console.log(e.element);
+      this.formData.id = e.element.id;
+      this.$refs["popupFavourites"].instance.show();
+    },
+    findMenuById(object, id) {
+      // Early return
+      if (object.id === id) {
+        return object;
+      }
+      var result, p;
+      for (p in object) {
+        // eslint-disable-next-line no-prototype-builtins
+        if (object.hasOwnProperty(p) && typeof object[p] === "object") {
+          result = this.findMenuById(object[p], id);
+          if (result) {
+            return result;
+          }
+        }
+      }
+      return result;
+    },
+    deepSearch(object, key, predicate) {
+      // Example:
+      // let result = this.deepSearch(menuData, "id", (k, v) => v === "2.1.2");
+      // eslint-disable-next-line no-prototype-builtins
+      if (object.hasOwnProperty(key) && predicate(key, object[key]) === true)
+        return object;
+
+      for (let i = 0; i < Object.keys(object).length; i++) {
+        if (typeof object[Object.keys(object)[i]] === "object") {
+          let o = this.deepSearch(
+            object[Object.keys(object)[i]],
+            key,
+            predicate
+          );
+          if (o != null) return o;
+        }
+      }
+      return null;
+    },
+    saveFavourite() {
+      var result = this.$refs["formFavourites"].instance.validate();
+      console.log(result);
+      if (result.isValid) {
+        //alert("folder id: " + this.formData.saveTo);
+        // Find menu by id
+        //console.log(this.formData);
+        let menu = this.findMenuById(MenuData, this.formData.id);
+        //console.log(menu);
+        const newId = getNewId();
+        let data = {
+          folderId: this.formData.saveTo,
+          favourite: {
+            id: newId,
+            menuId: this.formData.id,
+            text: menu.text,
+            icon: menu.icon,
+            isFolder: false,
+            link: menu.link
+          }
+        };
+        //alert("saveTo: " + this.formData.saveTo);
+        this.$store.dispatch("addFavouriteToFavouritesData", data);
+        // mark item as favourite to update the icon
+        menu.favourite = true;
+        // Save the last folder selection for later use
+        this.$store.dispatch(
+          "setLastSelectedFavouriteFolder",
+          this.formData.saveTo
+        );
+        this.hidePoupForm();
+      }
+    },
+    hidePoupForm() {
+      this.$refs["popupFavourites"].instance.hide();
+    },
+    validateForm(e) {
+      e.component.validate();
+    },
+    popupFormShowing() {
+      // Select default value
+      //console.log(this.getLastSelectedFavouriteFolder);
+      let folderSet = false;
+      if (this.getLastSelectedFavouriteFolder) {
+        // Check if folder still exists in array
+        let index = this.getFavouritesData.findIndex(
+          obj => obj.id === this.getLastSelectedFavouriteFolder
+        );
+        if (index >= 0) {
+          this.formData.saveTo = this.getLastSelectedFavouriteFolder;
+          folderSet = true;
+        }
+      }
+      if (!folderSet) {
+        // Default folder was not set. Set to first found in array
+        //console.log(this.getFavouritesData);
+        if (this.getFavouritesData) {
+          this.formData.saveTo = this.getFavouritesData[0].id;
+          folderSet = true;
+        }
+      }
+    },
+    popupFormShown() {
+      // Set focus to input field
+      this.$refs["formFavourites"].instance.getEditor("saveTo").focus();
+    },
+    popupFormHiding() {
+      this.$refs["formFavourites"].instance.resetValues();
+    }
+  },
   mounted() {
-    this.$store.dispatch("setBreadcrumbData", [{ id: "1" }]);
+    //this.$store.dispatch("setBreadcrumbData", [{ id: "1" }]);
   }
 };
 </script>
@@ -159,7 +304,9 @@ export default {
 
 .material-icons,
 .fas {
-  font-size: 36px;
+  display: block;
+  margin: auto;
+  font-size: 24px;
 }
 
 .main-description {
