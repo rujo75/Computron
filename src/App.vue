@@ -59,4 +59,17 @@ body {
   font-size: 16px;
   /*color: red;*/
 }
+
+.dx-field-item .dx-checkbox {
+  padding-top: 7px;
+}
+
+.dx-field-item .dx-checkbox-icon {
+  margin-right: 5px;
+}
+
+.dx-switch-on,
+.dx-switch-off {
+  font-size: 14px;
+}
 </style>

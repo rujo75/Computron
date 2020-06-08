@@ -101,7 +101,7 @@ export default {
             focusStateEnabled: false,
             disabled: true,
             onClick: () => {
-              this.$router.push("/UserProfileMaintenanceForm");
+              this.$router.push("/EditUser");
             }
           }
         },
@@ -114,7 +114,7 @@ export default {
             text: "Edit",
             focusStateEnabled: false,
             onClick: () => {
-              this.$router.push("/UserProfileMaintenanceForm");
+              this.$router.push("/EditUser");
             }
           }
         },
@@ -140,7 +140,7 @@ export default {
       this.$store.dispatch("setFormData", e.row.data);
     },
     onRowDblClick() {
-      this.$router.push("/UserProfileMaintenanceForm");
+      this.$router.push("/EditUser");
     }
   },
   mounted() {

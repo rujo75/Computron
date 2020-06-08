@@ -7,7 +7,7 @@ export const MenuData = {
       icon: "fas fa-layer-group",
       link: "/Menu/2",
       items: [
-        {
+        /*{
           id: "2.1",
           text: "System Parameters",
           icon: "fas fa-folder-open",
@@ -349,7 +349,7 @@ export const MenuData = {
           icon: "fas fa-folder-open",
           link: "/Menu/2.14",
           favourite: false, items: []
-        }
+        }*/
       ]
     },
     {
@@ -387,13 +387,13 @@ export const MenuData = {
       link: "/Menu/7",
       items: []
     },*/
-    {
+    /*{
       id: "8",
       text: "Fixed Assets",
       icon: "fas fa-boxes",
       link: "/Menu/8",
       items: []
-    },
+    },*/
     /*{
       id: "9",
       text: "Universal Utilities",
@@ -428,7 +428,7 @@ export const MenuData = {
       icon: "fas fa-file-invoice-dollar",
       link: "/Menu/13",
       items: [
-        {
+        /*{
           id: "13.1",
           text: "Chart of Accounts",
           description: "Manage accounts used by the organization.",
@@ -459,7 +459,7 @@ export const MenuData = {
           icon: "fas fa-store-alt",
           link: "/Menu/13.4",
           favourite: false,
-        }
+        }*/
       ]
     },
     {
@@ -469,6 +469,24 @@ export const MenuData = {
       link: "/Menu/14",
       items: [
         {
+          id: "14.1",
+          text: "Users",
+          description: "Manage users and assign security roles in the organization.",
+          icon: "fas fa-users",
+          link: "/ListUsers/14.1",
+          favourite: false,
+          items: []
+        },
+        {
+          id: "14.2",
+          text: "Settings",
+          description: "Customise and configure the application settings.",
+          icon: "fas fa-cog",
+          link: "/Menu/14.2",
+          favourite: false,
+          items: []
+        },
+        /*{
           id: "14.1",
           text: "System Parameters",
           icon: "fas fa-folder-open",
@@ -590,7 +608,7 @@ export const MenuData = {
               favourite: false, items: []
             },
           ]
-        }
+        }*/
       ]
     }
   ]

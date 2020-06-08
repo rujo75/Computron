@@ -1,73 +1,71 @@
 <template>
-  <div style="width: 450px">
-    <!--<div>{{ id }}</div>-->
-    <DxList
-      :data-source="getMenuData"
-      :active-state-enabled="false"
-      :hover-state-enabled="true"
-      :focus-state-enabled="false"
-      class="panel-list"
-      @item-click="onNavigationItemClick"
-    >
-      <template #item="{ data: item }">
-        <div class="item-template">
-          <div class="item-icon">
-            <i class="dx-icon dx-list-item-icon" :class="item.icon" />
-          </div>
-          <div class="item-text">{{ item.text }}</div>
-          <DxButton
-            :icon="getItemFavouritesIcon(item)"
+  <div class="home-panel">
+    <div class="container">
+      <div class="my-card dx-theme-border-color" v-for="item in getMenuItems" :key="item.id">
+        <div class="card-header dx-theme-border-color">
+          <dx-button
+            width="100%"
+            :text="item.text"
+            type="normal"
             styling-mode="text"
-            :id="item.id"
-            :active-state-enabled="false"
+            class="card-header-text"
             :focus-state-enabled="false"
-            :width="24"
-            :height="24"
-            hint="Add to favourites"
-            @click="onNavigationItemButtonClick"
+            :id="item.id"
+            @click="onHeaderButtonClick"
           />
         </div>
-      </template>
-    </DxList>
-    <dx-popup
-      ref="popupFavourites"
-      :drag-enabled="true"
-      :close-on-outside-click="false"
-      :show-title="true"
-      :width="450"
-      :height="200"
-      class="popup"
-      title="Favourites"
-      @showing="popupFormShowing"
-      @shown="popupFormShown"
-      @hiding="popupFormHiding"
-    >
-      <p>
-        <dx-form ref="formFavourites" :form-data="formData">
-          <dx-form-item
-            data-field="saveTo"
-            :validation-rules="validationRules.saveTo"
-            editor-type="dxSelectBox"
-            :editor-options="saveToEditorOptions"
+        <div class="card-main">
+          <i v-bind:class="item.icon"></i>
+          <div class="main-description">{{ item.description }}</div>
+          <dx-button
+            :icon="getItemFavouritesIcon(item)"
+            :focus-state-enabled="false"
+            :id="item.id"
+            styling-mode="text"
+            hint="Add to favourites"
+            @click="onAddToFavouritesButtonClick"
           />
-        </dx-form>
-      </p>
-      <div align="right">
-        <dx-button
-          text="OK"
-          type="success"
-          :use-submit-behavior="true"
-          :width="80"
-          @click="saveFavourite"
-        />
-        <dx-button text="Cancel" :width="80" class="margin-left-10" @click="hidePoupForm" />
+        </div>
       </div>
-    </dx-popup>
+      <dx-popup
+        ref="popupFavourites"
+        :drag-enabled="true"
+        :close-on-outside-click="false"
+        :show-title="true"
+        :width="450"
+        :height="200"
+        class="popup"
+        title="Add to Favourites"
+        @showing="popupFormShowing"
+        @shown="popupFormShown"
+        @hiding="popupFormHiding"
+      >
+        <p>
+          <dx-form ref="formFavourites" :form-data="formData">
+            <dx-form-item
+              data-field="saveTo"
+              :validation-rules="validationRules.saveTo"
+              editor-type="dxSelectBox"
+              :editor-options="saveToEditorOptions"
+            />
+          </dx-form>
+        </p>
+        <div align="right">
+          <dx-button
+            text="OK"
+            type="success"
+            :use-submit-behavior="true"
+            :width="80"
+            @click="saveFavourite"
+          />
+          <dx-button text="Cancel" :width="80" class="margin-left-10" @click="hidePoupForm" />
+        </div>
+      </dx-popup>
+    </div>
   </div>
 </template>
 
 <script>
-import { DxList } from "devextreme-vue/list";
 import { DxButton } from "devextreme-vue";
 import { DxPopup } from "devextreme-vue/popup";
 import { DxForm, DxItem as DxFormItem } from "devextreme-vue/form";
@@ -80,7 +78,6 @@ export default {
     id: String
   },
   components: {
-    DxList,
     DxButton,
     DxPopup,
     DxForm,
@@ -104,8 +101,7 @@ export default {
         valueExpr: "id"
       };
     },
-
-    getMenuData() {
+    getMenuItems() {
       //console.log("Menu id: " + this.id);
       // Build new breadcrumb data path
       const menuIdPath = this.id.split(".");
@@ -141,16 +137,18 @@ export default {
         return "far fa-star";
       }
     },
-    onNavigationItemClick(e) {
-      if (e.itemData.link) {
-        if (this.$route.path !== e.itemData.link) {
-          this.$router.push(e.itemData.link);
+    onHeaderButtonClick(e) {
+      //console.log(e.element);
+      let menu = this.findMenuById(MenuData, e.element.id);
+      if (menu.link) {
+        if (this.$route.path !== menu.link) {
+          this.$router.push(menu.link);
         }
       }
     },
-    onNavigationItemButtonClick(e) {
+    onAddToFavouritesButtonClick(e) {
       e.event.stopPropagation();
-      //console.log(e.element.id);
+      //console.log(e.element);
       this.formData.id = e.element.id;
       this.$refs["popupFavourites"].instance.show();
     },
@@ -192,10 +190,11 @@ export default {
     },
     saveFavourite() {
       var result = this.$refs["formFavourites"].instance.validate();
-      //console.log(result);
+      console.log(result);
       if (result.isValid) {
         //alert("folder id: " + this.formData.saveTo);
         // Find menu by id
+        //console.log(this.formData);
         let menu = this.findMenuById(MenuData, this.formData.id);
         //console.log(menu);
         const newId = getNewId();
@@ -212,6 +211,8 @@ export default {
         };
         //alert("saveTo: " + this.formData.saveTo);
         this.$store.dispatch("addFavouriteToFavouritesData", data);
+        // mark item as favourite to update the icon
+        menu.favourite = true;
         // Save the last folder selection for later use
         this.$store.dispatch(
           "setLastSelectedFavouriteFolder",
@@ -264,51 +265,58 @@ export default {
 </script>
 
 <style scoped>
-.panel-list {
-  height: calc(100vh - 119px);
+* {
+  box-sizing: border-box;
+}
+
+.home-panel {
   padding: 10px;
 }
 
-.panel-list >>> .dx-list-item {
-  border: none;
+.container {
+  margin: 0px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 400px));
+  grid-gap: 10px;
+  width: 100%;
 }
 
-.panel-list >>> .dx-empty-message {
-  border: none;
+.my-card {
+  border: 1px solid; /* Set up Border */
+  /*border-radius: 4px;*/ /* Slightly Curve edges */
+  overflow: hidden; /* Fixes the corners */
+  display: flex; /* Children use Flexbox */
+  flex-direction: column; /* Rotate Axis */
 }
 
-.item-template {
-  padding: 8px 10px;
+.my-card:hover {
+  box-shadow: 0 0 0 1px;
 }
 
-.item-template > i {
-  float: left;
+.card-header {
+  border-bottom: 1px solid;
 }
 
-.item-template > .item-icon {
-  height: 24px;
-  line-height: 24px;
-  vertical-align: middle;
-  /* background: green; */
+.card-header-text {
+  /*font-weight: bold;*/
+  font-size: 16px;
 }
 
-.item-template > .item-text {
-  padding-left: 15px;
-  height: 24px;
-  line-height: 24px;
-  vertical-align: middle;
-  /* background: red; */
+.card-main {
+  display: grid; /* Children use Flexbox */
+  padding: 15px; /* Add padding to the top/bottom/left/right */
+  grid-column-gap: 15px;
+  grid-template-columns: 40px auto 36px;
 }
 
-.item-template > div {
-  float: left;
+.material-icons,
+.fas {
+  display: block;
+  margin: auto;
+  font-size: 24px;
 }
 
-.item-template >>> .dx-button {
-  float: right;
-}
-
-.item-template >>> .dx-button .dx-button-content {
-  padding: 0px;
+.main-description {
+  font-size: 14px;
 }
 </style>

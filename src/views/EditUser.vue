@@ -5,28 +5,58 @@
       <dx-item :options="cancelNavButtonOptions" location="before" widget="dxButton" />
     </dx-toolbar>
     <div class="widget-container">
-      <dx-form ref="form" :form-data="getFormData" :scrolling-enabled="true" class="form">
-        <dx-group-item caption="Security Details" :col-count="2">
-          <dx-form-item data-field="username">
-            <dx-label text="Email" />
-          </dx-form-item>
-          <dx-form-item data-field="password" />
-        </dx-group-item>
-        <dx-group-item caption="General Details" :col-count="2">
-          <dx-form-item data-field="firstname">
-            <dx-label text="First Name" />
-          </dx-form-item>
-          <dx-form-item data-field="lastname">
-            <dx-label text="Last Name" />
-          </dx-form-item>
-          <dx-form-item data-field="enabled" editor-type="dxSwitch" />
-        </dx-group-item>
-      </dx-form>
+      <dx-accordion
+        :multiple="true"
+        :collapsible="true"
+        class="accordion"
+        @initialized="onAccordionInitialized"
+      >
+        <dx-accordion-item #default title="General">
+          <dx-form ref="formGeneral" :form-data="getFormData">
+            <dx-group-item :col-count="2">
+              <dx-form-item data-field="userId" :editor-options="{disabled: true}">
+                <dx-label text="User ID" />
+              </dx-form-item>
+              <dx-form-item data-field="userName">
+                <dx-label text="User Name" />
+              </dx-form-item>
+              <dx-form-item data-field="fullName">
+                <dx-label text="Full Name" />
+              </dx-form-item>
+              <dx-form-item data-field="email" />
+              <dx-form-item
+                data-field="enabled"
+                editor-type="dxSwitch"
+                :editor-options="{switchedOffText: 'NO', switchedOnText: 'YES', width: '60'}"
+              />
+              <dx-form-item data-field="expiryDate" editor-type="dxDateBox" />
+            </dx-group-item>
+          </dx-form>
+        </dx-accordion-item>
+        <dx-accordion-item #default title="Security">
+          <dx-form ref="formSecurity" :form-data="getFormData">
+            <dx-group-item :col-count="2">
+              <dx-form-item data-field="password" :editor-options="{mode: 'password'}" />
+              <dx-form-item
+                :editor-options="{text: 'User must change password at next login'}"
+                data-field="mustChangePassword"
+                editor-type="dxCheckBox"
+              >
+                <dx-label :visible="false" />
+              </dx-form-item>
+            </dx-group-item>
+          </dx-form>
+        </dx-accordion-item>
+      </dx-accordion>
     </div>
   </div>
 </template>
 
 <script>
+import {
+  DxAccordion,
+  DxItem as DxAccordionItem
+} from "devextreme-vue/accordion";
 import { DxToolbar, DxItem } from "devextreme-vue/toolbar";
 import {
   DxForm,
@@ -39,6 +69,8 @@ import { mapGetters } from "vuex";
 export default {
   name: "app",
   components: {
+    DxAccordion,
+    DxAccordionItem,
     DxToolbar,
     DxItem,
     DxForm,
@@ -103,6 +135,14 @@ export default {
   },
   computed: {
     ...mapGetters(["getFormData"])
+  },
+  methods: {
+    onAccordionInitialized() {
+      //console.log(e.data);
+      /*for (var i = 0; i < e.accordionItems.length; i++) {
+        e.component.expandItem(i);
+      }*/
+    }
   }
 };
 </script>
@@ -117,5 +157,9 @@ export default {
 .form {
   margin: 20px;
   height: calc(100vh - 206px);
+}
+
+.accordion {
+  margin: 10px;
 }
 </style>
