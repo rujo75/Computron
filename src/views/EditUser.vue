@@ -139,9 +139,10 @@ export default {
   methods: {
     onAccordionInitialized() {
       //console.log(e.data);
-      /*for (var i = 0; i < e.accordionItems.length; i++) {
-        e.component.expandItem(i);
-      }*/
+      // expand general item
+      //e.components.expandItem(0);
+      // expand security item
+      //e.component.expandItem(1);
     }
   }
 };
