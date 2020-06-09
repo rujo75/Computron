@@ -9,7 +9,7 @@
         :multiple="true"
         :collapsible="true"
         class="accordion"
-        @initialized="onAccordionInitialized"
+        @contentReady="onAccordionContentReady"
       >
         <dx-accordion-item #default title="General">
           <dx-form ref="formGeneral" :form-data="getFormData">
@@ -137,12 +137,9 @@ export default {
     ...mapGetters(["getFormData"])
   },
   methods: {
-    onAccordionInitialized() {
-      //console.log(e.data);
-      // expand general item
-      //e.components.expandItem(0);
+    onAccordionContentReady(e) {
       // expand security item
-      //e.component.expandItem(1);
+      e.component.expandItem(1);
     }
   }
 };
