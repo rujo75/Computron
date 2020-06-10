@@ -2,12 +2,12 @@
   <div class="grid-panel">
     <dx-data-grid
       ref="grid"
-      :data-source="getUsers"
-      key-expr="id"
+      key-expr="userID"
+      :data-source="dataSource"
       :remote-operations="false"
       :allow-column-resizing="true"
+      :allow-column-reordering="true"
       :column-min-width="50"
-      column-resizing-mode="widget"
       :column-auto-width="true"
       :row-alternation-enabled="false"
       :hover-state-enabled="true"
@@ -15,6 +15,7 @@
       :focused-row-enabled="true"
       :auto-navigate-to-focused-row="true"
       :focused-row-key.sync="focusedRowKey"
+      column-resizing-mode="widget"
       width="100%"
       height="calc(100vh - 139px)"
       @toolbar-preparing="onToolbarPreparing($event);"
@@ -33,15 +34,35 @@
         file-name="User Maintenance List"
       />
       <dx-column-chooser :enabled="true" />
-      <dx-column data-field="id" caption="ID" data-type="string" :width="200" :visible="false" />
+      <dx-column
+        data-field="userID"
+        caption="User ID"
+        data-type="string"
+        :width="300"
+        :visible="false"
+      />
+      <dx-column data-field="userName" caption="User Name" data-type="string" :width="150" />
       <dx-column data-field="email" caption="Email" data-type="string" :width="250" />
-      <dx-column data-field="firstname" caption="First Name" data-type="string" :width="150" />
-      <dx-column data-field="lastname" caption="Last Name" data-type="string" :width="150" />
+      <dx-column data-field="fullName" caption="Full Name" data-type="string" :width="300" />
       <dx-column
         data-field="enabled"
         caption="Enabled"
         data-type="boolean"
         :width="80"
+        :visible="false"
+      />
+      <dx-column
+        data-field="expiryDate"
+        caption="Expiry Date"
+        data-type="date"
+        :width="150"
+        :visible="false"
+      />
+      <dx-column
+        data-field="mustChangePassword"
+        caption="Change Password"
+        data-type="boolean"
+        :width="150"
         :visible="false"
       />
       <dx-load-panel :enabled="false" />
@@ -82,7 +103,19 @@ export default {
   data() {
     return {
       pageSizes: [10, 15, 20, 25, 50, 100],
-      focusedRowKey: null
+      focusedRowKey: null,
+      dataSource: [
+        {
+          userID: "185bad2d-0a16-4e6b-a6a1-49ac2d380c57",
+          userName: "drusmir",
+          fullName: "Dal Rusmir",
+          email: "drusmir@tpg.com",
+          enabled: true,
+          expiryDate: "2020-06-30",
+          password: "123456",
+          mustChangePassword: false
+        }
+      ]
     };
   },
   computed: {

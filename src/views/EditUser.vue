@@ -14,7 +14,7 @@
         <dx-accordion-item #default title="General">
           <dx-form ref="formGeneral" :form-data="getFormData">
             <dx-group-item :col-count="2">
-              <dx-form-item data-field="userId" :editor-options="{disabled: true}">
+              <dx-form-item data-field="userID" :editor-options="{disabled: true}">
                 <dx-label text="User ID" />
               </dx-form-item>
               <dx-form-item data-field="userName">
@@ -141,6 +141,9 @@ export default {
       // expand security item
       e.component.expandItem(1);
     }
+  },
+  created() {
+    //console.log("created");
   }
 };
 </script>

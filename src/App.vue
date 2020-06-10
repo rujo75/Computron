@@ -13,6 +13,7 @@ import Main from "./components/layout/Main";
 import StatusBar from "./components/layout/StatusBar";
 import SignIn from "./components/layout/SignIn";
 import { dbUsersRef } from "./firebase";
+import { locale } from "devextreme/localization";
 
 export default {
   name: "App",
@@ -22,7 +23,22 @@ export default {
     StatusBar,
     SignIn
   },
+  data() {
+    return {
+      locale: null
+    };
+  },
+  methods: {
+    getLocale() {
+      var lang = navigator.language || navigator.userLanguage;
+      //console.log(lang);
+      return lang != null ? lang : "en";
+    }
+  },
   created() {
+    this.locale = this.getLocale();
+    //console.log(this.locale);
+    locale(this.locale);
     this.$store.dispatch("setUsersRef", dbUsersRef);
   },
   mounted() {
