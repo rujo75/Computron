@@ -138,10 +138,14 @@ export default {
       }
     },
     onHeaderButtonClick(e) {
-      //console.log(e.element);
+      console.log(e.element);
       let menu = this.findMenuById(MenuData, e.element.id);
+      console.log(menu);
       if (menu.link) {
         if (this.$route.path !== menu.link) {
+          // store current path
+          this.$store.dispatch("setCurrentPath", menu.path);
+          // navigate to new page
           this.$router.push(menu.link);
         }
       }

@@ -80,12 +80,25 @@ body {
   padding-top: 7px;
 }
 
-.dx-field-item .dx-checkbox-icon {
-  margin-right: 5px;
+.dx-field-item .dx-checkbox-text {
+  padding-left: 30px;
 }
 
 .dx-switch-on,
 .dx-switch-off {
   font-size: 14px;
+}
+
+/*.data-grid-hyperlink {
+  color: #0b0080;
+}*/
+
+.data-grid-hyperlink:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.data-grid-hyperlink:active {
+  text-decoration: underline;
 }
 </style>

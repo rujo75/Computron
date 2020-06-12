@@ -20,7 +20,6 @@
       height="calc(100vh - 139px)"
       @toolbar-preparing="onToolbarPreparing($event);"
       @focused-row-changed="onFocusedRowChanged"
-      @row-dbl-click="onRowDblClick"
     >
       <dx-state-storing
         :enabled="true"
@@ -40,6 +39,7 @@
         data-type="string"
         :width="300"
         :visible="false"
+        cell-template="UserIDTemplate"
       />
       <dx-column data-field="userName" caption="User Name" data-type="string" :width="150" />
       <dx-column data-field="email" caption="Email" data-type="string" :width="250" />
@@ -68,6 +68,13 @@
       <dx-load-panel :enabled="false" />
       <dx-group-panel :visible="false" />
       <dx-search-panel :visible="true" :width="250" />
+
+      <div slot="UserIDTemplate" slot-scope="{ data: item }">
+        <span
+          @click.stop.prevent="onUserIDClick(item);"
+          class="data-grid-hyperlink"
+        >{{ item.value }}</span>
+      </div>
     </dx-data-grid>
   </div>
 </template>
@@ -114,12 +121,32 @@ export default {
           expiryDate: "2020-06-30",
           password: "123456",
           mustChangePassword: false
+        },
+        {
+          userID: "f274ab28-59af-45af-86f5-97a149104476",
+          userName: "jsmith",
+          fullName: "John Smith",
+          email: "jsmith@tpg.com",
+          enabled: true,
+          expiryDate: "",
+          password: "123456",
+          mustChangePassword: false
+        },
+        {
+          userID: "2652c185-09ab-4b8a-8518-7f184a4f2baf",
+          userName: "jpike",
+          fullName: "Jane Pike",
+          email: "jpike@tpg.com",
+          enabled: true,
+          expiryDate: "",
+          password: "123456",
+          mustChangePassword: false
         }
       ]
     };
   },
   computed: {
-    ...mapGetters(["getUsers"])
+    ...mapGetters(["getUsers", "getCurrentPath"])
   },
   methods: {
     onToolbarPreparing(e) {
@@ -174,12 +201,17 @@ export default {
     },
     onRowDblClick() {
       this.$router.push("/EditUser");
+    },
+    onUserIDClick() {
+      //alert(e.text);
+      this.$router.push("/EditUser");
     }
   },
   mounted() {
     //console.log("mounted");
-    //console.log("Menu Id: " + this.id);
     // Set breadcrumb path
+    //console.log(this.getCurrentPath);
+    /*this.id = "14.Users";
     const menuIdPath = this.id.split(".");
     let newBreadcrumbPath = [];
     let tempBreadcrumb = "";
@@ -192,7 +224,21 @@ export default {
       newBreadcrumbPath.push({ id: tempBreadcrumb });
     }
     // Save new breadcrumb data path
-    this.$store.dispatch("setBreadcrumbData", newBreadcrumbPath);
+    this.$store.dispatch("setBreadcrumbData", newBreadcrumbPath);*/
+
+    // Build breadcrumb path
+    const menuIdPath = this.getCurrentPath.split("/");
+    let newBreadcrumbPath = [];
+    let tempBreadcrumb = "";
+
+    for (let i = 0; i < menuIdPath.length; i++) {
+      if (i === 0) {
+        tempBreadcrumb = menuIdPath[0];
+      } else {
+        tempBreadcrumb += "." + menuIdPath[i];
+      }
+      newBreadcrumbPath.push({ id: tempBreadcrumb });
+    }
 
     // Focus on first row if we have any records
     if (this.dataSource.length > 0 && this.focusedRowKey === null) {

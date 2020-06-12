@@ -1,6 +1,7 @@
 const state = {
     sideNavMenuOpenState: true,
     favouritesNavMenuOpenState: true,
+    currentPath: "",
     breadcrumbData: [],
     formData: null
 };
@@ -8,6 +9,7 @@ const state = {
 const getters = {
     getSideNavMenuOpenState: state => state.sideNavMenuOpenState,
     getFavouritesNavMenuOpenState: state => state.favouritesNavMenuOpenState,
+    getCurrentPath: state => state.currentPath,
     getBreadcrumbData: state => state.breadcrumbData,
     getFormData: state => state.formData
 };
@@ -19,6 +21,9 @@ const mutations = {
     toggleFavouritesNavMenuOpenState: function (state) {
         state.favouritesNavMenuOpenState = !state.favouritesNavMenuOpenState;
     },
+    setCurrentPath: function (state, data) {
+        state.currentPath = data;
+    },
     setBreadcrumbData: function (state, data) {
         state.breadcrumbData = data;
     },
@@ -28,6 +33,9 @@ const mutations = {
 }
 
 const actions = {
+    setCurrentPath({ commit }, data) {
+        commit("setCurrentPath", data);
+    },
     setBreadcrumbData({ commit }, data) {
         commit("setBreadcrumbData", data);
     },

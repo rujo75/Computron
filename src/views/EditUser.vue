@@ -24,11 +24,12 @@
                 <dx-label text="Full Name" />
               </dx-form-item>
               <dx-form-item data-field="email" />
-              <dx-form-item
+              <!--<dx-form-item
                 data-field="enabled"
                 editor-type="dxSwitch"
                 :editor-options="{switchedOffText: 'NO', switchedOnText: 'YES', width: '60'}"
-              />
+              />-->
+              <dx-form-item data-field="enabled" editor-type="dxCheckBox" />
               <dx-form-item data-field="expiryDate" editor-type="dxDateBox" />
             </dx-group-item>
           </dx-form>
@@ -38,7 +39,7 @@
             <dx-group-item :col-count="2">
               <dx-form-item data-field="password" :editor-options="{mode: 'password'}" />
               <dx-form-item
-                :editor-options="{text: 'User must change password at next login'}"
+                :editor-options="mustChangePasswordOptions"
                 data-field="mustChangePassword"
                 editor-type="dxCheckBox"
               >
@@ -130,6 +131,9 @@ export default {
       },
       dunsNoEditorOptions: {
         mask: "000 000 000"
+      },
+      mustChangePasswordOptions: {
+        text: "User must change password at next login"
       }
     };
   },
