@@ -20,6 +20,7 @@
       height="calc(100vh - 139px)"
       @toolbar-preparing="onToolbarPreparing($event);"
       @focused-row-changed="onFocusedRowChanged"
+      @initialized="onGridInitialized"
     >
       <dx-state-storing
         :enabled="true"
@@ -198,6 +199,13 @@ export default {
       //console.log(e.row);
       //console.log(e.row.data);
       this.$store.dispatch("setFormData", e.row.data);
+    },
+    onGridInitialized(e) {
+      console.log(e.component.focusedRowIndex);
+      console.log(this.dataSource);
+      if (e.component.focusedRowIndex == null && this.dataSource.length > 0) {
+        e.component.focusedRowIndex = 0;
+      }
     },
     onRowDblClick() {
       this.$router.push("/EditUser");

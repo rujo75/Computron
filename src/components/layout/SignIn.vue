@@ -62,7 +62,10 @@ export default {
         username: [{ type: "required", message: "Username is required." }],
         password: [{ type: "required", message: "Password is required." }]
       },
-      passwordOptions: { mode: "password" }
+      passwordOptions: {
+        mode: "password",
+        onEnterKey: this.onPasswordEnterKey.bind(this)
+      }
     };
   },
   computed: {
@@ -74,6 +77,10 @@ export default {
     },
     popupFormHiding() {
       this.$refs["formSignIn"].instance.resetValues();
+    },
+    onPasswordEnterKey() {
+      console.log("onPasswordEnterKey");
+      this.signIn();
     },
     signIn() {
       const user = {
