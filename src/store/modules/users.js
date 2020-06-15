@@ -5,11 +5,13 @@ import notify from 'devextreme/ui/notify';
 
 const state = {
     currentUser: null,
+    signInLoading: false,
     users: []
 };
 
 const getters = {
     currentUser: state => state.currentUser,
+    signInLoading: state => state.signInLoading,
     getUsers: state => state.users
 };
 
@@ -32,18 +34,22 @@ const actions = {
     }),
     signIn: async ({ commit }, user) => {
         try {
+            state.signInLoading = true;
             const userData = await firebaseAuth.signInWithEmailAndPassword(
                 user.email,
                 user.password
             );
+            state.signInLoading = false;
             commit("userStatus", userData.user);
             console.log(userData.user)
         } catch (error) {
             const errorCode = error.code;
             const errorMessage = error.message;
             if (errorCode === "auth/wrong-password") {
+                state.signInLoading = false;
                 notify("Wrong password!", "error", 5000);
             } else {
+                state.signInLoading = false;
                 notify(errorMessage, "error", 5000);
             }
         }
