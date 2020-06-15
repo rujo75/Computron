@@ -17,7 +17,11 @@
     >
       <p>
         <dx-form ref="formSignIn" :form-data="formData">
-          <dx-form-item data-field="username" :validation-rules="validationRules.username">
+          <dx-form-item
+            data-field="username"
+            :validation-rules="validationRules.username"
+            :editor-options="usernameOptions"
+          >
             <dx-label text="Email" />
           </dx-form-item>
           <dx-form-item
@@ -73,6 +77,9 @@ export default {
         username: [{ type: "required", message: "Username is required." }],
         password: [{ type: "required", message: "Password is required." }]
       },
+      usernameOptions: {
+        onEnterKey: this.onUsernameEnterKey.bind(this)
+      },
       passwordOptions: {
         mode: "password",
         onEnterKey: this.onPasswordEnterKey.bind(this)
@@ -88,6 +95,10 @@ export default {
     },
     popupFormHiding() {
       this.$refs["formSignIn"].instance.resetValues();
+    },
+    onUsernameEnterKey() {
+      console.log("onUsernameEnterKey");
+      this.signIn();
     },
     onPasswordEnterKey() {
       console.log("onPasswordEnterKey");

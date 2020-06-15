@@ -26,13 +26,9 @@
         :enabled="true"
         :saving-timeout="100"
         type="localStorage"
-        storage-key="storageUsersList"
+        storage-key="storageUsersList2"
       />
-      <dx-export
-        :enabled="true"
-        :allow-export-selected-data="false"
-        file-name="User Maintenance List"
-      />
+      <dx-export :enabled="true" :allow-export-selected-data="false" file-name="Users List" />
       <dx-column-chooser :enabled="true" />
       <dx-column
         data-field="userID"
@@ -201,10 +197,24 @@ export default {
       this.$store.dispatch("setFormData", e.row.data);
     },
     onGridInitialized(e) {
-      console.log(e.component.focusedRowIndex);
+      console.log("onGridInitialized");
+      console.log(e.component);
+      console.log(
+        "e.component.focusedRowIndex: " + e.component.option("focusedRowIndex")
+      );
+      console.log("this.focusedRowKey: " + this.focusedRowKey);
       console.log(this.dataSource);
-      if (e.component.focusedRowIndex == null && this.dataSource.length > 0) {
-        e.component.focusedRowIndex = 0;
+      // Focus on first row if we have any records
+      if (
+        e.component.option("focusedRowIndex") == -1 &&
+        this.dataSource.length > 0
+      ) {
+        console.log("Setting focusedRowKey");
+        //this.focusedRowKey = this.dataSource[0].id;
+        e.component.option(
+          "focusedRowKey",
+          "185bad2d-0a16-4e6b-a6a1-49ac2d380c57"
+        );
       }
     },
     onRowDblClick() {
@@ -249,9 +259,10 @@ export default {
     }
 
     // Focus on first row if we have any records
-    if (this.dataSource.length > 0 && this.focusedRowKey === null) {
+    /*if (this.dataSource.length > 0 && this.focusedRowKey === null) {
+      console.log("focus on row: " & this.dataSource[0].id);
       this.focusedRowKey = this.dataSource[0].id;
-    }
+    }*/
   },
   created() {
     //console.log("created");
