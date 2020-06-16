@@ -147,7 +147,8 @@ export default {
         type: "custom",
         savingTimeout: 100,
         customLoad: function() {
-          var state = localStorage.getItem(this.storageKey);
+          console.log(this.stateStoring);
+          var state = localStorage.getItem(this.stateStoring.storageKey);
           if (state) {
             state = JSON.parse(state);
             /*for (var i = 0; i < state.columns.length; i++) {
@@ -166,7 +167,7 @@ export default {
             }
           }
           return state;
-        },
+        }.bind(this),
         customSave: function(state) {
           localStorage.setItem(this.storageKey, JSON.stringify(state));
         }
