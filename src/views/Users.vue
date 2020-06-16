@@ -15,6 +15,7 @@
       :focused-row-enabled="true"
       :auto-navigate-to-focused-row="true"
       :focused-row-key.sync="focusedRowKey"
+      :state-storing="stateStoring"
       column-resizing-mode="widget"
       width="100%"
       height="calc(100vh - 139px)"
@@ -22,12 +23,12 @@
       @focused-row-changed="onFocusedRowChanged"
       @initialized="onGridInitialized"
     >
-      <dx-state-storing
+      <!--<dx-state-storing
         :enabled="true"
         :saving-timeout="100"
         type="localStorage"
         storage-key="storageUsersList2"
-      />
+      />-->
       <dx-export :enabled="true" :allow-export-selected-data="false" file-name="Users List" />
       <dx-column-chooser :enabled="true" />
       <dx-column
@@ -84,7 +85,7 @@ import {
   DxGroupPanel,
   DxSearchPanel,
   DxColumnChooser,
-  DxStateStoring,
+  //DxStateStoring,
   DxExport
 } from "devextreme-vue/data-grid";
 import { mapGetters } from "vuex";
@@ -101,7 +102,7 @@ export default {
     DxGroupPanel,
     DxSearchPanel,
     DxColumnChooser,
-    DxStateStoring,
+    //DxStateStoring,
     DxExport
   },
   data() {
@@ -139,7 +140,37 @@ export default {
           password: "123456",
           mustChangePassword: false
         }
-      ]
+      ],
+      stateStoring: {
+        enabled: true,
+        storageKey: "storage2",
+        type: "custom",
+        savingTimeout: 100,
+        customLoad: function() {
+          var state = localStorage.getItem(this.storageKey);
+          if (state) {
+            state = JSON.parse(state);
+            /*for (var i = 0; i < state.columns.length; i++) {
+              state.columns[i].filterValue = null;
+            }*/
+            console.log(state);
+            // eslint-disable-next-line no-prototype-builtins
+            if (state.hasOwnProperty("focusedRowKey")) {
+              console.log(state.focusedRowKey);
+            } else {
+              console.log("focusedRowKey does not exist");
+              if (this.dataSource.length > 0) {
+                console.log("set state.focusedRowKey");
+                state.focusedRowKey = this.dataSource[0].id;
+              }
+            }
+          }
+          return state;
+        },
+        customSave: function(state) {
+          localStorage.setItem(this.storageKey, JSON.stringify(state));
+        }
+      }
     };
   },
   computed: {
@@ -199,7 +230,7 @@ export default {
     onGridInitialized(e) {
       console.log("onGridInitialized");
       console.log(e.component);
-      console.log(
+      /*console.log(
         "e.component.focusedRowIndex: " + e.component.option("focusedRowIndex")
       );
       console.log("this.focusedRowKey: " + this.focusedRowKey);
@@ -215,7 +246,13 @@ export default {
           "focusedRowKey",
           "185bad2d-0a16-4e6b-a6a1-49ac2d380c57"
         );
-      }
+        console.log(
+          "e.component.focusedRowIndex: " +
+            e.component.option("focusedRowIndex")
+        );
+        this.focusedRowKey = "185bad2d-0a16-4e6b-a6a1-49ac2d380c57";
+        console.log("this.focusedRowKey: " + this.focusedRowKey);
+      }*/
     },
     onRowDblClick() {
       this.$router.push("/EditUser");
@@ -226,7 +263,7 @@ export default {
     }
   },
   mounted() {
-    //console.log("mounted");
+    console.log("mounted");
     // Set breadcrumb path
     //console.log(this.getCurrentPath);
     /*this.id = "14.Users";
@@ -265,7 +302,7 @@ export default {
     }*/
   },
   created() {
-    //console.log("created");
+    console.log("created");
   },
   destroyed() {
     //console.log("destroyed");
