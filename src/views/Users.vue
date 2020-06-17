@@ -147,22 +147,23 @@ export default {
         type: "custom",
         savingTimeout: 100,
         customLoad: function() {
-          console.log(this.stateStoring);
+          //console.log(this.stateStoring);
           var state = localStorage.getItem(this.stateStoring.storageKey);
           if (state) {
             state = JSON.parse(state);
             /*for (var i = 0; i < state.columns.length; i++) {
               state.columns[i].filterValue = null;
             }*/
-            console.log(state);
+            //console.log(state);
             // eslint-disable-next-line no-prototype-builtins
             if (state.hasOwnProperty("focusedRowKey")) {
-              console.log(state.focusedRowKey);
+              //console.log(state.focusedRowKey);
             } else {
-              console.log("focusedRowKey does not exist");
+              //console.log("focusedRowKey does not exist");
               if (this.dataSource.length > 0) {
-                console.log("set state.focusedRowKey");
-                state.focusedRowKey = this.dataSource[0].id;
+                //console.log("set state.focusedRowKey");
+                //console.log(this.dataSource);
+                state.focusedRowKey = this.dataSource[0].userID;
               }
             }
           }
@@ -228,32 +229,9 @@ export default {
       //console.log(e.row.data);
       this.$store.dispatch("setFormData", e.row.data);
     },
-    onGridInitialized(e) {
-      console.log("onGridInitialized");
-      console.log(e.component);
-      /*console.log(
-        "e.component.focusedRowIndex: " + e.component.option("focusedRowIndex")
-      );
-      console.log("this.focusedRowKey: " + this.focusedRowKey);
-      console.log(this.dataSource);
-      // Focus on first row if we have any records
-      if (
-        e.component.option("focusedRowIndex") == -1 &&
-        this.dataSource.length > 0
-      ) {
-        console.log("Setting focusedRowKey");
-        //this.focusedRowKey = this.dataSource[0].id;
-        e.component.option(
-          "focusedRowKey",
-          "185bad2d-0a16-4e6b-a6a1-49ac2d380c57"
-        );
-        console.log(
-          "e.component.focusedRowIndex: " +
-            e.component.option("focusedRowIndex")
-        );
-        this.focusedRowKey = "185bad2d-0a16-4e6b-a6a1-49ac2d380c57";
-        console.log("this.focusedRowKey: " + this.focusedRowKey);
-      }*/
+    onGridInitialized() {
+      //console.log("onGridInitialized");
+      //console.log(e.component);
     },
     onRowDblClick() {
       this.$router.push("/EditUser");
@@ -295,15 +273,9 @@ export default {
       }
       newBreadcrumbPath.push({ id: tempBreadcrumb });
     }
-
-    // Focus on first row if we have any records
-    /*if (this.dataSource.length > 0 && this.focusedRowKey === null) {
-      console.log("focus on row: " & this.dataSource[0].id);
-      this.focusedRowKey = this.dataSource[0].id;
-    }*/
   },
   created() {
-    console.log("created");
+    //console.log("created");
   },
   destroyed() {
     //console.log("destroyed");
