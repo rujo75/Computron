@@ -66,6 +66,7 @@ import {
   DxLabel
 } from "devextreme-vue/form";
 import { mapGetters } from "vuex";
+import { getNewId } from "../store/common";
 
 export default {
   props: {
@@ -144,7 +145,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getFormData"])
+    ...mapGetters(["getUsers", "getFormData"])
   },
   methods: {
     onAccordionContentReady(e) {
@@ -154,9 +155,31 @@ export default {
     loadFormData: function() {
       //console.log("loadFormData");
       console.log("id: " + this.id);
-      this.formData = this._.cloneDeep(this.getFormData);
-      // clone formData
-      this.formOriginalData = this._.cloneDeep(this.formData);
+      if (this.id === "") {
+        // new user
+        let newUser = {
+          userID: getNewId(),
+          userName: "",
+          fullName: "",
+          email: "",
+          enabled: true,
+          expiryDate: "",
+          password: "",
+          mustChangePassword: true
+        };
+        // use new user
+        this.formData = newUser;
+        // clone formData
+        this.formOriginalData = this._.cloneDeep(this.formData);
+      } else {
+        let index = this._.findIndex(this.getUsers, { userID: this.id });
+        if (index >= 0) {
+          // clone user
+          this.formData = this._.cloneDeep(this.getUsers[index]);
+          // clone formData
+          this.formOriginalData = this._.cloneDeep(this.formData);
+        }
+      }
     },
     isFormDataChanged: function() {
       // check the main form data

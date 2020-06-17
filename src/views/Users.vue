@@ -3,7 +3,7 @@
     <dx-data-grid
       ref="grid"
       key-expr="userID"
-      :data-source="dataSource"
+      :data-source="getUsers"
       :remote-operations="false"
       :allow-column-resizing="true"
       :allow-column-reordering="true"
@@ -101,38 +101,6 @@ export default {
     return {
       pageSizes: [10, 15, 20, 25, 50, 100],
       focusedRowKey: null,
-      dataSource: [
-        {
-          userID: "185bad2d-0a16-4e6b-a6a1-49ac2d380c57",
-          userName: "drusmir",
-          fullName: "Dal Rusmir",
-          email: "drusmir@tpg.com",
-          enabled: true,
-          expiryDate: "2020-06-30",
-          password: "123456",
-          mustChangePassword: false
-        },
-        {
-          userID: "f274ab28-59af-45af-86f5-97a149104476",
-          userName: "jsmith",
-          fullName: "John Smith",
-          email: "jsmith@tpg.com",
-          enabled: true,
-          expiryDate: "",
-          password: "123456",
-          mustChangePassword: false
-        },
-        {
-          userID: "2652c185-09ab-4b8a-8518-7f184a4f2baf",
-          userName: "jpike",
-          fullName: "Jane Pike",
-          email: "jpike@tpg.com",
-          enabled: true,
-          expiryDate: "",
-          password: "123456",
-          mustChangePassword: false
-        }
-      ],
       stateStoring: {
         enabled: true,
         storageKey: "Users",
@@ -152,22 +120,22 @@ export default {
               //console.log(state.focusedRowKey);
               // find if record still exists in dataset
               let focusedRowKey = state.focusedRowKey;
-              let record = this.dataSource.find(
-                x => x.userID === focusedRowKey
-              );
-              if (record === undefined) {
+              let index = this._.findIndex(this.getUsers, {
+                userID: focusedRowKey
+              });
+              if (index === -1) {
                 //console.log("record not found!");
                 // record not found, set to the first record in dataset
-                if (this.dataSource.length > 0) {
-                  state.focusedRowKey = this.dataSource[0].userID;
+                if (this.getUsers.length > 0) {
+                  state.focusedRowKey = this.getUsers[0].userID;
                 }
               }
             } else {
               //console.log("focusedRowKey does not exist");
-              if (this.dataSource.length > 0) {
+              if (this.getUsers.length > 0) {
                 //console.log("set state.focusedRowKey");
-                //console.log(this.dataSource);
-                state.focusedRowKey = this.dataSource[0].userID;
+                //console.log(this.getUsers);
+                state.focusedRowKey = this.getUsers[0].userID;
               }
             }
           }
@@ -195,7 +163,7 @@ export default {
             focusStateEnabled: false,
             disabled: false,
             onClick: () => {
-              this.$router.push("/EditUser/New");
+              this.$router.push("/CreateUser");
             }
           }
         },
@@ -226,13 +194,13 @@ export default {
         }
       );
     },
-    onFocusedRowChanged(e) {
+    onFocusedRowChanged() {
       //console.log("onFocusedRowChanged");
       //var data = e.row && e.row.data;
       //console.log(data);
       //console.log(e.row);
       //console.log(e.row.data);
-      this.$store.dispatch("setFormData", e.row.data);
+      //this.$store.dispatch("setFormData", e.row.data);
     },
     onGridInitialized() {
       //console.log("onGridInitialized");

@@ -42,6 +42,11 @@ const router = new Router({
       component: Users
     },
     {
+      path: "/CreateUser",
+      name: "CreateUser",
+      component: EditUser
+    },
+    {
       path: "/EditUser/:id",
       props: true,
       name: "EditUser",

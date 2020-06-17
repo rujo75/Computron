@@ -3,7 +3,7 @@ const state = {
     favouritesNavMenuOpenState: true,
     currentPath: "",
     breadcrumbData: [],
-    formData: null
+    //formData: null
 };
 
 const getters = {
@@ -11,7 +11,7 @@ const getters = {
     getFavouritesNavMenuOpenState: state => state.favouritesNavMenuOpenState,
     getCurrentPath: state => state.currentPath,
     getBreadcrumbData: state => state.breadcrumbData,
-    getFormData: state => state.formData
+    //getFormData: state => state.formData
 };
 
 const mutations = {
@@ -27,9 +27,9 @@ const mutations = {
     setBreadcrumbData: function (state, data) {
         state.breadcrumbData = data;
     },
-    setFormData: function (state, data) {
+    /*setFormData: function (state, data) {
         state.formData = data;
-    }
+    }*/
 }
 
 const actions = {
@@ -39,9 +39,9 @@ const actions = {
     setBreadcrumbData({ commit }, data) {
         commit("setBreadcrumbData", data);
     },
-    setFormData({ commit }, data) {
+    /*setFormData({ commit }, data) {
         commit("setFormData", data);
-    }
+    }*/
 }
 
 export default {

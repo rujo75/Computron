@@ -6,7 +6,39 @@ import notify from 'devextreme/ui/notify';
 const state = {
     currentUser: null,
     signInLoading: false,
-    users: []
+    users: [
+        {
+            userID: "185bad2d-0a16-4e6b-a6a1-49ac2d380c57",
+            userName: "drusmir",
+            fullName: "Dal Rusmir",
+            email: "drusmir@tpg.com",
+            enabled: true,
+            expiryDate: "2020-06-30",
+            password: "123456",
+            mustChangePassword: false
+        },
+        {
+            userID: "f274ab28-59af-45af-86f5-97a149104476",
+            userName: "jsmith",
+            fullName: "John Smith",
+            email: "jsmith@tpg.com",
+            enabled: true,
+            expiryDate: "",
+            password: "123456",
+            mustChangePassword: false
+        },
+        {
+            userID: "2652c185-09ab-4b8a-8518-7f184a4f2baf",
+            userName: "jpike",
+            fullName: "Jane Pike",
+            email: "jpike@tpg.com",
+            enabled: true,
+            expiryDate: "",
+            password: "123456",
+            mustChangePassword: false
+        }
+    ],
+    firebaseUsers: []
 };
 
 const getters = {
@@ -30,7 +62,7 @@ const mutations = {
 
 const actions = {
     setUsersRef: firestoreAction(context => {
-        return context.bindFirestoreRef("users", dbUsersRef.orderBy("lastname"));
+        return context.bindFirestoreRef("firebaseUsers", dbUsersRef.orderBy("lastname"));
     }),
     signIn: async ({ commit }, user) => {
         try {
