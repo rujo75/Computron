@@ -115,6 +115,8 @@ export default {
         }
         newBreadcrumbPath.push({ id: tempBreadcrumb });
       }
+      //console.log("newBreadcrumbPath");
+      //console.log(newBreadcrumbPath);
       // Save new breadcrumb data path
       this.$store.dispatch("setBreadcrumbData", newBreadcrumbPath);
 

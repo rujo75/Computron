@@ -13,7 +13,7 @@ export default {
   computed: {},
   methods: {},
   mounted() {
-    this.$store.dispatch("setBreadcrumbData", [{ id: "1" }]);
+    this.$store.dispatch("setBreadcrumbData", [{ id: "Home" }]);
   }
 };
 </script>

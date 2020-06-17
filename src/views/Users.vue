@@ -87,7 +87,7 @@ export default {
   props: {
     id: String
   },
-  name: "app",
+  name: "users",
   components: {
     DxDataGrid,
     DxColumn,
@@ -135,9 +135,9 @@ export default {
       ],
       stateStoring: {
         enabled: true,
-        storageKey: "storage2",
+        storageKey: "Users",
         type: "custom",
-        savingTimeout: 100,
+        savingTimeout: 0,
         customLoad: function() {
           //console.log(this.stateStoring);
           var state = localStorage.getItem(this.stateStoring.storageKey);
@@ -193,9 +193,9 @@ export default {
             stylingMode: "text",
             text: "Create",
             focusStateEnabled: false,
-            disabled: true,
+            disabled: false,
             onClick: () => {
-              this.$router.push("/EditUser");
+              this.$router.push("/EditUser/New");
             }
           }
         },
@@ -208,7 +208,7 @@ export default {
             text: "Edit",
             focusStateEnabled: false,
             onClick: () => {
-              this.$router.push("/EditUser");
+              this.$router.push("/EditUser/" + this.focusedRowKey);
             }
           }
         },
@@ -227,6 +227,7 @@ export default {
       );
     },
     onFocusedRowChanged(e) {
+      //console.log("onFocusedRowChanged");
       //var data = e.row && e.row.data;
       //console.log(data);
       //console.log(e.row);
@@ -238,45 +239,33 @@ export default {
       //console.log(e.component);
     },
     onRowDblClick() {
-      this.$router.push("/EditUser");
+      //this.$router.push("/EditUser/" + this.focusedRowKey);
     },
     onUserIDClick() {
       //alert(e.text);
-      this.$router.push("/EditUser");
+      //console.log("onUserIDClick");
+      setTimeout(
+        function() {
+          this.$router.push("/EditUser/" + this.focusedRowKey);
+        }.bind(this),
+        1
+      );
     }
   },
   mounted() {
-    console.log("mounted");
+    //console.log("mounted");
     // Set breadcrumb path
     //console.log(this.getCurrentPath);
-    /*this.id = "14.Users";
-    const menuIdPath = this.id.split(".");
-    let newBreadcrumbPath = [];
-    let tempBreadcrumb = "";
-    for (let i = 0; i < menuIdPath.length; i++) {
-      if (i === 0) {
-        tempBreadcrumb = menuIdPath[0];
-      } else {
-        tempBreadcrumb += "." + menuIdPath[i];
-      }
-      newBreadcrumbPath.push({ id: tempBreadcrumb });
-    }
-    // Save new breadcrumb data path
-    this.$store.dispatch("setBreadcrumbData", newBreadcrumbPath);*/
-
     // Build breadcrumb path
     const menuIdPath = this.getCurrentPath.split("/");
     let newBreadcrumbPath = [];
-    let tempBreadcrumb = "";
 
     for (let i = 0; i < menuIdPath.length; i++) {
-      if (i === 0) {
-        tempBreadcrumb = menuIdPath[0];
-      } else {
-        tempBreadcrumb += "." + menuIdPath[i];
-      }
-      newBreadcrumbPath.push({ id: tempBreadcrumb });
+      newBreadcrumbPath.push({ id: menuIdPath[i] });
     }
+    console.log(newBreadcrumbPath);
+    // Save new breadcrumb data path
+    this.$store.dispatch("setBreadcrumbData", newBreadcrumbPath);
   },
   created() {
     //console.log("created");

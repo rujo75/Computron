@@ -12,7 +12,7 @@
         @contentReady="onAccordionContentReady"
       >
         <dx-accordion-item #default title="General">
-          <dx-form ref="formGeneral" :form-data="getFormData">
+          <dx-form ref="formGeneral" :form-data="formData">
             <dx-group-item :col-count="2">
               <dx-form-item data-field="userID" :editor-options="{disabled: true}">
                 <dx-label text="User ID" />
@@ -35,7 +35,7 @@
           </dx-form>
         </dx-accordion-item>
         <dx-accordion-item #default title="Security">
-          <dx-form ref="formSecurity" :form-data="getFormData">
+          <dx-form ref="formSecurity" :form-data="formData">
             <dx-group-item :col-count="2">
               <dx-form-item data-field="password" :editor-options="{mode: 'password'}" />
               <dx-form-item
@@ -68,7 +68,13 @@ import {
 import { mapGetters } from "vuex";
 
 export default {
-  name: "app",
+  props: {
+    id: {
+      default: "",
+      type: String
+    }
+  },
+  name: "editUser",
   components: {
     DxAccordion,
     DxAccordionItem,
@@ -81,14 +87,14 @@ export default {
   },
   data() {
     return {
+      formData: null,
+      formOriginalData: null,
       saveNavButtonOptions: {
         icon: "fas fa-save",
         focusStateEnabled: false,
         stylingMode: "text",
         text: "Save",
-        onClick: () => {
-          this.$router.back();
-        }
+        onClick: this.onSaveClick.bind(this)
       },
       cancelNavButtonOptions: {
         icon: "fas fa-times",
@@ -144,10 +150,41 @@ export default {
     onAccordionContentReady(e) {
       // expand security item
       e.component.expandItem(1);
+    },
+    loadFormData: function() {
+      //console.log("loadFormData");
+      console.log("id: " + this.id);
+      this.formData = this._.cloneDeep(this.getFormData);
+      // clone formData
+      this.formOriginalData = this._.cloneDeep(this.formData);
+    },
+    isFormDataChanged: function() {
+      // check the main form data
+      let isFormDataNotChanged = this._.isEqual(
+        this.formData,
+        this.formOriginalData
+      );
+      //console.log(isFormDataNotChanged);
+      return !isFormDataNotChanged;
+    },
+    onSaveClick() {
+      let changed = this.isFormDataChanged();
+      console.log("changed: " + changed);
+      if (changed) {
+        this.saveFormData();
+      }
+      this.$router.back();
+    },
+    saveFormData() {
+      // update store
+      this.$store.dispatch("setFormData", this.formData);
+      // update formOriginalData with formData
+      this.formOriginalData = this.formData;
     }
   },
   created() {
     //console.log("created");
+    this.loadFormData();
   }
 };
 </script>
