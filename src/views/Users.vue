@@ -23,12 +23,6 @@
       @focused-row-changed="onFocusedRowChanged"
       @initialized="onGridInitialized"
     >
-      <!--<dx-state-storing
-        :enabled="true"
-        :saving-timeout="100"
-        type="localStorage"
-        storage-key="storageUsersList2"
-      />-->
       <dx-export :enabled="true" :allow-export-selected-data="false" file-name="Users List" />
       <dx-column-chooser :enabled="true" />
       <dx-column
@@ -85,7 +79,6 @@ import {
   DxGroupPanel,
   DxSearchPanel,
   DxColumnChooser,
-  //DxStateStoring,
   DxExport
 } from "devextreme-vue/data-grid";
 import { mapGetters } from "vuex";
@@ -102,7 +95,6 @@ export default {
     DxGroupPanel,
     DxSearchPanel,
     DxColumnChooser,
-    //DxStateStoring,
     DxExport
   },
   data() {
@@ -158,6 +150,18 @@ export default {
             // eslint-disable-next-line no-prototype-builtins
             if (state.hasOwnProperty("focusedRowKey")) {
               //console.log(state.focusedRowKey);
+              // find if record still exists in dataset
+              let focusedRowKey = state.focusedRowKey;
+              let record = this.dataSource.find(
+                x => x.userID === focusedRowKey
+              );
+              if (record === undefined) {
+                //console.log("record not found!");
+                // record not found, set to the first record in dataset
+                if (this.dataSource.length > 0) {
+                  state.focusedRowKey = this.dataSource[0].userID;
+                }
+              }
             } else {
               //console.log("focusedRowKey does not exist");
               if (this.dataSource.length > 0) {
