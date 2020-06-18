@@ -156,7 +156,7 @@ export default {
       //console.log("loadFormData");
       console.log("id: " + this.id);
       if (this.id === "") {
-        // new user
+        // create user
         let newUser = {
           userID: getNewId(),
           userName: "",
@@ -172,6 +172,7 @@ export default {
         // clone formData
         this.formOriginalData = this._.cloneDeep(this.formData);
       } else {
+        // edit user
         let index = this._.findIndex(this.getUsers, { userID: this.id });
         if (index >= 0) {
           // clone user
@@ -199,8 +200,13 @@ export default {
       this.$router.back();
     },
     saveFormData() {
-      // update store
-      this.$store.dispatch("setFormData", this.formData);
+      if (this.id === "") {
+        // create user
+        this.$store.dispatch("createUser", this.formData);
+      } else {
+        // update user
+      }
+
       // update formOriginalData with formData
       this.formOriginalData = this.formData;
     }
@@ -208,6 +214,10 @@ export default {
   created() {
     //console.log("created");
     this.loadFormData();
+  },
+  mounted() {
+    //console.log("mounted");
+    this.$refs["formGeneral"].instance.getEditor("userName").focus();
   }
 };
 </script>

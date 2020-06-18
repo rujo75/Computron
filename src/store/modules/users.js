@@ -5,6 +5,7 @@ import notify from 'devextreme/ui/notify';
 
 const state = {
     currentUser: null,
+    newUserID: "",
     signInLoading: false,
     users: [
         {
@@ -43,6 +44,7 @@ const state = {
 
 const getters = {
     currentUser: state => state.currentUser,
+    newUserID: state => state.newUserID,
     signInLoading: state => state.signInLoading,
     getUsers: state => state.users
 };
@@ -57,6 +59,14 @@ const mutations = {
         user === null
             ? (state.currentUser = null)
             : (state.currentUser = user.email);
+    },
+
+    createUser: (state, user) => {
+        state.users.push(user);
+    },
+
+    setNewUserID: (state, id) => {
+        state.newUserID = id;
     }
 };
 
@@ -64,6 +74,7 @@ const actions = {
     setUsersRef: firestoreAction(context => {
         return context.bindFirestoreRef("firebaseUsers", dbUsersRef.orderBy("lastname"));
     }),
+
     signIn: async ({ commit }, user) => {
         try {
             state.signInLoading = true;
@@ -95,6 +106,15 @@ const actions = {
             notify(errorMessage, "error", 5000);
         }
         commit("userStatus", null);
+    },
+
+    createUser: ({ commit }, user) => {
+        commit("createUser", user);
+        commit("setNewUserID", user.userID);
+    },
+
+    clearNewUserID: ({ commit }) => {
+        commit("setNewUserID", "");
     }
 };
 

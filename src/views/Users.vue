@@ -118,7 +118,12 @@ export default {
             // eslint-disable-next-line no-prototype-builtins
             if (state.hasOwnProperty("focusedRowKey")) {
               //console.log(state.focusedRowKey);
+              // set to new user if new user was just created
+              if (this.newUserID !== "") {
+                state.focusedRowKey = this.newUserID;
+              }
               // find if record still exists in dataset
+              //console.log("state.focusedRowKey: " + state.focusedRowKey);
               let focusedRowKey = state.focusedRowKey;
               let index = this._.findIndex(this.getUsers, {
                 userID: focusedRowKey
@@ -135,7 +140,12 @@ export default {
               if (this.getUsers.length > 0) {
                 //console.log("set state.focusedRowKey");
                 //console.log(this.getUsers);
-                state.focusedRowKey = this.getUsers[0].userID;
+                // set to new user if new user was just created
+                if (this.newUserID !== "") {
+                  state.focusedRowKey = this.newUserID;
+                } else {
+                  state.focusedRowKey = this.getUsers[0].userID;
+                }
               }
             }
           }
@@ -148,7 +158,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getUsers", "getCurrentPath"])
+    ...mapGetters(["getUsers", "newUserID", "getCurrentPath"])
   },
   methods: {
     onToolbarPreparing(e) {
@@ -176,6 +186,7 @@ export default {
             text: "Edit",
             focusStateEnabled: false,
             onClick: () => {
+              this.$store.dispatch("clearNewUserID");
               this.$router.push("/EditUser/" + this.focusedRowKey);
             }
           }
@@ -214,6 +225,7 @@ export default {
       //console.log("onUserIDClick");
       setTimeout(
         function() {
+          this.$store.dispatch("clearNewUserID");
           this.$router.push("/EditUser/" + this.focusedRowKey);
         }.bind(this),
         1
