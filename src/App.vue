@@ -93,8 +93,9 @@ body {
   position: absolute;
 }
 
-.dx-overlay-wrapper {
-  font-size: 16px;
+.dx-invalid-message .dx-overlay-wrapper .dx-overlay-content {
+  color: white;
+  font-size: 14px;
 }
 
 /*.data-grid-hyperlink {
