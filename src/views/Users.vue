@@ -83,6 +83,9 @@ import {
 } from "devextreme-vue/data-grid";
 import { mapGetters } from "vuex";
 
+var editToolbarButtonRef = null;
+var deleteToolbarButtonRef = null;
+
 export default {
   props: {
     id: String
@@ -100,7 +103,7 @@ export default {
   data() {
     return {
       pageSizes: [10, 15, 20, 25, 50, 100],
-      focusedRowKey: null,
+      focusedRowKey: "",
       stateStoring: {
         enabled: true,
         storageKey: "Users",
@@ -112,43 +115,42 @@ export default {
           var state = localStorage.getItem(this.stateStoring.storageKey);
           if (state) {
             state = JSON.parse(state);
-            /*for (var i = 0; i < state.columns.length; i++) {
-              state.columns[i].filterValue = null;
-            }*/
             //console.log(state);
+            let newFocusedRowKey = "";
+
+            // make sure state has focusedRowKey property
             // eslint-disable-next-line no-prototype-builtins
-            if (state.hasOwnProperty("focusedRowKey")) {
-              //console.log(state.focusedRowKey);
-              // set to new user if new user was just created
-              if (this.newUserID !== "") {
-                state.focusedRowKey = this.newUserID;
-              }
-              // find if record still exists in dataset
-              //console.log("state.focusedRowKey: " + state.focusedRowKey);
-              let focusedRowKey = state.focusedRowKey;
-              let index = this._.findIndex(this.getUsers, {
-                userID: focusedRowKey
+            if (!state.hasOwnProperty("focusedRowKey")) {
+              state.focusedRowKey = "";
+            }
+
+            // check new row key
+            if (this.newUserID !== "") {
+              newFocusedRowKey = this.newUserID;
+            }
+            let index = this._.findIndex(this.getUsers, {
+              userID: newFocusedRowKey
+            });
+
+            if (index === -1) {
+              // new row key not found
+              // check the old key stored in the local storage
+              newFocusedRowKey = state.focusedRowKey;
+              index = this._.findIndex(this.getUsers, {
+                userID: newFocusedRowKey
               });
               if (index === -1) {
-                //console.log("record not found!");
-                // record not found, set to the first record in dataset
+                // old key no longer exists
+                // check if we have any records
                 if (this.getUsers.length > 0) {
-                  state.focusedRowKey = this.getUsers[0].userID;
-                }
-              }
-            } else {
-              //console.log("focusedRowKey does not exist");
-              if (this.getUsers.length > 0) {
-                //console.log("set state.focusedRowKey");
-                //console.log(this.getUsers);
-                // set to new user if new user was just created
-                if (this.newUserID !== "") {
-                  state.focusedRowKey = this.newUserID;
-                } else {
-                  state.focusedRowKey = this.getUsers[0].userID;
+                  // select the first row
+                  newFocusedRowKey = this.getUsers[0].userID;
                 }
               }
             }
+
+            // assign new focused row key
+            state.focusedRowKey = newFocusedRowKey;
           }
           return state;
         }.bind(this),
@@ -187,6 +189,10 @@ export default {
             stylingMode: "text",
             text: "Edit",
             focusStateEnabled: false,
+            disabled: true,
+            onInitialized: e => {
+              editToolbarButtonRef = e.component;
+            },
             onClick: () => {
               this.$store.dispatch("clearNewUserID");
               this.$router.push("/EditUser/" + this.focusedRowKey);
@@ -201,8 +207,14 @@ export default {
             stylingMode: "text",
             text: "Delete",
             focusStateEnabled: false,
-            disabled: true
-            //onClick: this.refreshDataGrid.bind(this)
+            disabled: true,
+            onInitialized: e => {
+              deleteToolbarButtonRef = e.component;
+            },
+            onClick: () => {
+              this.$store.dispatch("deleteUser", this.focusedRowKey);
+              this.focusedRowKey = "";
+            }
           }
         }
       );
@@ -241,6 +253,20 @@ export default {
       );
     }
   },
+  watch: {
+    focusedRowKey: {
+      handler(value) {
+        //console.log("focusedRowKey value changed: " + value);
+        if (value === "" || this.getUsers.length === 0) {
+          editToolbarButtonRef.option("disabled", true);
+          deleteToolbarButtonRef.option("disabled", true);
+        } else {
+          editToolbarButtonRef.option("disabled", false);
+          deleteToolbarButtonRef.option("disabled", false);
+        }
+      }
+    }
+  },
   mounted() {
     //console.log("mounted");
     // Set breadcrumb path
@@ -252,7 +278,7 @@ export default {
     for (let i = 0; i < menuIdPath.length; i++) {
       newBreadcrumbPath.push({ id: menuIdPath[i] });
     }
-    console.log(newBreadcrumbPath);
+    //console.log(newBreadcrumbPath);
     // Save new breadcrumb data path
     this.$store.dispatch("setBreadcrumbData", newBreadcrumbPath);
   },

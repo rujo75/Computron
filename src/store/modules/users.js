@@ -72,9 +72,16 @@ const mutations = {
 
     updateUser: (state, user) => {
         let index = _.findIndex(state.users, { userID: user.userID });
-        console.log(index)
+        //console.log(index)
         if (index >= 0) {
             state.users.splice(index, 1, user)
+        }
+    },
+
+    deleteUser: (state, id) => {
+        let index = _.findIndex(state.users, { userID: id });
+        if (index >= 0) {
+            state.users.splice(index, 1)
         }
     }
 };
@@ -128,6 +135,10 @@ const actions = {
 
     updateUser: ({ commit }, user) => {
         commit("updateUser", user);
+    },
+
+    deleteUser: ({ commit }, id) => {
+        commit("deleteUser", id);
     }
 };
 

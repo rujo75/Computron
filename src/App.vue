@@ -89,6 +89,14 @@ body {
   font-size: 14px;
 }
 
+.dx-invalid-message.dx-overlay {
+  position: absolute;
+}
+
+.dx-overlay-wrapper {
+  font-size: 16px;
+}
+
 /*.data-grid-hyperlink {
   color: #0b0080;
 }*/

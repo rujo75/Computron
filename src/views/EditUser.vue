@@ -5,50 +5,62 @@
       <dx-item :options="cancelNavButtonOptions" location="before" widget="dxButton" />
     </dx-toolbar>
     <div class="widget-container">
-      <dx-accordion
-        :multiple="true"
-        :collapsible="true"
-        class="accordion"
-        @contentReady="onAccordionContentReady"
-      >
-        <dx-accordion-item #default title="General">
-          <dx-form ref="formGeneral" :form-data="formData">
-            <dx-group-item :col-count="2">
-              <dx-form-item data-field="userID" :editor-options="{disabled: true}">
-                <dx-label text="User ID" />
-              </dx-form-item>
-              <dx-form-item data-field="userName">
-                <dx-label text="User Name" />
-              </dx-form-item>
-              <dx-form-item data-field="fullName">
-                <dx-label text="Full Name" />
-              </dx-form-item>
-              <dx-form-item data-field="email" />
-              <!--<dx-form-item
+      <form>
+        <dx-accordion
+          :multiple="true"
+          :collapsible="true"
+          class="accordion"
+          @contentReady="onAccordionContentReady"
+        >
+          <dx-accordion-item #default title="General">
+            <dx-form ref="formGeneral" :form-data="formData" validation-group="userData">
+              <dx-group-item :col-count="2">
+                <dx-form-item data-field="userID" :editor-options="{disabled: true}">
+                  <dx-label text="User ID" />
+                </dx-form-item>
+                <dx-form-item data-field="userName">
+                  <dx-label text="User Name" />
+                  <dx-required-rule message="User Name is required!" />
+                  <dx-pattern-rule
+                    :pattern="userNamePattern"
+                    message="Do not use spaces in the User Name!"
+                  />
+                </dx-form-item>
+                <dx-form-item data-field="fullName">
+                  <dx-label text="Full Name" />
+                  <dx-required-rule message="Full Name is required!" />
+                </dx-form-item>
+                <dx-form-item data-field="email">
+                  <dx-email-rule message="Email is invalid!" />
+                </dx-form-item>
+                <!--<dx-form-item
                 data-field="enabled"
                 editor-type="dxSwitch"
                 :editor-options="{switchedOffText: 'NO', switchedOnText: 'YES', width: '60'}"
-              />-->
-              <dx-form-item data-field="enabled" editor-type="dxCheckBox" />
-              <dx-form-item data-field="expiryDate" editor-type="dxDateBox" />
-            </dx-group-item>
-          </dx-form>
-        </dx-accordion-item>
-        <dx-accordion-item #default title="Security">
-          <dx-form ref="formSecurity" :form-data="formData">
-            <dx-group-item :col-count="2">
-              <dx-form-item data-field="password" :editor-options="{mode: 'password'}" />
-              <dx-form-item
-                :editor-options="mustChangePasswordOptions"
-                data-field="mustChangePassword"
-                editor-type="dxCheckBox"
-              >
-                <dx-label :visible="false" />
-              </dx-form-item>
-            </dx-group-item>
-          </dx-form>
-        </dx-accordion-item>
-      </dx-accordion>
+                />-->
+                <dx-form-item data-field="enabled" editor-type="dxCheckBox" />
+                <dx-form-item data-field="expiryDate" editor-type="dxDateBox" />
+              </dx-group-item>
+            </dx-form>
+          </dx-accordion-item>
+          <dx-accordion-item #default title="Security">
+            <dx-form ref="formSecurity" :form-data="formData">
+              <dx-group-item :col-count="2">
+                <dx-form-item data-field="password" :editor-options="{mode: 'password'}">
+                  <dx-required-rule message="Password is required!" />
+                </dx-form-item>
+                <dx-form-item
+                  :editor-options="mustChangePasswordOptions"
+                  data-field="mustChangePassword"
+                  editor-type="dxCheckBox"
+                >
+                  <dx-label :visible="false" />
+                </dx-form-item>
+              </dx-group-item>
+            </dx-form>
+          </dx-accordion-item>
+        </dx-accordion>
+      </form>
     </div>
   </div>
 </template>
@@ -63,7 +75,10 @@ import {
   DxForm,
   DxItem as DxFormItem,
   DxGroupItem,
-  DxLabel
+  DxLabel,
+  DxRequiredRule,
+  DxPatternRule,
+  DxEmailRule
 } from "devextreme-vue/form";
 import { mapGetters } from "vuex";
 import { getNewId } from "../store/common";
@@ -84,7 +99,10 @@ export default {
     DxForm,
     DxFormItem,
     DxGroupItem,
-    DxLabel
+    DxLabel,
+    DxRequiredRule,
+    DxPatternRule,
+    DxEmailRule
   },
   data() {
     return {
@@ -106,8 +124,13 @@ export default {
           this.$router.back();
         }
       },
+      buttonOptions: {
+        text: "Register",
+        type: "success",
+        useSubmitBehavior: true
+      },
       validationRules: {
-        companyNo: [{ type: "required", message: "Company No is required." }]
+        userName: [{ type: "pattern", pattern: "[^s]+" }]
       },
       /* stateEditorOptions: {
         items: [
@@ -141,7 +164,8 @@ export default {
       },
       mustChangePasswordOptions: {
         text: "User must change password at next login"
-      }
+      },
+      userNamePattern: /^[^\s]+$/
     };
   },
   computed: {
@@ -154,7 +178,7 @@ export default {
     },
     loadFormData: function() {
       //console.log("loadFormData");
-      console.log("id: " + this.id);
+      //console.log("id: " + this.id);
       if (this.id === "") {
         // create user
         let newUser = {
@@ -192,12 +216,18 @@ export default {
       return !isFormDataNotChanged;
     },
     onSaveClick() {
-      let changed = this.isFormDataChanged();
-      console.log("changed: " + changed);
-      if (changed) {
-        this.saveFormData();
+      var resultGeneral = this.$refs["formGeneral"].instance.validate();
+      var resultSecurity = this.$refs["formSecurity"].instance.validate();
+
+      if (resultGeneral.isValid && resultSecurity.isValid) {
+        // all data is valid
+        let changed = this.isFormDataChanged();
+        //console.log("changed: " + changed);
+        if (changed) {
+          this.saveFormData();
+        }
+        this.$router.back();
       }
-      this.$router.back();
     },
     saveFormData() {
       if (this.id === "") {
