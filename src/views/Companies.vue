@@ -157,9 +157,6 @@ import {
 } from "devextreme-vue/data-grid";
 
 export default {
-  props: {
-    id: String
-  },
   name: "app",
   components: {
     DxDataGrid,

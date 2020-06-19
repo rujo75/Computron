@@ -2,7 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import Home from "@/views/Home";
 import Menu from "@/views/Menu";
-import CompanyMaintenanceList from "@/views/CompanyMaintenanceList";
+import Companies from "@/views/Companies";
 import CompanyMaintenanceForm from "@/views/CompanyMaintenanceForm";
 import Users from "@/views/Users";
 import EditUser from "@/views/EditUser";
@@ -25,10 +25,9 @@ const router = new Router({
       component: Menu
     },
     {
-      path: "/CompanyMaintenanceList/:id",
-      props: true,
-      name: "CompanyMaintenanceList",
-      component: CompanyMaintenanceList
+      path: "/Companies",
+      name: "Companies",
+      component: Companies
     },
     {
       path: "/CompanyMaintenanceForm",
@@ -37,7 +36,6 @@ const router = new Router({
     },
     {
       path: "/Users",
-      props: true,
       name: "Users",
       component: Users
     },

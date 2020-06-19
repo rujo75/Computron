@@ -49,9 +49,19 @@ export const MenuData = {
       path: "Administration",
       items: [
         {
+          id: "Companies",
+          text: "Companies",
+          description: "Create and manage your companies.",
+          icon: "fas fa-building",
+          link: "/Companies",
+          path: "Administration/Companies",
+          favourite: false,
+          items: []
+        },
+        {
           id: "Users",
           text: "Users",
-          description: "Manage users and assign security roles in the organization.",
+          description: "Manage users and assign security roles.",
           icon: "fas fa-users",
           link: "/Users",
           path: "Administration/Users",

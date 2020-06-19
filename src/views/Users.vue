@@ -87,9 +87,6 @@ var editToolbarButtonRef = null;
 var deleteToolbarButtonRef = null;
 
 export default {
-  props: {
-    id: String
-  },
   name: "users",
   components: {
     DxDataGrid,
