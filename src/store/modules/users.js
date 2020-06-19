@@ -2,6 +2,7 @@ import { firebaseAuth } from "../../firebase";
 import { firestoreAction } from "vuexfire";
 import { dbUsersRef } from "../../firebase";
 import notify from 'devextreme/ui/notify';
+import _ from "lodash";
 
 const state = {
     currentUser: null,
@@ -67,6 +68,14 @@ const mutations = {
 
     setNewUserID: (state, id) => {
         state.newUserID = id;
+    },
+
+    updateUser: (state, user) => {
+        let index = _.findIndex(state.users, { userID: user.userID });
+        console.log(index)
+        if (index >= 0) {
+            state.users.splice(index, 1, user)
+        }
     }
 };
 
@@ -115,6 +124,10 @@ const actions = {
 
     clearNewUserID: ({ commit }) => {
         commit("setNewUserID", "");
+    },
+
+    updateUser: ({ commit }, user) => {
+        commit("updateUser", user);
     }
 };
 

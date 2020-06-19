@@ -105,8 +105,9 @@ export default {
         enabled: true,
         storageKey: "Users",
         type: "custom",
-        savingTimeout: 0,
+        savingTimeout: 10,
         customLoad: function() {
+          //console.log("stateStoring customLoad");
           //console.log(this.stateStoring);
           var state = localStorage.getItem(this.stateStoring.storageKey);
           if (state) {
@@ -152,6 +153,7 @@ export default {
           return state;
         }.bind(this),
         customSave: function(state) {
+          //console.log("stateStoring customSave");
           localStorage.setItem(this.storageKey, JSON.stringify(state));
         }
       }
@@ -205,13 +207,20 @@ export default {
         }
       );
     },
-    onFocusedRowChanged() {
+    onFocusedRowChanged(e) {
       //console.log("onFocusedRowChanged");
-      //var data = e.row && e.row.data;
-      //console.log(data);
-      //console.log(e.row);
-      //console.log(e.row.data);
-      //this.$store.dispatch("setFormData", e.row.data);
+      //console.log("onFocusedRowChanged ->  e.component.state(): ");
+      //console.log(e.component.state());
+      // save grid state in case it was manually set from the code
+      if (e.component.state()) {
+        localStorage.setItem(
+          this.stateStoring.storageKey,
+          JSON.stringify(e.component.state())
+        );
+      }
+      // read back the saved data and display to console
+      //var state = localStorage.getItem(this.stateStoring.storageKey);
+      //console.log(state);
     },
     onGridInitialized() {
       //console.log("onGridInitialized");

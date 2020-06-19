@@ -205,6 +205,7 @@ export default {
         this.$store.dispatch("createUser", this.formData);
       } else {
         // update user
+        this.$store.dispatch("updateUser", this.formData);
       }
 
       // update formOriginalData with formData
