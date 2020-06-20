@@ -105,7 +105,7 @@ export default {
         enabled: true,
         storageKey: "Users",
         type: "custom",
-        savingTimeout: 10,
+        savingTimeout: 0,
         customLoad: function() {
           //console.log("stateStoring customLoad");
           //console.log(this.stateStoring);

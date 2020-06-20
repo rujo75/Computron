@@ -2,12 +2,12 @@
   <div class="grid-panel">
     <dx-data-grid
       ref="grid"
-      :data-source="dataSource"
-      key-expr="id"
+      key-expr="companyID"
+      :data-source="getCompanies"
       :remote-operations="false"
       :allow-column-resizing="true"
+      :allow-column-reordering="true"
       :column-min-width="50"
-      column-resizing-mode="widget"
       :column-auto-width="true"
       :row-alternation-enabled="false"
       :hover-state-enabled="true"
@@ -15,24 +15,24 @@
       :focused-row-enabled="true"
       :auto-navigate-to-focused-row="true"
       :focused-row-key.sync="focusedRowKey"
+      :state-storing="stateStoring"
+      column-resizing-mode="widget"
       width="100%"
       height="calc(100vh - 139px)"
       @toolbar-preparing="onToolbarPreparing($event);"
       @focused-row-changed="onFocusedRowChanged"
-      @row-dbl-click="onRowDblClick"
+      @initialized="onGridInitialized"
     >
-      <dx-state-storing
-        :enabled="true"
-        :saving-timeout="100"
-        type="localStorage"
-        storage-key="storageCompaniesList"
-      />
-      <dx-export
-        :enabled="true"
-        :allow-export-selected-data="false"
-        file-name="Company Maintenance List"
-      />
+      <dx-export :enabled="true" :allow-export-selected-data="false" file-name="Companies List" />
       <dx-column-chooser :enabled="true" />
+      <dx-column
+        data-field="companyID"
+        caption="Company ID"
+        data-type="string"
+        :width="300"
+        :visible="false"
+        cell-template="CompanyIDTemplate"
+      />
       <dx-column
         data-field="companyNo"
         caption="Company No"
@@ -139,6 +139,13 @@
       <dx-load-panel :enabled="false" />
       <dx-group-panel :visible="false" />
       <dx-search-panel :visible="true" :width="250" />
+
+      <div slot="CompanyIDTemplate" slot-scope="{ data: item }">
+        <span
+          @click.stop.prevent="onCompanyIDClick(item);"
+          class="data-grid-hyperlink"
+        >{{ item.value }}</span>
+      </div>
     </dx-data-grid>
   </div>
 </template>
@@ -151,13 +158,16 @@ import {
   DxGroupPanel,
   DxSearchPanel,
   DxColumnChooser,
-  DxStateStoring,
   DxExport
   //DxSelection
 } from "devextreme-vue/data-grid";
+import { mapGetters } from "vuex";
+
+//var editToolbarButtonRef = null;
+//var deleteToolbarButtonRef = null;
 
 export default {
-  name: "app",
+  name: "companies",
   components: {
     DxDataGrid,
     DxColumn,
@@ -165,7 +175,6 @@ export default {
     DxGroupPanel,
     DxSearchPanel,
     DxColumnChooser,
-    DxStateStoring,
     DxExport
     //DxSelection
   },
@@ -272,10 +281,67 @@ export default {
         }
       ],
       pageSizes: [10, 15, 20, 25, 50, 100],
-      focusedRowKey: null
+      focusedRowKey: "",
+      stateStoring: {
+        enabled: true,
+        storageKey: "Companies",
+        type: "custom",
+        savingTimeout: 0,
+        customLoad: function() {
+          //console.log("stateStoring customLoad");
+          //console.log(this.stateStoring);
+          var state = localStorage.getItem(this.stateStoring.storageKey);
+          if (state) {
+            state = JSON.parse(state);
+            //console.log(state);
+            let newFocusedRowKey = "";
+
+            // make sure state has focusedRowKey property
+            // eslint-disable-next-line no-prototype-builtins
+            if (!state.hasOwnProperty("focusedRowKey")) {
+              state.focusedRowKey = "";
+            }
+
+            // check new row key
+            if (this.newCompanyID !== "") {
+              newFocusedRowKey = this.newCompanyID;
+            }
+            let index = this._.findIndex(this.getCompanies, {
+              companyID: newFocusedRowKey
+            });
+
+            if (index === -1) {
+              // new row key not found
+              // check the old key stored in the local storage
+              newFocusedRowKey = state.focusedRowKey;
+              index = this._.findIndex(this.getCompanies, {
+                companyID: newFocusedRowKey
+              });
+              if (index === -1) {
+                // old key no longer exists
+                // check if we have any records
+                if (this.getCompanies.length > 0) {
+                  // select the first row
+                  newFocusedRowKey = this.getCompanies[0].companyID;
+                }
+              }
+            }
+
+            // assign new focused row key
+            state.focusedRowKey = newFocusedRowKey;
+          }
+          return state;
+        }.bind(this),
+        customSave: function(state) {
+          //console.log("stateStoring customSave");
+          localStorage.setItem(this.storageKey, JSON.stringify(state));
+        }
+      }
     };
   },
-  computed: {},
+  computed: {
+    ...mapGetters(["getCompanies", "newCompanyID", "getCurrentPath"])
+  },
   methods: {
     onToolbarPreparing(e) {
       e.toolbarOptions.items.unshift(
@@ -333,26 +399,16 @@ export default {
   },
   mounted() {
     //console.log("mounted");
-    //console.log("Menu Id: " + this.id);
-    // Set breadcrumb path
-    const menuIdPath = this.id.split(".");
+    // Build breadcrumb path
+    const menuIdPath = this.getCurrentPath.split("/");
     let newBreadcrumbPath = [];
-    let tempBreadcrumb = "";
+
     for (let i = 0; i < menuIdPath.length; i++) {
-      if (i === 0) {
-        tempBreadcrumb = menuIdPath[0];
-      } else {
-        tempBreadcrumb += "." + menuIdPath[i];
-      }
-      newBreadcrumbPath.push({ id: tempBreadcrumb });
+      newBreadcrumbPath.push({ id: menuIdPath[i] });
     }
+    //console.log(newBreadcrumbPath);
     // Save new breadcrumb data path
     this.$store.dispatch("setBreadcrumbData", newBreadcrumbPath);
-
-    // Focus on first row if we have any records
-    if (this.dataSource.length > 0 && this.focusedRowKey === null) {
-      this.focusedRowKey = this.dataSource[0].id;
-    }
   },
   created() {
     //console.log("created");
