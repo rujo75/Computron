@@ -45,9 +45,16 @@ const state = {
 
 const getters = {
     currentUser: state => state.currentUser,
+
     newUserID: state => state.newUserID,
+
     signInLoading: state => state.signInLoading,
-    getUsers: state => state.users
+
+    getUsers: state => state.users,
+
+    getUserByID: (state) => (id) => {
+        return state.users.find(user => user.userID === id)
+    }
 };
 
 const mutations = {

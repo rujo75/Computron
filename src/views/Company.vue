@@ -63,7 +63,13 @@ import {
 import { mapGetters } from "vuex";
 
 export default {
-  name: "app",
+  props: {
+    id: {
+      default: "",
+      type: String
+    }
+  },
+  name: "company",
   components: {
     DxToolbar,
     DxItem,
@@ -152,7 +158,16 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getFormData"])
+    ...mapGetters(["getCompanies"])
+  },
+  methods: {},
+  created() {
+    //console.log("created");
+    //this.loadFormData();
+  },
+  mounted() {
+    //console.log("mounted");
+    //this.$refs["formGeneral"].instance.getEditor("userName").focus();
   }
 };
 </script>

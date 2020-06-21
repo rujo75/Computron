@@ -3,9 +3,9 @@ import Router from "vue-router";
 import Home from "@/views/Home";
 import Menu from "@/views/Menu";
 import Companies from "@/views/Companies";
-import CompanyMaintenanceForm from "@/views/CompanyMaintenanceForm";
+import Company from "@/views/Company";
 import Users from "@/views/Users";
-import EditUser from "@/views/EditUser";
+import User from "@/views/User";
 import Settings from "@/views/Settings";
 
 Vue.use(Router);
@@ -30,9 +30,14 @@ const router = new Router({
       component: Companies
     },
     {
-      path: "/CompanyMaintenanceForm",
-      name: "CompanyMaintenanceForm",
-      component: CompanyMaintenanceForm
+      path: "/Company",
+      name: "CreateCompany",
+      component: Company
+    },
+    {
+      path: "/Company/:id",
+      name: "EditCompany",
+      component: Company
     },
     {
       path: "/Users",
@@ -40,15 +45,15 @@ const router = new Router({
       component: Users
     },
     {
-      path: "/CreateUser",
+      path: "/User",
       name: "CreateUser",
-      component: EditUser
+      component: User
     },
     {
-      path: "/EditUser/:id",
+      path: "/User/:id",
       props: true,
       name: "EditUser",
-      component: EditUser
+      component: User
     },
     {
       path: "/Settings",

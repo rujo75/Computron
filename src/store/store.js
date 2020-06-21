@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import general from "./modules/general";
 import users from "./modules/users";
+import companies from "./modules/companies";
 import favourites from "./modules/favourites";
 import { vuexfireMutations } from "vuexfire";
 
@@ -12,6 +13,7 @@ export const store = new Vuex.Store({
     modules: {
         general,
         users,
+        companies,
         favourites
     }
 });

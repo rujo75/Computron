@@ -80,7 +80,6 @@ import {
   DxPatternRule,
   DxEmailRule
 } from "devextreme-vue/form";
-import { mapGetters } from "vuex";
 import { getNewId } from "../store/common";
 
 export default {
@@ -90,7 +89,7 @@ export default {
       type: String
     }
   },
-  name: "editUser",
+  name: "user",
   components: {
     DxAccordion,
     DxAccordionItem,
@@ -168,9 +167,7 @@ export default {
       userNamePattern: /^[^\s]+$/
     };
   },
-  computed: {
-    ...mapGetters(["getUsers", "getFormData"])
-  },
+  computed: {},
   methods: {
     onAccordionContentReady(e) {
       // expand security item
@@ -197,10 +194,12 @@ export default {
         this.formOriginalData = this._.cloneDeep(this.formData);
       } else {
         // edit user
-        let index = this._.findIndex(this.getUsers, { userID: this.id });
-        if (index >= 0) {
+        // get user by id
+        let user = this.$store.getters.getUserByID(this.id);
+        //console.log(user);
+        if (user) {
           // clone user
-          this.formData = this._.cloneDeep(this.getUsers[index]);
+          this.formData = this._.cloneDeep(user);
           // clone formData
           this.formOriginalData = this._.cloneDeep(this.formData);
         }

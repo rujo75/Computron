@@ -21,9 +21,8 @@
       height="calc(100vh - 139px)"
       @toolbar-preparing="onToolbarPreparing($event);"
       @focused-row-changed="onFocusedRowChanged"
-      @initialized="onGridInitialized"
     >
-      <dx-export :enabled="true" :allow-export-selected-data="false" file-name="Companies List" />
+      <dx-export :enabled="true" :allow-export-selected-data="false" file-name="Companies" />
       <dx-column-chooser :enabled="true" />
       <dx-column
         data-field="companyID"
@@ -163,8 +162,8 @@ import {
 } from "devextreme-vue/data-grid";
 import { mapGetters } from "vuex";
 
-//var editToolbarButtonRef = null;
-//var deleteToolbarButtonRef = null;
+var editToolbarButtonRef = null;
+var deleteToolbarButtonRef = null;
 
 export default {
   name: "companies",
@@ -180,7 +179,7 @@ export default {
   },
   data() {
     return {
-      dataSource: [
+      /* dataSource: [
         {
           id: "1",
           companyNo: "1",
@@ -279,7 +278,7 @@ export default {
           dunsNo: "",
           emailAddress: ""
         }
-      ],
+      ], */
       pageSizes: [10, 15, 20, 25, 50, 100],
       focusedRowKey: "",
       stateStoring: {
@@ -353,9 +352,9 @@ export default {
             stylingMode: "text",
             text: "Create",
             focusStateEnabled: false,
-            disabled: true,
+            disabled: false,
             onClick: () => {
-              this.$router.push("/CompanyMaintenanceForm");
+              this.$router.push("/Company");
             }
           }
         },
@@ -367,8 +366,13 @@ export default {
             stylingMode: "text",
             text: "Edit",
             focusStateEnabled: false,
+            disabled: true,
+            onInitialized: e => {
+              editToolbarButtonRef = e.component;
+            },
             onClick: () => {
-              this.$router.push("/CompanyMaintenanceForm");
+              this.$store.dispatch("clearNewCompanyID");
+              this.$router.push("/Company/" + this.focusedRowKey);
             }
           }
         },
@@ -380,21 +384,52 @@ export default {
             stylingMode: "text",
             text: "Delete",
             focusStateEnabled: false,
-            disabled: true
-            //onClick: this.refreshDataGrid.bind(this)
+            disabled: true,
+            onInitialized: e => {
+              deleteToolbarButtonRef = e.component;
+            },
+            onClick: () => {
+              this.$store.dispatch("deleteCompany", this.focusedRowKey);
+              this.focusedRowKey = "";
+            }
           }
         }
       );
     },
     onFocusedRowChanged(e) {
-      //var data = e.row && e.row.data;
-      //console.log(data);
-      //console.log(e.row);
-      //console.log(e.row.data);
-      this.$store.dispatch("setFormData", e.row.data);
+      //console.log("onFocusedRowChanged");
+      // save grid state in case it was manually set from the code
+      if (e.component.state()) {
+        localStorage.setItem(
+          this.stateStoring.storageKey,
+          JSON.stringify(e.component.state())
+        );
+      }
     },
-    onRowDblClick() {
-      this.$router.push("/CompanyMaintenanceForm");
+    onCompanyIDClick() {
+      //alert(e.text);
+      //console.log("onCompanyIDClick");
+      setTimeout(
+        function() {
+          this.$store.dispatch("clearNewCompanyID");
+          this.$router.push("/Company/" + this.focusedRowKey);
+        }.bind(this),
+        1
+      );
+    }
+  },
+  watch: {
+    focusedRowKey: {
+      handler(value) {
+        //console.log("focusedRowKey value changed: " + value);
+        if (value === "" || this.getCompanies.length === 0) {
+          editToolbarButtonRef.option("disabled", true);
+          deleteToolbarButtonRef.option("disabled", true);
+        } else {
+          editToolbarButtonRef.option("disabled", false);
+          deleteToolbarButtonRef.option("disabled", false);
+        }
+      }
     }
   },
   mounted() {

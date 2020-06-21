@@ -21,9 +21,8 @@
       height="calc(100vh - 139px)"
       @toolbar-preparing="onToolbarPreparing($event);"
       @focused-row-changed="onFocusedRowChanged"
-      @initialized="onGridInitialized"
     >
-      <dx-export :enabled="true" :allow-export-selected-data="false" file-name="Users List" />
+      <dx-export :enabled="true" :allow-export-selected-data="false" file-name="Users" />
       <dx-column-chooser :enabled="true" />
       <dx-column
         data-field="userID"
@@ -174,7 +173,7 @@ export default {
             focusStateEnabled: false,
             disabled: false,
             onClick: () => {
-              this.$router.push("/CreateUser");
+              this.$router.push("/User");
             }
           }
         },
@@ -192,7 +191,7 @@ export default {
             },
             onClick: () => {
               this.$store.dispatch("clearNewUserID");
-              this.$router.push("/EditUser/" + this.focusedRowKey);
+              this.$router.push("/User/" + this.focusedRowKey);
             }
           }
         },
@@ -231,20 +230,13 @@ export default {
       //var state = localStorage.getItem(this.stateStoring.storageKey);
       //console.log(state);
     },
-    onGridInitialized() {
-      //console.log("onGridInitialized");
-      //console.log(e.component);
-    },
-    onRowDblClick() {
-      //this.$router.push("/EditUser/" + this.focusedRowKey);
-    },
     onUserIDClick() {
       //alert(e.text);
       //console.log("onUserIDClick");
       setTimeout(
         function() {
           this.$store.dispatch("clearNewUserID");
-          this.$router.push("/EditUser/" + this.focusedRowKey);
+          this.$router.push("/User/" + this.focusedRowKey);
         }.bind(this),
         1
       );
