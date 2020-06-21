@@ -36,6 +36,7 @@ const router = new Router({
     },
     {
       path: "/Company/:id",
+      props: true,
       name: "EditCompany",
       component: Company
     },

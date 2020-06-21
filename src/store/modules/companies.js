@@ -30,7 +30,12 @@ const state = {
 
 const getters = {
     newCompanyID: state => state.newCompanyID,
-    getCompanies: state => state.companies
+
+    getCompanies: state => state.companies,
+
+    getCompanyByID: (state) => (id) => {
+        return state.companies.find(company => company.companyID === id)
+    }
 };
 
 const mutations = {
