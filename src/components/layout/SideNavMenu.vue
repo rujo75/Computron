@@ -19,6 +19,7 @@ import ArrayStore from "devextreme/data/array_store";
 import { MenuData } from "./../../data/menus.js";
 
 export default {
+  name: "sideNavMenu",
   components: {
     DxList
   },

@@ -23,7 +23,7 @@ import { mapGetters } from "vuex";
 import { store } from "../../store/store";
 
 export default {
-  name: "app",
+  name: "navBar",
   components: {
     DxToolbar,
     DxItem

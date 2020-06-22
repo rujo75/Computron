@@ -77,6 +77,7 @@ export default {
   props: {
     id: String
   },
+  name: "menu",
   components: {
     DxButton,
     DxPopup,

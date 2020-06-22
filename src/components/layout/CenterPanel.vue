@@ -9,7 +9,7 @@
 import Breadcrumb from "./Breadcrumb.vue";
 
 export default {
-  name: "app",
+  name: "centerPanel",
   components: {
     Breadcrumb
   },

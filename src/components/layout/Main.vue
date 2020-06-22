@@ -39,7 +39,7 @@ import FavouritesNavMenu from "./FavouritesNavMenu.vue";
 import CenterPanel from "./CenterPanel.vue";
 
 export default {
-  name: "app",
+  name: "main",
   components: {
     DxDrawer,
     SideNavMenu,

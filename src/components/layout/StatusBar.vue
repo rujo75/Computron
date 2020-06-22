@@ -10,7 +10,7 @@
 import { DxToolbar, DxItem } from "devextreme-vue/toolbar";
 
 export default {
-  name: "app",
+  name: "statusBar",
   components: {
     DxToolbar,
     DxItem

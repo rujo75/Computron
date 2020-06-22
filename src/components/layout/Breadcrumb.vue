@@ -7,7 +7,7 @@ import { DxToolbar } from "devextreme-vue/toolbar";
 import { MenuData } from "./../../data/menus.js";
 
 export default {
-  name: "app",
+  name: "breadcrumb",
   components: {
     DxToolbar
   },

@@ -60,7 +60,7 @@ import { mapGetters } from "vuex";
 import { store } from "../../store/store";
 
 export default {
-  name: "app",
+  name: "signIn",
   components: {
     DxButton,
     DxPopup,

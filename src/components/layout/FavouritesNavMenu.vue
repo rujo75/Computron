@@ -72,7 +72,7 @@ import { mapGetters } from "vuex";
 import { getNewId } from "./../../store/common.js";
 
 export default {
-  name: "app",
+  name: "favouritesNavMenu",
   components: {
     DxToolbar,
     DxItem,
