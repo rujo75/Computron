@@ -32,12 +32,13 @@
         :visible="false"
         cell-template="UserIDTemplate"
       />
+      <dx-column data-field="userNo" caption="User No" data-type="string" :width="150" />
       <dx-column data-field="userName" caption="User Name" data-type="string" :width="150" />
       <dx-column data-field="email" caption="Email" data-type="string" :width="250" />
       <dx-column data-field="fullName" caption="Full Name" data-type="string" :width="300" />
       <dx-column
-        data-field="enabled"
-        caption="Enabled"
+        data-field="active"
+        caption="Active"
         data-type="boolean"
         :width="80"
         :visible="false"

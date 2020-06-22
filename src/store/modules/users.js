@@ -11,30 +11,33 @@ const state = {
     users: [
         {
             userID: "185bad2d-0a16-4e6b-a6a1-49ac2d380c57",
+            userNo: "1",
             userName: "drusmir",
             fullName: "Dal Rusmir",
             email: "drusmir@tpg.com",
-            enabled: true,
+            active: true,
             expiryDate: "2020-06-30",
             password: "123456",
             mustChangePassword: false
         },
         {
             userID: "f274ab28-59af-45af-86f5-97a149104476",
+            userNo: "2",
             userName: "jsmith",
             fullName: "John Smith",
             email: "jsmith@tpg.com",
-            enabled: true,
+            active: true,
             expiryDate: "",
             password: "123456",
             mustChangePassword: false
         },
         {
             userID: "2652c185-09ab-4b8a-8518-7f184a4f2baf",
+            userNo: "3",
             userName: "jpike",
             fullName: "Jane Pike",
             email: "jpike@tpg.com",
-            enabled: true,
+            active: true,
             expiryDate: "",
             password: "123456",
             mustChangePassword: false
@@ -54,6 +57,30 @@ const getters = {
 
     getUserByID: (state) => (id) => {
         return state.users.find(user => user.userID === id)
+    },
+
+    userExistsByUserNo: (state) => (userNo) => {
+        if (state.users.find(user => user.userNo === userNo)) {
+            return true
+        } else {
+            return false
+        }
+    },
+
+    userExistsByUserName: (state) => (userName) => {
+        if (state.users.find(user => user.userName === userName)) {
+            return true
+        } else {
+            return false
+        }
+    },
+
+    userExistsByEmail: (state) => (email) => {
+        if (state.users.find(user => user.email === email)) {
+            return true
+        } else {
+            return false
+        }
     }
 };
 

@@ -18,6 +18,26 @@
                 <dx-form-item data-field="userID" :editor-options="{disabled: true}">
                   <dx-label text="User ID" />
                 </dx-form-item>
+                <dx-form-item data-field="userNo" :editor-options="{disabled: !isNewRecord}">
+                  <dx-label text="User No" />
+                  <dx-required-rule message="User No is required!" />
+                  <dx-pattern-rule
+                    :pattern="userNoPattern"
+                    message="Do not use spaces in the User No!"
+                  />
+                  <dx-string-length-rule
+                    :max="20"
+                    message="User No must have maximum 20 characters!"
+                  />
+                  <!--<DxAsyncRule
+                    :validation-callback="userNoValidationAsync"
+                    message="User No is already used!"
+                  />-->
+                  <dx-custom-rule
+                    :validation-callback="userNoValidation"
+                    message="User No is already used!"
+                  />
+                </dx-form-item>
                 <dx-form-item data-field="userName">
                   <dx-label text="User Name" />
                   <dx-required-rule message="User Name is required!" />
@@ -25,20 +45,29 @@
                     :pattern="userNamePattern"
                     message="Do not use spaces in the User Name!"
                   />
+                  <dx-custom-rule
+                    :validation-callback="userNameValidation"
+                    message="User Name is already used!"
+                  />
                 </dx-form-item>
                 <dx-form-item data-field="fullName">
                   <dx-label text="Full Name" />
                   <dx-required-rule message="Full Name is required!" />
                 </dx-form-item>
                 <dx-form-item data-field="email">
+                  <dx-required-rule message="Email is required!" />
                   <dx-email-rule message="Email is invalid!" />
+                  <dx-custom-rule
+                    :validation-callback="emailValidation"
+                    message="Email is already used!"
+                  />
                 </dx-form-item>
                 <!--<dx-form-item
-                data-field="enabled"
+                data-field="active"
                 editor-type="dxSwitch"
                 :editor-options="{switchedOffText: 'NO', switchedOnText: 'YES', width: '60'}"
                 />-->
-                <dx-form-item data-field="enabled" editor-type="dxCheckBox" />
+                <dx-form-item data-field="active" editor-type="dxCheckBox" />
                 <dx-form-item data-field="expiryDate" editor-type="dxDateBox" />
               </dx-group-item>
             </dx-form>
@@ -78,7 +107,10 @@ import {
   DxLabel,
   DxRequiredRule,
   DxPatternRule,
-  DxEmailRule
+  DxEmailRule,
+  DxStringLengthRule,
+  DxCustomRule
+  //DxAsyncRule
 } from "devextreme-vue/form";
 import { getNewId } from "../store/common";
 
@@ -101,7 +133,10 @@ export default {
     DxLabel,
     DxRequiredRule,
     DxPatternRule,
-    DxEmailRule
+    DxEmailRule,
+    DxStringLengthRule,
+    DxCustomRule
+    //DxAsyncRule
   },
   data() {
     return {
@@ -131,43 +166,24 @@ export default {
       validationRules: {
         userName: [{ type: "pattern", pattern: "[^s]+" }]
       },
-      /* stateEditorOptions: {
-        items: [
-          { id: "enabled", text: "Enabled" },
-          { id: "disabled", text: "Disabled" }
-        ],
-        displayExpr: "text",
-        valueExpr: "id",
-        showClearButton: true
-      }, */
-      postcodeEditorOptions: {
-        mask: "0000"
-      },
-      countryEditorOptions: {
-        items: [{ id: "AUS", text: "Australia" }],
-        displayExpr: "text",
-        valueExpr: "id",
-        showClearButton: true
-      },
-      telephoneNoEditorOptions: {
-        mask: "(00) 0000 0000"
-      },
-      mobileNoEditorOptions: {
-        mask: "0000 000 000"
-      },
-      taxNoEditorOptions: {
-        mask: "00 000 000 000"
-      },
-      dunsNoEditorOptions: {
-        mask: "000 000 000"
-      },
       mustChangePasswordOptions: {
         text: "User must change password at next login"
       },
+      userNoPattern: /^[^\s]+$/,
       userNamePattern: /^[^\s]+$/
     };
   },
-  computed: {},
+  computed: {
+    isNewRecord() {
+      if (this.id === "") {
+        // new user
+        return true;
+      } else {
+        // existing user
+        return false;
+      }
+    }
+  },
   methods: {
     onAccordionContentReady(e) {
       // expand security item
@@ -176,14 +192,15 @@ export default {
     loadFormData: function() {
       //console.log("loadFormData");
       //console.log("id: " + this.id);
-      if (this.id === "") {
+      if (this.isNewRecord) {
         // create user
         let newUser = {
           userID: getNewId(),
+          userNo: "",
           userName: "",
           fullName: "",
           email: "",
-          enabled: true,
+          active: true,
           expiryDate: "",
           password: "",
           mustChangePassword: true
@@ -229,7 +246,7 @@ export default {
       }
     },
     saveFormData() {
-      if (this.id === "") {
+      if (this.isNewRecord) {
         // create user
         this.$store.dispatch("createUser", this.formData);
       } else {
@@ -239,6 +256,62 @@ export default {
 
       // update formOriginalData with formData
       this.formOriginalData = this.formData;
+    },
+    userNoValidationAsync(params) {
+      console.log("params.value: " + params.value);
+      /*return new Promise((resolve, reject) => {
+        if (params.value === "1") {
+          resolve();
+        } else {
+          reject("User No is already used!");
+        }
+      });*/
+
+      /*return new Promise(resolve => {
+        setTimeout(function() {
+          resolve(params.value === "1");
+        }, 1000);
+      });*/
+
+      /*return new Promise((resolve, reject) => {
+        setTimeout(function() {
+          if (params.value === "1") {
+            resolve();
+          } else {
+            reject("User No is already used!");
+          }
+        }, 1000);
+      });*/
+    },
+    userNoValidation(e) {
+      if (this.isNewRecord) {
+        // new user
+        let result = this.$store.getters.userExistsByUserNo(e.value);
+        return (result = !result);
+      } else {
+        // existing user
+        return true;
+      }
+    },
+    userNameValidation(e) {
+      if (this.isNewRecord) {
+        // new user
+        let result = this.$store.getters.userExistsByUserName(e.value);
+        return (result = !result);
+      } else {
+        // existing user
+        return true;
+      }
+    },
+    emailValidation(e) {
+      if (this.isNewRecord) {
+        // new user
+        let result = this.$store.getters.userExistsByEmail(e.value);
+        return (result = !result);
+      } else {
+        // existing user
+        return true;
+      }
     }
   },
   created() {
@@ -247,7 +320,13 @@ export default {
   },
   mounted() {
     //console.log("mounted");
-    this.$refs["formGeneral"].instance.getEditor("userName").focus();
+    if (this.isNewRecord) {
+      // new user
+      this.$refs["formGeneral"].instance.getEditor("userNo").focus();
+    } else {
+      // existing user
+      this.$refs["formGeneral"].instance.getEditor("userName").focus();
+    }
   }
 };
 </script>
