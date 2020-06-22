@@ -9,14 +9,14 @@
       :show-close-button="false"
       :shading-color="backgroundColour"
       :width="400"
-      :height="250"
+      :height="220"
       class="popup"
       title="Computron Financial"
       @shown="popupFormShown"
       @hiding="popupFormHiding"
     >
-      <p>
-        <dx-form ref="formSignIn" :form-data="formData">
+      <form>
+        <dx-form ref="formSignIn" :form-data="formData" validation-group="signInData">
           <dx-form-item
             data-field="username"
             :validation-rules="validationRules.username"
@@ -29,17 +29,9 @@
             :validation-rules="validationRules.password"
             :editor-options="passwordOptions"
           />
+          <dx-button-item :button-options="signInButtonOptions" horizontal-alignment="right" />
         </dx-form>
-      </p>
-      <div align="right">
-        <dx-button
-          text="Sign In"
-          type="success"
-          :use-submit-behavior="true"
-          :width="100"
-          @click="signIn"
-        />
-      </div>
+      </form>
       <dx-load-panel
         :visible.sync="signInLoading"
         :show-indicator="true"
@@ -53,8 +45,12 @@
 
 <script>
 import { DxPopup } from "devextreme-vue/popup";
-import { DxForm, DxItem as DxFormItem, DxLabel } from "devextreme-vue/form";
-import { DxButton } from "devextreme-vue";
+import {
+  DxForm,
+  DxItem as DxFormItem,
+  DxLabel,
+  DxButtonItem
+} from "devextreme-vue/form";
 import { DxLoadPanel } from "devextreme-vue/load-panel";
 import { mapGetters } from "vuex";
 import { store } from "../../store/store";
@@ -62,11 +58,11 @@ import { store } from "../../store/store";
 export default {
   name: "signIn",
   components: {
-    DxButton,
     DxPopup,
     DxForm,
     DxFormItem,
     DxLabel,
+    DxButtonItem,
     DxLoadPanel
   },
   data() {
@@ -74,8 +70,8 @@ export default {
       backgroundColour: "rgb(42,42,42)",
       formData: { username: "", password: "" },
       validationRules: {
-        username: [{ type: "required", message: "Username is required." }],
-        password: [{ type: "required", message: "Password is required." }]
+        username: [{ type: "required", message: "Email is required!" }],
+        password: [{ type: "required", message: "Password is required!" }]
       },
       usernameOptions: {
         onEnterKey: this.onUsernameEnterKey.bind(this)
@@ -83,6 +79,13 @@ export default {
       passwordOptions: {
         mode: "password",
         onEnterKey: this.onPasswordEnterKey.bind(this)
+      },
+      signInButtonOptions: {
+        text: "Sign In",
+        type: "success",
+        focusStateEnabled: false,
+        width: 100,
+        onClick: this.onSignInClick.bind(this)
       }
     };
   },
@@ -97,20 +100,33 @@ export default {
       this.$refs["formSignIn"].instance.resetValues();
     },
     onUsernameEnterKey() {
-      console.log("onUsernameEnterKey");
+      //console.log("onUsernameEnterKey");
       this.signIn();
     },
     onPasswordEnterKey() {
-      console.log("onPasswordEnterKey");
+      //console.log("onPasswordEnterKey");
+      this.signIn();
+    },
+    onSignInClick() {
       this.signIn();
     },
     signIn() {
-      const user = {
-        email: this.formData.username,
-        password: this.formData.password
-      };
-      store.dispatch("signIn", user);
+      console.log("signIn");
+      var result = this.$refs["formSignIn"].instance.validate();
+
+      if (result.isValid) {
+        // all data is valid
+        const user = {
+          email: this.formData.username,
+          password: this.formData.password
+        };
+        store.dispatch("signIn", user);
+      }
     }
+  },
+  mounted() {
+    //console.log("mounted");
+    this.$refs["formSignIn"].instance.getEditor("username").focus();
   }
 };
 </script>
