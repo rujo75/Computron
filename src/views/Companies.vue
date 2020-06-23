@@ -32,13 +32,7 @@
         :visible="false"
         cell-template="CompanyIDTemplate"
       />
-      <dx-column
-        data-field="companyNo"
-        caption="Company No"
-        data-type="string"
-        :width="120"
-        calculate-display-value="companyNoFormatted"
-      />
+      <dx-column data-field="companyNo" caption="Company No" data-type="string" :width="120" />
       <dx-column
         data-field="companyName"
         caption="Company Name"
@@ -89,16 +83,16 @@
         :visible="false"
       />
       <dx-column
-        data-field="telephoneNo"
-        caption="Telephone"
+        data-field="phoneNo"
+        caption="Phone No"
         data-type="string"
         :width="120"
         :visible="false"
-        calculate-display-value="telephoneNoFormatted"
+        calculate-display-value="phoneNoFormatted"
       />
       <dx-column
         data-field="faxNo"
-        caption="Fax"
+        caption="Fax No"
         data-type="string"
         :width="120"
         :visible="false"
@@ -106,35 +100,21 @@
       />
       <dx-column
         data-field="mobileNo"
-        caption="Mobile"
+        caption="Mobile No"
         data-type="string"
         :width="120"
         :visible="false"
         calculate-display-value="mobileNoFormatted"
       />
       <dx-column
-        data-field="emailAddress"
-        caption="Email Address"
+        data-field="email"
+        caption="Email"
         data-type="string"
         :width="200"
         :visible="false"
       />
-      <dx-column
-        data-field="taxNo"
-        caption="ABN"
-        data-type="string"
-        :width="130"
-        :visible="false"
-        calculate-display-value="taxNoFormatted"
-      />
-      <dx-column
-        data-field="dunsNo"
-        caption="Duns No"
-        data-type="string"
-        :width="130"
-        :visible="false"
-        calculate-display-value="dunsNoFormatted"
-      />
+      <!-- calculate-display-value="taxNoFormatted" -->
+      <dx-column data-field="taxNo" caption="ABN" data-type="string" :width="130" :visible="false" />
       <dx-load-panel :enabled="false" />
       <dx-group-panel :visible="false" />
       <dx-search-panel :visible="true" :width="250" />
@@ -145,6 +125,7 @@
           class="data-grid-hyperlink"
         >{{ item.value }}</span>
       </div>
+      <div slot="TaxNoTemplate" slot-scope="{ data: item }">{{ item.value }}</div>
     </dx-data-grid>
   </div>
 </template>
@@ -161,6 +142,7 @@ import {
   //DxSelection
 } from "devextreme-vue/data-grid";
 import { mapGetters } from "vuex";
+//import numeral from "numeral";
 
 var editToolbarButtonRef = null;
 var deleteToolbarButtonRef = null;
@@ -179,106 +161,6 @@ export default {
   },
   data() {
     return {
-      /* dataSource: [
-        {
-          id: "1",
-          companyNo: "1",
-          companyNoFormatted: "001",
-          companyName: "City of Melbourne",
-          companyCode: "COM",
-          addressLine1: "100 Burk Steet",
-          addressLine2: "",
-          city: "Melbourne",
-          state: "VIC",
-          postcode: "3000",
-          country: "AUS",
-          telephoneNo: "0392003776",
-          telephoneNoFormatted: "(03) 9200 3776",
-          faxNo: "",
-          mobileNo: "0488711256",
-          mobileNoFormatted: "0488 711 256",
-          taxNo: "12345678901",
-          taxNoFormatted: "12 345 678 901",
-          dunsNo: "",
-          emailAddress: "helpdesk@melbourne.vic.gov.au"
-        },
-        {
-          id: "2",
-          companyNo: "10",
-          companyNoFormatted: "010",
-          companyName: "Library Leaders",
-          companyCode: "LIB LEAD",
-          addressLine1: "",
-          addressLine2: "",
-          city: "",
-          state: "",
-          postcode: "",
-          country: "",
-          telephoneNo: "",
-          faxNo: "",
-          mobileNo: "",
-          taxNo: "",
-          dunsNo: "",
-          emailAddress: ""
-        },
-        {
-          id: "3",
-          companyNo: "21",
-          companyNoFormatted: "021",
-          companyName: "Waste Management",
-          companyCode: "WSTE MGMNT",
-          addressLine1: "",
-          addressLine2: "",
-          city: "",
-          state: "",
-          postcode: "",
-          country: "",
-          telephoneNo: "",
-          faxNo: "",
-          mobileNo: "",
-          taxNo: "",
-          dunsNo: "",
-          emailAddress: ""
-        },
-        {
-          id: "4",
-          companyNo: "24",
-          companyNoFormatted: "024",
-          companyName: "Health & Environment Service Management",
-          companyCode: "",
-          addressLine1: "",
-          addressLine2: "",
-          city: "",
-          state: "",
-          postcode: "",
-          country: "",
-          telephoneNo: "",
-          faxNo: "",
-          mobileNo: "",
-          taxNo: "",
-          dunsNo: "",
-          emailAddress: ""
-        },
-        {
-          id: "5",
-          companyNo: "32",
-          companyNoFormatted: "032",
-          companyName: "Parking",
-          companyCode: "",
-          addressLine1: "",
-          addressLine2: "",
-          city: "",
-          state: "",
-          postcode: "",
-          country: "",
-          telephoneNo: "",
-          faxNo: "",
-          mobileNo: "",
-          taxNo: "",
-          dunsNo: "",
-          emailAddress: ""
-        }
-      ], */
       pageSizes: [10, 15, 20, 25, 50, 100],
       focusedRowKey: "",
       stateStoring: {
@@ -340,8 +222,18 @@ export default {
   },
   computed: {
     ...mapGetters(["getCompanies", "newCompanyID", "getCurrentPath"])
+
+    /*getFormattedABN(e) {
+      console.log("getFormattedABN");
+      return numeral(e).format("00 000 000 000");
+    }*/
   },
   methods: {
+    getFormattedABN(e) {
+      console.log("getFormattedABN");
+      console.log(e);
+      //return numeral(e).format("00 000 000 000");
+    },
     onToolbarPreparing(e) {
       e.toolbarOptions.items.unshift(
         {

@@ -8,6 +8,9 @@
       <form>
         <dx-form ref="form" :form-data="formData" :scrolling-enabled="true" class="form">
           <dx-group-item :col-count="2">
+            <dx-form-item data-field="companyID" :editor-options="{disabled: true}">
+              <dx-label text="Company ID" />
+            </dx-form-item>
             <dx-form-item data-field="companyNo" :editor-options="{disabled: true}" />
           </dx-group-item>
           <dx-group-item caption="Company Details" :col-count="2">
@@ -31,22 +34,21 @@
             />
           </dx-group-item>
           <dx-group-item caption="Company Contact Details" :col-count="2">
-            <dx-form-item data-field="telephoneNo" :editor-options="telephoneNoEditorOptions">
-              <dx-label text="Telephone" />
+            <dx-form-item data-field="phoneNo" :editor-options="telephoneNoEditorOptions">
+              <dx-label text="Phone No" />
             </dx-form-item>
             <dx-form-item data-field="faxNo" :editor-options="telephoneNoEditorOptions">
-              <dx-label text="Fax" />
+              <dx-label text="Fax No" />
             </dx-form-item>
             <dx-form-item data-field="mobileNo" :editor-options="mobileNoEditorOptions">
-              <dx-label text="Mobile" />
+              <dx-label text="Mobile No" />
             </dx-form-item>
-            <dx-form-item data-field="emailAddress" />
+            <dx-form-item data-field="email" />
           </dx-group-item>
           <dx-group-item caption="Other Company Details" :col-count="2">
             <dx-form-item data-field="taxNo" :editor-options="taxNoEditorOptions">
               <dx-label text="ABN" />
             </dx-form-item>
-            <dx-form-item data-field="dunsNo" :editor-options="dunsNoEditorOptions" />
           </dx-group-item>
         </dx-form>
       </form>
@@ -153,25 +155,31 @@ export default {
         let newCompany = {
           companyID: getNewId(),
           companyNo: "",
-          companyNoFormatted: "",
           companyName: "",
           companyCode: "",
           addressLine1: "",
           addressLine2: "",
+          contactName: "",
           city: "",
           state: "",
           postcode: "",
           country: "",
-          telephoneNo: "",
-          telephoneNoFormatted: "",
+          phoneNo: "",
+          phoneNoFormatted: "",
           faxNo: "",
           mobileNo: "",
           mobileNoFormatted: "",
           taxNo: "",
           taxNoFormatted: "",
-          dunsNo: "",
-          emailAddress: "",
-          enabled: true
+          email: "",
+          website: "",
+          logo: "",
+          bankName: "",
+          bankBranchNo: "",
+          bankAccountNo: "",
+          swiftCode: "",
+          iban: "",
+          active: true
         };
         // use new company
         this.formData = newCompany;
