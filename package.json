@@ -13,6 +13,7 @@
     "devextreme-vue": "19.2.6",
     "firebase": "^7.13.1",
     "lodash": "4.17.15",
+    "v-mask": "^2.2.1",
     "vue": "2.6.11",
     "vue-lodash": "2.0.2",
     "vue-router": "3.1.6",

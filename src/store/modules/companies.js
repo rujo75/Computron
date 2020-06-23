@@ -21,7 +21,6 @@ const state = {
             mobileNo: "0488711256",
             mobileNoFormatted: "0488 711 256",
             taxNo: "12345678901",
-            taxNoFormatted: "12 345 678 901",
             email: "admin@globeworks.com.au",
             website: "www.globeworks.com.au",
             logo: "",

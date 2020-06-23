@@ -114,7 +114,14 @@
         :visible="false"
       />
       <!-- calculate-display-value="taxNoFormatted" -->
-      <dx-column data-field="taxNo" caption="ABN" data-type="string" :width="130" :visible="false" />
+      <dx-column
+        data-field="taxNo"
+        caption="ABN"
+        data-type="string"
+        :width="130"
+        :visible="false"
+        cell-template="TaxNoTemplate"
+      />
       <dx-load-panel :enabled="false" />
       <dx-group-panel :visible="false" />
       <dx-search-panel :visible="true" :width="250" />
@@ -125,7 +132,10 @@
           class="data-grid-hyperlink"
         >{{ item.value }}</span>
       </div>
-      <div slot="TaxNoTemplate" slot-scope="{ data: item }">{{ item.value }}</div>
+      <div
+        slot="TaxNoTemplate"
+        slot-scope="{ data: item }"
+      >{{ item.value | VMask("## ### ### ###") }}</div>
     </dx-data-grid>
   </div>
 </template>
@@ -142,7 +152,6 @@ import {
   //DxSelection
 } from "devextreme-vue/data-grid";
 import { mapGetters } from "vuex";
-//import numeral from "numeral";
 
 var editToolbarButtonRef = null;
 var deleteToolbarButtonRef = null;
@@ -232,6 +241,7 @@ export default {
     getFormattedABN(e) {
       console.log("getFormattedABN");
       console.log(e);
+      //console.log(e.mask("00 000 000 000"));
       //return numeral(e).format("00 000 000 000");
     },
     onToolbarPreparing(e) {
