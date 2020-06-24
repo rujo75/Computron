@@ -77,7 +77,8 @@ body {
 }
 
 .dx-field-item .dx-checkbox {
-  padding-top: 7px;
+  /*padding-top: 7px;*/ /* label inline */
+  padding-top: 29px; /* lable on top */
 }
 
 .dx-field-item .dx-checkbox-text {

@@ -1,74 +1,77 @@
 <template>
-  <div class="home-panel">
-    <div class="container">
-      <div class="my-card dx-theme-border-color" v-for="item in getMenuItems" :key="item.id">
-        <div class="card-header dx-theme-border-color">
-          <dx-button
-            width="100%"
-            :text="item.text"
-            type="normal"
-            styling-mode="text"
-            class="card-header-text"
-            :focus-state-enabled="false"
-            :id="item.id"
-            @click="onHeaderButtonClick"
-          />
-        </div>
-        <div class="card-main">
-          <i v-bind:class="item.icon"></i>
-          <div class="main-description">{{ item.description }}</div>
-          <dx-button
-            :icon="getItemFavouritesIcon(item)"
-            :focus-state-enabled="false"
-            :id="item.id"
-            styling-mode="text"
-            hint="Add to favourites"
-            @click="onAddToFavouritesButtonClick"
-          />
-        </div>
-      </div>
-      <dx-popup
-        ref="popupFavourites"
-        :drag-enabled="true"
-        :close-on-outside-click="false"
-        :show-title="true"
-        :width="450"
-        :height="200"
-        class="popup"
-        title="Add to Favourites"
-        @showing="popupFormShowing"
-        @shown="popupFormShown"
-        @hiding="popupFormHiding"
-      >
-        <p>
-          <dx-form ref="formFavourites" :form-data="formData">
-            <dx-form-item
-              data-field="saveTo"
-              :validation-rules="validationRules.saveTo"
-              editor-type="dxSelectBox"
-              :editor-options="saveToEditorOptions"
+  <dx-scroll-view :show-scrollbar="onHover" height="calc(100vh - 119px)">
+    <div class="home-panel">
+      <div class="container">
+        <div class="my-card dx-theme-border-color" v-for="item in getMenuItems" :key="item.id">
+          <div class="card-header dx-theme-border-color">
+            <dx-button
+              width="100%"
+              :text="item.text"
+              type="normal"
+              styling-mode="text"
+              class="card-header-text"
+              :focus-state-enabled="false"
+              :id="item.id"
+              @click="onHeaderButtonClick"
             />
-          </dx-form>
-        </p>
-        <div align="right">
-          <dx-button
-            text="OK"
-            type="success"
-            :use-submit-behavior="true"
-            :width="80"
-            @click="saveFavourite"
-          />
-          <dx-button text="Cancel" :width="80" class="margin-left-10" @click="hidePoupForm" />
+          </div>
+          <div class="card-main">
+            <i v-bind:class="item.icon"></i>
+            <div class="main-description">{{ item.description }}</div>
+            <dx-button
+              :icon="getItemFavouritesIcon(item)"
+              :focus-state-enabled="false"
+              :id="item.id"
+              styling-mode="text"
+              hint="Add to favourites"
+              @click="onAddToFavouritesButtonClick"
+            />
+          </div>
         </div>
-      </dx-popup>
+        <dx-popup
+          ref="popupFavourites"
+          :drag-enabled="true"
+          :close-on-outside-click="false"
+          :show-title="true"
+          :width="450"
+          :height="200"
+          class="popup"
+          title="Add to Favourites"
+          @showing="popupFormShowing"
+          @shown="popupFormShown"
+          @hiding="popupFormHiding"
+        >
+          <p>
+            <dx-form ref="formFavourites" :form-data="formData">
+              <dx-form-item
+                data-field="saveTo"
+                :validation-rules="validationRules.saveTo"
+                editor-type="dxSelectBox"
+                :editor-options="saveToEditorOptions"
+              />
+            </dx-form>
+          </p>
+          <div align="right">
+            <dx-button
+              text="OK"
+              type="success"
+              :use-submit-behavior="true"
+              :width="80"
+              @click="saveFavourite"
+            />
+            <dx-button text="Cancel" :width="80" class="margin-left-10" @click="hidePoupForm" />
+          </div>
+        </dx-popup>
+      </div>
     </div>
-  </div>
+  </dx-scroll-view>
 </template>
 
 <script>
 import { DxButton } from "devextreme-vue";
 import { DxPopup } from "devextreme-vue/popup";
 import { DxForm, DxItem as DxFormItem } from "devextreme-vue/form";
+import { DxScrollView } from "devextreme-vue/scroll-view";
 import { MenuData } from "./../data/menus.js";
 import { mapGetters } from "vuex";
 import { getNewId } from "./../store/common.js";
@@ -82,7 +85,8 @@ export default {
     DxButton,
     DxPopup,
     DxForm,
-    DxFormItem
+    DxFormItem,
+    DxScrollView
   },
   data() {
     return {

@@ -1,5 +1,8 @@
 <template>
   <dx-toolbar class="status-toolbar dx-theme-border-color" :height="26">
+    <DxItem #default location="before" locate-in-menu="never">
+      <div class="toolbar-label">Globeworks (GLB)</div>
+    </DxItem>
     <DxItem #default location="after" locate-in-menu="never">
       <div class="toolbar-label">Version 1.0</div>
     </DxItem>

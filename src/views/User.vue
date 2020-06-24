@@ -5,107 +5,123 @@
       <dx-item :options="cancelNavButtonOptions" location="before" widget="dxButton" />
     </dx-toolbar>
     <div class="widget-container">
-      <form>
-        <dx-accordion
-          :multiple="true"
-          :collapsible="true"
-          class="accordion"
-          @contentReady="onAccordionContentReady"
-        >
-          <dx-accordion-item #default title="General">
-            <dx-form ref="formGeneral" :form-data="formData" validation-group="userData">
-              <dx-group-item :col-count="2">
-                <dx-form-item data-field="userID" :editor-options="{disabled: true}">
-                  <dx-label text="User ID" />
-                </dx-form-item>
-                <dx-form-item data-field="userNo" :editor-options="{disabled: !isNewRecord}">
-                  <dx-label text="User No" />
-                  <dx-required-rule message="User No is required!" />
-                  <dx-pattern-rule
-                    :pattern="userNoPattern"
-                    message="Do not use spaces in the User No!"
-                  />
-                  <dx-string-length-rule
-                    :max="20"
-                    message="User No must have maximum 20 characters!"
-                  />
-                  <!--<DxAsyncRule
+      <dx-scroll-view :show-scrollbar="onHover" height="calc(100vh - 166px)">
+        <form>
+          <dx-accordion
+            :multiple="true"
+            :collapsible="true"
+            class="accordion"
+            @contentReady="onAccordionContentReady"
+          >
+            <dx-accordion-item #default title="General">
+              <dx-form
+                ref="formGeneral"
+                :form-data="formData"
+                validation-group="userData"
+                labelLocation="top"
+              >
+                <dx-group-item :col-count="2">
+                  <dx-form-item data-field="userID" :editor-options="{disabled: true}">
+                    <dx-label text="User ID" />
+                  </dx-form-item>
+                  <dx-form-item data-field="userNo" :editor-options="{disabled: !isNewRecord}">
+                    <dx-label text="User No" />
+                    <dx-required-rule message="User No is required!" />
+                    <dx-pattern-rule
+                      :pattern="userNoPattern"
+                      message="Do not use spaces in the User No!"
+                    />
+                    <dx-string-length-rule
+                      :max="20"
+                      message="User No must have maximum 20 characters!"
+                    />
+                    <!--<DxAsyncRule
                     :validation-callback="userNoValidationAsync"
                     message="User No is already used!"
-                  />-->
-                  <dx-custom-rule
-                    :validation-callback="userNoValidation"
-                    message="User No is already used!"
-                  />
-                </dx-form-item>
-                <dx-form-item data-field="userName">
-                  <dx-label text="User Name" />
-                  <dx-required-rule message="User Name is required!" />
-                  <dx-pattern-rule
-                    :pattern="userNamePattern"
-                    message="Do not use spaces in the User Name!"
-                  />
-                  <dx-string-length-rule
-                    :max="20"
-                    message="User Name must have maximum 20 characters!"
-                  />
-                  <dx-custom-rule
-                    :validation-callback="userNameValidation"
-                    message="User Name is already used!"
-                  />
-                </dx-form-item>
-                <dx-form-item data-field="fullName">
-                  <dx-label text="Full Name" />
-                  <dx-required-rule message="Full Name is required!" />
-                  <dx-string-length-rule
-                    :max="255"
-                    message="Full Name must have maximum 255 characters!"
-                  />
-                </dx-form-item>
-                <dx-form-item data-field="email">
-                  <dx-required-rule message="Email is required!" />
-                  <dx-email-rule message="Email is invalid!" />
-                  <dx-string-length-rule
-                    :max="255"
-                    message="Email must have maximum 255 characters!"
-                  />
-                  <dx-custom-rule
-                    :validation-callback="emailValidation"
-                    message="Email is already used!"
-                  />
-                </dx-form-item>
-                <!--<dx-form-item
+                    />-->
+                    <dx-custom-rule
+                      :validation-callback="userNoValidation"
+                      message="User No is already used!"
+                    />
+                  </dx-form-item>
+                  <dx-form-item data-field="userName">
+                    <dx-label text="User Name" />
+                    <dx-required-rule message="User Name is required!" />
+                    <dx-pattern-rule
+                      :pattern="userNamePattern"
+                      message="Do not use spaces in the User Name!"
+                    />
+                    <dx-string-length-rule
+                      :max="20"
+                      message="User Name must have maximum 20 characters!"
+                    />
+                    <dx-custom-rule
+                      :validation-callback="userNameValidation"
+                      message="User Name is already used!"
+                    />
+                  </dx-form-item>
+                  <dx-form-item data-field="fullName">
+                    <dx-label text="Full Name" />
+                    <dx-required-rule message="Full Name is required!" />
+                    <dx-string-length-rule
+                      :max="255"
+                      message="Full Name must have maximum 255 characters!"
+                    />
+                  </dx-form-item>
+                  <dx-form-item data-field="email">
+                    <dx-required-rule message="Email is required!" />
+                    <dx-email-rule message="Email is invalid!" />
+                    <dx-string-length-rule
+                      :max="255"
+                      message="Email must have maximum 255 characters!"
+                    />
+                    <dx-custom-rule
+                      :validation-callback="emailValidation"
+                      message="Email is already used!"
+                    />
+                  </dx-form-item>
+                  <!--<dx-form-item
                 data-field="active"
                 editor-type="dxSwitch"
                 :editor-options="{switchedOffText: 'NO', switchedOnText: 'YES', width: '60'}"
-                />-->
-                <dx-form-item data-field="active" editor-type="dxCheckBox" />
-                <dx-form-item data-field="expiryDate" editor-type="dxDateBox" />
-              </dx-group-item>
-            </dx-form>
-          </dx-accordion-item>
-          <dx-accordion-item #default title="Security">
-            <dx-form ref="formSecurity" :form-data="formData">
-              <dx-group-item :col-count="2">
-                <dx-form-item data-field="password" :editor-options="{mode: 'password'}">
-                  <dx-required-rule message="Password is required!" />
-                  <dx-string-length-rule
-                    :max="50"
-                    message="Password must have maximum 50 characters!"
-                  />
-                </dx-form-item>
-                <dx-form-item
-                  :editor-options="mustChangePasswordOptions"
-                  data-field="mustChangePassword"
-                  editor-type="dxCheckBox"
-                >
-                  <dx-label :visible="false" />
-                </dx-form-item>
-              </dx-group-item>
-            </dx-form>
-          </dx-accordion-item>
-        </dx-accordion>
-      </form>
+                  />-->
+                  <dx-form-item
+                    data-field="active"
+                    editor-type="dxCheckBox"
+                    :editor-options="{text: 'Active'}"
+                  >
+                    <dx-label :visible="false" />
+                  </dx-form-item>
+                  <dx-form-item data-field="expiryDate" editor-type="dxDateBox" />
+                </dx-group-item>
+              </dx-form>
+            </dx-accordion-item>
+            <dx-accordion-item #default title="Security">
+              <dx-form ref="formSecurity" :form-data="formData" labelLocation="top">
+                <dx-group-item :col-count="2">
+                  <dx-form-item data-field="password" :editor-options="{mode: 'password'}">
+                    <dx-required-rule message="Password is required!" />
+                    <dx-string-length-rule
+                      :max="50"
+                      message="Password must have maximum 50 characters!"
+                    />
+                  </dx-form-item>
+                  <dx-form-item
+                    :editor-options="{text: 'User must change password at next login'}"
+                    data-field="mustChangePassword"
+                    editor-type="dxCheckBox"
+                  >
+                    <dx-label :visible="false" />
+                  </dx-form-item>
+                  <!--<dx-form-item data-field="mustChangePassword" editor-type="dxCheckBox">
+                    <dx-label text="User must change password at next login" />
+                  </dx-form-item>-->
+                </dx-group-item>
+              </dx-form>
+            </dx-accordion-item>
+          </dx-accordion>
+        </form>
+      </dx-scroll-view>
     </div>
   </div>
 </template>
@@ -128,6 +144,7 @@ import {
   DxCustomRule
   //DxAsyncRule
 } from "devextreme-vue/form";
+import { DxScrollView } from "devextreme-vue/scroll-view";
 import { getNewId } from "../store/common";
 
 export default {
@@ -151,7 +168,8 @@ export default {
     DxPatternRule,
     DxEmailRule,
     DxStringLengthRule,
-    DxCustomRule
+    DxCustomRule,
+    DxScrollView
     //DxAsyncRule
   },
   data() {
@@ -181,9 +199,6 @@ export default {
       },
       validationRules: {
         userName: [{ type: "pattern", pattern: "[^s]+" }]
-      },
-      mustChangePasswordOptions: {
-        text: "User must change password at next login"
       },
       userNoPattern: /^[^\s]+$/,
       userNamePattern: /^[^\s]+$/

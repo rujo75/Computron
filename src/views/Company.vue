@@ -5,157 +5,169 @@
       <dx-item :options="cancelNavButtonOptions" location="before" widget="dxButton" />
     </dx-toolbar>
     <div class="widget-container">
-      <form>
-        <dx-accordion
-          :multiple="true"
-          :collapsible="true"
-          class="accordion"
-          @contentReady="onAccordionContentReady"
-        >
-          <dx-accordion-item #default title="General">
-            <dx-form
-              ref="formGeneral"
-              :form-data="formData"
-              validation-group="userData"
-              labelLocation="top"
-            >
-              <dx-group-item :col-count="2">
-                <dx-form-item data-field="companyID" :editor-options="{disabled: true}">
-                  <dx-label text="Company ID" />
-                </dx-form-item>
-                <dx-form-item data-field="companyNo" :editor-options="{disabled: !isNewRecord}">
-                  <dx-label text="Company No" />
-                  <dx-required-rule message="Company No is required!" />
-                  <dx-pattern-rule
-                    :pattern="companyNoPattern"
-                    message="Do not use spaces in the Company No!"
+      <dx-scroll-view :show-scrollbar="onHover" height="calc(100vh - 166px)">
+        <form>
+          <dx-accordion
+            :multiple="true"
+            :collapsible="true"
+            class="accordion"
+            @contentReady="onAccordionContentReady"
+          >
+            <dx-accordion-item #default title="General">
+              <dx-form
+                ref="formGeneral"
+                :form-data="formData"
+                validation-group="userData"
+                labelLocation="top"
+              >
+                <dx-group-item :col-count="2">
+                  <dx-form-item data-field="companyID" :editor-options="{disabled: true}">
+                    <dx-label text="Company ID" />
+                  </dx-form-item>
+                  <dx-form-item data-field="companyNo" :editor-options="{disabled: !isNewRecord}">
+                    <dx-label text="Company No" />
+                    <dx-required-rule message="Company No is required!" />
+                    <dx-pattern-rule
+                      :pattern="companyNoPattern"
+                      message="Do not use spaces in the Company No!"
+                    />
+                    <dx-string-length-rule
+                      :max="20"
+                      message="Company No must have maximum 20 characters!"
+                    />
+                    <dx-custom-rule
+                      :validation-callback="companyNoValidation"
+                      message="Company No is already used!"
+                    />
+                  </dx-form-item>
+                  <dx-form-item data-field="companyName">
+                    <dx-required-rule message="Company No is required!" />
+                    <dx-string-length-rule
+                      :max="255"
+                      message="Company No must have maximum 255 characters!"
+                    />
+                  </dx-form-item>
+                  <dx-form-item data-field="companyCode">
+                    <dx-string-length-rule
+                      :max="20"
+                      message="Company Code must have maximum 20 characters!"
+                    />
+                    <dx-custom-rule
+                      :validation-callback="companyNoValidation"
+                      message="Company Code is already used!"
+                    />
+                  </dx-form-item>
+                  <dx-form-item data-field="addressLine1">
+                    <dx-string-length-rule
+                      :max="255"
+                      message="Address Line 1 must have maximum 255 characters!"
+                    />
+                  </dx-form-item>
+                  <dx-form-item data-field="addressLine2">
+                    <dx-string-length-rule
+                      :max="255"
+                      message="Address Line 2 must have maximum 255 characters!"
+                    />
+                  </dx-form-item>
+                  <dx-form-item data-field="city">
+                    <dx-string-length-rule
+                      :max="50"
+                      message="City must have maximum 50 characters!"
+                    />
+                  </dx-form-item>
+                  <dx-form-item data-field="postcode" :editor-options="postcodeEditorOptions" />
+                  <dx-form-item
+                    data-field="country"
+                    editor-type="dxSelectBox"
+                    :editor-options="countryEditorOptions"
                   />
-                  <dx-string-length-rule
-                    :max="20"
-                    message="Company No must have maximum 20 characters!"
+                  <dx-form-item
+                    data-field="state"
+                    editor-type="dxSelectBox"
+                    :editor-options="stateEditorOptions"
                   />
-                  <dx-custom-rule
-                    :validation-callback="companyNoValidation"
-                    message="Company No is already used!"
-                  />
-                </dx-form-item>
-                <dx-form-item data-field="companyName">
-                  <dx-required-rule message="Company No is required!" />
-                  <dx-string-length-rule
-                    :max="255"
-                    message="Company No must have maximum 255 characters!"
-                  />
-                </dx-form-item>
-                <dx-form-item data-field="companyCode">
-                  <dx-string-length-rule
-                    :max="20"
-                    message="Company Code must have maximum 20 characters!"
-                  />
-                  <dx-custom-rule
-                    :validation-callback="companyNoValidation"
-                    message="Company Code is already used!"
-                  />
-                </dx-form-item>
-                <dx-form-item data-field="addressLine1">
-                  <dx-string-length-rule
-                    :max="255"
-                    message="Address Line 1 must have maximum 255 characters!"
-                  />
-                </dx-form-item>
-                <dx-form-item data-field="addressLine2">
-                  <dx-string-length-rule
-                    :max="255"
-                    message="Address Line 2 must have maximum 255 characters!"
-                  />
-                </dx-form-item>
-                <dx-form-item data-field="city">
-                  <dx-string-length-rule :max="50" message="City must have maximum 50 characters!" />
-                </dx-form-item>
-                <dx-form-item data-field="postcode" :editor-options="postcodeEditorOptions" />
-                <dx-form-item
-                  data-field="country"
-                  editor-type="dxSelectBox"
-                  :editor-options="countryEditorOptions"
-                />
-                <dx-form-item
-                  data-field="state"
-                  editor-type="dxSelectBox"
-                  :editor-options="stateEditorOptions"
-                />
-                <dx-form-item data-field="taxNo" :editor-options="taxNoEditorOptions">
-                  <dx-label text="ABN" />
-                </dx-form-item>
-              </dx-group-item>
-            </dx-form>
-          </dx-accordion-item>
-          <dx-accordion-item #default title="Communication">
-            <dx-form
-              ref="formCommunication"
-              :form-data="formData"
-              validation-group="companyData"
-              labelLocation="top"
-            >
-              <dx-group-item :col-count="2">
-                <dx-form-item data-field="phoneNo" :editor-options="telephoneNoEditorOptions">
-                  <dx-label text="Phone No" />
-                </dx-form-item>
-                <dx-form-item data-field="faxNo" :editor-options="telephoneNoEditorOptions">
-                  <dx-label text="Fax No" />
-                </dx-form-item>
-                <dx-form-item data-field="mobileNo" :editor-options="mobileNoEditorOptions">
-                  <dx-label text="Mobile No" />
-                </dx-form-item>
-                <dx-form-item data-field="contactName">
-                  <dx-string-length-rule
-                    :max="255"
-                    message="Contact Name must have maximum 255 characters!"
-                  />
-                </dx-form-item>
-                <dx-form-item data-field="email">
-                  <dx-required-rule message="Email is required!" />
-                  <dx-email-rule message="Email is invalid!" />
-                  <dx-string-length-rule
-                    :max="255"
-                    message="Email must have maximum 255 characters!"
-                  />
-                </dx-form-item>
-                <dx-form-item data-field="website">
-                  <dx-label text="Home Page" />
-                  <dx-string-length-rule
-                    :max="255"
-                    message="Home Page must have maximum 255 characters!"
-                  />
-                </dx-form-item>
-              </dx-group-item>
-            </dx-form>
-          </dx-accordion-item>
-          <dx-accordion-item #default title="Payments">
-            <dx-form
-              ref="formPayments"
-              :form-data="formData"
-              validation-group="companyData"
-              labelLocation="top"
-            >
-              <dx-group-item :col-count="2">
-                <dx-form-item data-field="bankName">
-                  <dx-string-length-rule
-                    :max="100"
-                    message="Bank Name must have maximum 100 characters!"
-                  />
-                </dx-form-item>
-                <dx-form-item data-field="bankBranchNo"></dx-form-item>
-                <dx-form-item data-field="bankAccountNo"></dx-form-item>
-                <dx-form-item data-field="swiftCode">
-                  <dx-label text="SWIFT Code" />
-                </dx-form-item>
-                <dx-form-item data-field="iban">
-                  <dx-label text="IBAN" />
-                </dx-form-item>
-              </dx-group-item>
-            </dx-form>
-          </dx-accordion-item>
-        </dx-accordion>
-      </form>
+                  <dx-form-item data-field="taxNo" :editor-options="taxNoEditorOptions">
+                    <dx-label text="ABN" />
+                  </dx-form-item>
+                  <dx-form-item
+                    data-field="active"
+                    editor-type="dxCheckBox"
+                    :editor-options="{text: 'Active'}"
+                  >
+                    <dx-label :visible="false" />
+                  </dx-form-item>
+                </dx-group-item>
+              </dx-form>
+            </dx-accordion-item>
+            <dx-accordion-item #default title="Communication">
+              <dx-form
+                ref="formCommunication"
+                :form-data="formData"
+                validation-group="companyData"
+                labelLocation="top"
+              >
+                <dx-group-item :col-count="2">
+                  <dx-form-item data-field="phoneNo" :editor-options="telephoneNoEditorOptions">
+                    <dx-label text="Phone No" />
+                  </dx-form-item>
+                  <dx-form-item data-field="faxNo" :editor-options="telephoneNoEditorOptions">
+                    <dx-label text="Fax No" />
+                  </dx-form-item>
+                  <dx-form-item data-field="mobileNo" :editor-options="mobileNoEditorOptions">
+                    <dx-label text="Mobile No" />
+                  </dx-form-item>
+                  <dx-form-item data-field="contactName">
+                    <dx-string-length-rule
+                      :max="255"
+                      message="Contact Name must have maximum 255 characters!"
+                    />
+                  </dx-form-item>
+                  <dx-form-item data-field="email">
+                    <dx-required-rule message="Email is required!" />
+                    <dx-email-rule message="Email is invalid!" />
+                    <dx-string-length-rule
+                      :max="255"
+                      message="Email must have maximum 255 characters!"
+                    />
+                  </dx-form-item>
+                  <dx-form-item data-field="website">
+                    <dx-label text="Home Page" />
+                    <dx-string-length-rule
+                      :max="255"
+                      message="Home Page must have maximum 255 characters!"
+                    />
+                  </dx-form-item>
+                </dx-group-item>
+              </dx-form>
+            </dx-accordion-item>
+            <dx-accordion-item #default title="Payments">
+              <dx-form
+                ref="formPayments"
+                :form-data="formData"
+                validation-group="companyData"
+                labelLocation="top"
+              >
+                <dx-group-item :col-count="2">
+                  <dx-form-item data-field="bankName">
+                    <dx-string-length-rule
+                      :max="100"
+                      message="Bank Name must have maximum 100 characters!"
+                    />
+                  </dx-form-item>
+                  <dx-form-item data-field="bankBranchNo"></dx-form-item>
+                  <dx-form-item data-field="bankAccountNo"></dx-form-item>
+                  <dx-form-item data-field="swiftCode">
+                    <dx-label text="SWIFT Code" />
+                  </dx-form-item>
+                  <dx-form-item data-field="iban">
+                    <dx-label text="IBAN" />
+                  </dx-form-item>
+                </dx-group-item>
+              </dx-form>
+            </dx-accordion-item>
+          </dx-accordion>
+        </form>
+      </dx-scroll-view>
     </div>
   </div>
 </template>
@@ -177,6 +189,7 @@ import {
   DxStringLengthRule,
   DxCustomRule
 } from "devextreme-vue/form";
+import { DxScrollView } from "devextreme-vue/scroll-view";
 import { getNewId } from "../store/common";
 
 export default {
@@ -200,7 +213,8 @@ export default {
     DxPatternRule,
     //DxEmailRule,
     DxStringLengthRule,
-    DxCustomRule
+    DxCustomRule,
+    DxScrollView
   },
   data() {
     return {
