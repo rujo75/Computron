@@ -45,6 +45,10 @@
                     :pattern="userNamePattern"
                     message="Do not use spaces in the User Name!"
                   />
+                  <dx-string-length-rule
+                    :max="20"
+                    message="User Name must have maximum 20 characters!"
+                  />
                   <dx-custom-rule
                     :validation-callback="userNameValidation"
                     message="User Name is already used!"
@@ -53,10 +57,18 @@
                 <dx-form-item data-field="fullName">
                   <dx-label text="Full Name" />
                   <dx-required-rule message="Full Name is required!" />
+                  <dx-string-length-rule
+                    :max="255"
+                    message="Full Name must have maximum 255 characters!"
+                  />
                 </dx-form-item>
                 <dx-form-item data-field="email">
                   <dx-required-rule message="Email is required!" />
                   <dx-email-rule message="Email is invalid!" />
+                  <dx-string-length-rule
+                    :max="255"
+                    message="Email must have maximum 255 characters!"
+                  />
                   <dx-custom-rule
                     :validation-callback="emailValidation"
                     message="Email is already used!"
@@ -77,6 +89,10 @@
               <dx-group-item :col-count="2">
                 <dx-form-item data-field="password" :editor-options="{mode: 'password'}">
                   <dx-required-rule message="Password is required!" />
+                  <dx-string-length-rule
+                    :max="50"
+                    message="Password must have maximum 50 characters!"
+                  />
                 </dx-form-item>
                 <dx-form-item
                   :editor-options="mustChangePasswordOptions"

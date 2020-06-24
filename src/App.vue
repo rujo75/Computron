@@ -98,6 +98,10 @@ body {
   font-size: 14px;
 }
 
+.dx-field-item-label-location-top {
+  padding-bottom: 3px;
+}
+
 /*.data-grid-hyperlink {
   color: #0b0080;
 }*/

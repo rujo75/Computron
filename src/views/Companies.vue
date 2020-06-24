@@ -88,7 +88,7 @@
         data-type="string"
         :width="120"
         :visible="false"
-        calculate-display-value="phoneNoFormatted"
+        cell-template="phoneNoTemplate"
       />
       <dx-column
         data-field="faxNo"
@@ -96,7 +96,7 @@
         data-type="string"
         :width="120"
         :visible="false"
-        calculate-display-value="faxNoFormatted"
+        cell-template="phoneNoTemplate"
       />
       <dx-column
         data-field="mobileNo"
@@ -104,7 +104,7 @@
         data-type="string"
         :width="120"
         :visible="false"
-        calculate-display-value="mobileNoFormatted"
+        cell-template="mobileNoTemplate"
       />
       <dx-column
         data-field="email"
@@ -113,7 +113,6 @@
         :width="200"
         :visible="false"
       />
-      <!-- calculate-display-value="taxNoFormatted" -->
       <dx-column
         data-field="taxNo"
         caption="ABN"
@@ -132,10 +131,12 @@
           class="data-grid-hyperlink"
         >{{ item.value }}</span>
       </div>
+      <div slot="TaxNoTemplate" slot-scope="{ data: item }">{{ item.value | VMask(taxNoMask) }}</div>
+      <div slot="phoneNoTemplate" slot-scope="{ data: item }">{{ item.value | VMask(phoneNoMask) }}</div>
       <div
-        slot="TaxNoTemplate"
+        slot="mobileNoTemplate"
         slot-scope="{ data: item }"
-      >{{ item.value | VMask("## ### ### ###") }}</div>
+      >{{ item.value | VMask(mobileNoMask) }}</div>
     </dx-data-grid>
   </div>
 </template>
@@ -172,6 +173,9 @@ export default {
     return {
       pageSizes: [10, 15, 20, 25, 50, 100],
       focusedRowKey: "",
+      taxNoMask: "## ### ### ###",
+      phoneNoMask: "(##) #### ####",
+      mobileNoMask: "#### ### ###",
       stateStoring: {
         enabled: true,
         storageKey: "Companies",
