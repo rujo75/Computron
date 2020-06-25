@@ -5,7 +5,7 @@
       <dx-item :options="cancelNavButtonOptions" location="before" widget="dxButton" />
     </dx-toolbar>
     <div class="widget-container">
-      <dx-scroll-view :show-scrollbar="onHover" height="calc(100vh - 166px)">
+      <dx-scroll-view show-scrollbar="onHover" height="calc(100vh - 166px)">
         <form>
           <dx-accordion
             :multiple="true"

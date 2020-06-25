@@ -5,7 +5,7 @@
       <dx-item :options="cancelNavButtonOptions" location="before" widget="dxButton" />
     </dx-toolbar>
     <div class="widget-container">
-      <dx-scroll-view :show-scrollbar="onHover" height="calc(100vh - 166px)">
+      <dx-scroll-view show-scrollbar="onHover" height="calc(100vh - 166px)">
         <form>
           <dx-accordion
             :multiple="true"
@@ -17,7 +17,7 @@
               <dx-form
                 ref="formGeneral"
                 :form-data="formData"
-                validation-group="userData"
+                validation-group="companyData"
                 labelLocation="top"
               >
                 <dx-group-item :col-count="2">
@@ -46,6 +46,10 @@
                       :max="255"
                       message="Company No must have maximum 255 characters!"
                     />
+                    <dx-custom-rule
+                      :validation-callback="companyNameValidation"
+                      message="Company Name is already used!"
+                    />
                   </dx-form-item>
                   <dx-form-item data-field="companyCode">
                     <dx-string-length-rule
@@ -53,7 +57,7 @@
                       message="Company Code must have maximum 20 characters!"
                     />
                     <dx-custom-rule
-                      :validation-callback="companyNoValidation"
+                      :validation-callback="companyCodeValidation"
                       message="Company Code is already used!"
                     />
                   </dx-form-item>
@@ -185,7 +189,7 @@ import {
   DxLabel,
   DxRequiredRule,
   DxPatternRule,
-  //DxEmailRule,
+  DxEmailRule,
   DxStringLengthRule,
   DxCustomRule
 } from "devextreme-vue/form";
@@ -211,21 +215,21 @@ export default {
     DxLabel,
     DxRequiredRule,
     DxPatternRule,
-    //DxEmailRule,
+    DxEmailRule,
     DxStringLengthRule,
     DxCustomRule,
     DxScrollView
   },
   data() {
     return {
+      formData: null,
+      formOriginalData: null,
       saveNavButtonOptions: {
         icon: "fas fa-save",
         focusStateEnabled: false,
         stylingMode: "text",
         text: "Save",
-        onClick: () => {
-          this.$router.back();
-        }
+        onClick: this.onSaveClick.bind(this)
       },
       cancelNavButtonOptions: {
         icon: "fas fa-times",
@@ -236,8 +240,6 @@ export default {
           this.$router.back();
         }
       },
-      formData: null,
-      formOriginalData: null,
       validationRules: {
         companyNo: [{ type: "required", message: "Company No is required." }]
       },
@@ -286,7 +288,7 @@ export default {
         // new company
         return true;
       } else {
-        // company user
+        // company company
         return false;
       }
     }
@@ -297,8 +299,8 @@ export default {
       //e.component.expandItem(1);
     },
     loadFormData: function() {
-      console.log("loadFormData");
-      console.log("id: " + this.id);
+      //console.log("loadFormData");
+      //console.log("id: " + this.id);
       if (this.isNewRecord) {
         // create company
         let newCompany = {
@@ -338,13 +340,87 @@ export default {
         // edit company
         // get company by id
         let company = this.$store.getters.getCompanyByID(this.id);
-        console.log(company);
+        //console.log(company);
         if (company) {
           // clone company
           this.formData = this._.cloneDeep(company);
           // clone formData
           this.formOriginalData = this._.cloneDeep(this.formData);
         }
+      }
+    },
+    isFormDataChanged: function() {
+      // check the main form data
+      let isFormDataNotChanged = this._.isEqual(
+        this.formData,
+        this.formOriginalData
+      );
+      //console.log(isFormDataNotChanged);
+      return !isFormDataNotChanged;
+    },
+    onSaveClick() {
+      //console.log("onSaveClick");
+      var resultGeneral = this.$refs["formGeneral"].instance.validate();
+      var resultCommunication = this.$refs[
+        "formCommunication"
+      ].instance.validate();
+      var resultPayments = this.$refs["formPayments"].instance.validate();
+
+      if (
+        resultGeneral.isValid &&
+        resultCommunication.isValid &&
+        resultPayments.isValid
+      ) {
+        // all data is valid
+        let changed = this.isFormDataChanged();
+        //console.log("changed: " + changed);
+        if (changed) {
+          this.saveFormData();
+        }
+        this.$router.back();
+      }
+    },
+    saveFormData() {
+      //console.log("saveFormData");
+      if (this.isNewRecord) {
+        // create company
+        this.$store.dispatch("createCompany", this.formData);
+      } else {
+        // update company
+        this.$store.dispatch("updateCompany", this.formData);
+      }
+
+      // update formOriginalData with formData
+      this.formOriginalData = this.formData;
+    },
+    companyNoValidation(e) {
+      if (this.isNewRecord) {
+        // new company
+        let result = this.$store.getters.companyExistsByCompanyNo(e.value);
+        return (result = !result);
+      } else {
+        // existing company
+        return true;
+      }
+    },
+    companyNameValidation(e) {
+      if (this.isNewRecord) {
+        // new company
+        let result = this.$store.getters.companyExistsByCompanyName(e.value);
+        return (result = !result);
+      } else {
+        // existing company
+        return true;
+      }
+    },
+    companyCodeValidation(e) {
+      if (this.isNewRecord) {
+        // new company
+        let result = this.$store.getters.companyExistsByCompanyCode(e.value);
+        return (result = !result);
+      } else {
+        // existing company
+        return true;
       }
     }
   },
@@ -354,7 +430,13 @@ export default {
   },
   mounted() {
     //console.log("mounted");
-    //this.$refs["formGeneral"].instance.getEditor("userName").focus();
+    if (this.isNewRecord) {
+      // new company
+      this.$refs["formGeneral"].instance.getEditor("companyNo").focus();
+    } else {
+      // existing company
+      this.$refs["formGeneral"].instance.getEditor("companyName").focus();
+    }
   }
 };
 </script>

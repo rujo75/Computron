@@ -60,7 +60,7 @@ const getters = {
     },
 
     userExistsByUserNo: (state) => (userNo) => {
-        if (state.users.find(user => user.userNo === userNo)) {
+        if (state.users.find(user => user.userNo.toUpperCase() === userNo.toUpperCase())) {
             return true
         } else {
             return false
@@ -68,7 +68,7 @@ const getters = {
     },
 
     userExistsByUserName: (state) => (userName) => {
-        if (state.users.find(user => user.userName === userName)) {
+        if (state.users.find(user => user.userName.toUpperCase() === userName.toUpperCase())) {
             return true
         } else {
             return false
@@ -76,7 +76,7 @@ const getters = {
     },
 
     userExistsByEmail: (state) => (email) => {
-        if (state.users.find(user => user.email === email)) {
+        if (state.users.find(user => user.email.toUpperCase() === email.toUpperCase())) {
             return true
         } else {
             return false

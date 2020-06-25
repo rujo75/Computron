@@ -39,6 +39,30 @@ const getters = {
 
     getCompanyByID: (state) => (id) => {
         return state.companies.find(company => company.companyID === id)
+    },
+
+    companyExistsByCompanyNo: (state) => (companyNo) => {
+        if (state.companies.find(company => company.companyNo.toUpperCase() === companyNo.toUpperCase())) {
+            return true
+        } else {
+            return false
+        }
+    },
+
+    companyExistsByCompanyName: (state) => (companyName) => {
+        if (state.companies.find(company => company.companyName.toUpperCase() === companyName.toUpperCase())) {
+            return true
+        } else {
+            return false
+        }
+    },
+
+    companyExistsByCompanyCode: (state) => (companyCode) => {
+        if (state.companies.find(company => company.companyCode.toUpperCase() === companyCode.toUpperCase())) {
+            return true
+        } else {
+            return false
+        }
     }
 };
 

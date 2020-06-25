@@ -1,5 +1,5 @@
 <template>
-  <dx-scroll-view :show-scrollbar="onHover" height="calc(100vh - 119px)">
+  <dx-scroll-view show-scrollbar="onHover" height="calc(100vh - 119px)">
     <div class="home-panel">
       <div class="container">
         <div class="my-card dx-theme-border-color" v-for="item in getMenuItems" :key="item.id">
