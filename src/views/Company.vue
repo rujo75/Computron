@@ -10,6 +10,7 @@
           <dx-accordion
             :multiple="true"
             :collapsible="true"
+            :deferRendering="false"
             class="accordion"
             @contentReady="onAccordionContentReady"
           >
