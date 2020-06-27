@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <NavBar />
-    <Main />
+    <MainPage />
     <StatusBar />
     <SignIn />
   </div>
@@ -9,7 +9,7 @@
 
 <script>
 import NavBar from "./components/layout/NavBar";
-import Main from "./components/layout/Main";
+import MainPage from "./components/layout/MainPage";
 import StatusBar from "./components/layout/StatusBar";
 import SignIn from "./components/layout/SignIn";
 import { dbUsersRef } from "./firebase";
@@ -19,7 +19,7 @@ export default {
   name: "App",
   components: {
     NavBar,
-    Main,
+    MainPage,
     StatusBar,
     SignIn
   },
