@@ -7,6 +7,7 @@ import Company from "@/views/Company";
 import Users from "@/views/Users";
 import User from "@/views/User";
 import Settings from "@/views/Settings";
+import BankAccounts from "@/views/BankAccounts";
 
 Vue.use(Router);
 
@@ -60,6 +61,11 @@ const router = new Router({
       path: "/Settings",
       name: "Settings",
       component: Settings
+    },
+    {
+      path: "/BankAccounts",
+      name: "BankAccounts",
+      component: BankAccounts
     },
   ]
 });
