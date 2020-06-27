@@ -8,6 +8,7 @@ import Users from "@/views/Users";
 import User from "@/views/User";
 import Settings from "@/views/Settings";
 import BankAccounts from "@/views/BankAccounts";
+import BankAccount from "@/views/BankAccount";
 
 Vue.use(Router);
 
@@ -66,6 +67,17 @@ const router = new Router({
       path: "/BankAccounts",
       name: "BankAccounts",
       component: BankAccounts
+    },
+    {
+      path: "/BankAccount",
+      name: "CreateBankAccount",
+      component: BankAccount
+    },
+    {
+      path: "/BankAccount/:id",
+      props: true,
+      name: "EditBankAccount",
+      component: BankAccount
     },
   ]
 });

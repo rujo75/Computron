@@ -54,7 +54,7 @@ export const MenuData = {
           description: "Create and manage your bank accounts.",
           icon: "fas fa-university",
           link: "/BankAccounts",
-          path: "Administration/BankAccounts",
+          path: "Lists/BankAccounts",
           favourite: false,
           items: []
         },

@@ -30,7 +30,7 @@
         data-type="string"
         :width="300"
         :visible="false"
-        cell-template="UserIDTemplate"
+        cell-template="IDTemplate"
       />
       <dx-column data-field="userNo" caption="User No" data-type="string" :width="150" />
       <dx-column data-field="userName" caption="User Name" data-type="string" :width="150" />
@@ -61,11 +61,8 @@
       <dx-group-panel :visible="false" />
       <dx-search-panel :visible="true" :width="250" />
 
-      <div slot="UserIDTemplate" slot-scope="{ data: item }">
-        <span
-          @click.stop.prevent="onUserIDClick(item);"
-          class="data-grid-hyperlink"
-        >{{ item.value }}</span>
+      <div slot="IDTemplate" slot-scope="{ data: item }">
+        <span @click.stop.prevent="onIDClick(item);" class="data-grid-hyperlink">{{ item.value }}</span>
       </div>
     </dx-data-grid>
   </div>
@@ -231,9 +228,9 @@ export default {
       //var state = localStorage.getItem(this.stateStoring.storageKey);
       //console.log(state);
     },
-    onUserIDClick() {
+    onIDClick() {
       //alert(e.text);
-      //console.log("onUserIDClick");
+      //console.log("onIDClick");
       setTimeout(
         function() {
           this.$store.dispatch("clearNewUserID");

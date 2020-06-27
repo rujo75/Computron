@@ -30,7 +30,7 @@
         data-type="string"
         :width="300"
         :visible="false"
-        cell-template="CompanyIDTemplate"
+        cell-template="IDTemplate"
       />
       <dx-column data-field="companyNo" caption="Company No" data-type="string" :width="120" />
       <dx-column
@@ -125,11 +125,8 @@
       <dx-group-panel :visible="false" />
       <dx-search-panel :visible="true" :width="250" />
 
-      <div slot="CompanyIDTemplate" slot-scope="{ data: item }">
-        <span
-          @click.stop.prevent="onCompanyIDClick(item);"
-          class="data-grid-hyperlink"
-        >{{ item.value }}</span>
+      <div slot="IDTemplate" slot-scope="{ data: item }">
+        <span @click.stop.prevent="onIDClick(item);" class="data-grid-hyperlink">{{ item.value }}</span>
       </div>
       <div slot="TaxNoTemplate" slot-scope="{ data: item }">{{ item.value | VMask(taxNoMask) }}</div>
       <div slot="phoneNoTemplate" slot-scope="{ data: item }">{{ item.value | VMask(phoneNoMask) }}</div>
@@ -312,9 +309,9 @@ export default {
         );
       }
     },
-    onCompanyIDClick() {
+    onIDClick() {
       //alert(e.text);
-      //console.log("onCompanyIDClick");
+      //console.log("onIDClick");
       setTimeout(
         function() {
           this.$store.dispatch("clearNewCompanyID");

@@ -3,6 +3,7 @@ import Vuex from "vuex";
 import general from "./modules/general";
 import users from "./modules/users";
 import companies from "./modules/companies";
+import bankAccounts from "./modules/bankAccounts";
 import favourites from "./modules/favourites";
 import { vuexfireMutations } from "vuexfire";
 
@@ -14,6 +15,7 @@ export const store = new Vuex.Store({
         general,
         users,
         companies,
+        bankAccounts,
         favourites
     }
 });

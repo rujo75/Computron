@@ -1,0 +1,102 @@
+import _ from "lodash";
+
+const state = {
+    newBankAccountID: "",
+    bankAccounts: [
+        {
+            accountID: "185bad2d-0a16-4e6b-a6a1-49ac2d380c57",
+            accountNo: "1",
+            bankName: "Westpac",
+            bankBranchNo: "032050",
+            bankAccountNo: "111111",
+            swiftCode: "WPACAU2S",
+            iban: "",
+            active: true
+        }
+    ]
+}
+
+const getters = {
+    newBankAccountID: state => state.newBankAccountID,
+
+    getBankAccounts: state => state.bankAccounts,
+
+    getBankAccountByID: (state) => (id) => {
+        return state.bankAccounts.find(account => account.accountID === id)
+    },
+
+    bankAccountExistsByAccountNo: (state) => (accountNo) => {
+        if (state.bankAccounts.find(account => account.accountNo.toUpperCase() === accountNo.toUpperCase())) {
+            return true
+        } else {
+            return false
+        }
+    },
+
+    bankAccountExistsByBankName: (state) => (bankName) => {
+        if (state.bankAccounts.find(account => account.bankName.toUpperCase() === bankName.toUpperCase())) {
+            return true
+        } else {
+            return false
+        }
+    },
+
+    /*bankAccountExistsByCompanyCode: (state) => (companyCode) => {
+        if (state.companies.find(company => company.companyCode.toUpperCase() === companyCode.toUpperCase())) {
+            return true
+        } else {
+            return false
+        }
+    }*/
+};
+
+const mutations = {
+    createBankAccount: (state, account) => {
+        state.bankAccounts.push(account);
+    },
+
+    setNewBankAccountID: (state, id) => {
+        state.newBankAccountID = id;
+    },
+
+    updateBankAccount: (state, account) => {
+        let index = _.findIndex(state.bankAccounts, { accountID: account.accountID });
+        //console.log(index)
+        if (index >= 0) {
+            state.bankAccounts.splice(index, 1, account)
+        }
+    },
+
+    deleteBankAccount: (state, id) => {
+        let index = _.findIndex(state.bankAccounts, { accountID: id });
+        if (index >= 0) {
+            state.bankAccounts.splice(index, 1)
+        }
+    }
+}
+
+const actions = {
+    createBankAccount: ({ commit }, account) => {
+        commit("createBankAccount", account);
+        commit("setNewBankAccountID", account.accountID);
+    },
+
+    clearNewBankAccountID: ({ commit }) => {
+        commit("setNewBankAccountID", "");
+    },
+
+    updateBankAccount: ({ commit }, account) => {
+        commit("updateBankAccount", account);
+    },
+
+    deleteBankAccount: ({ commit }, id) => {
+        commit("deleteBankAccount", id);
+    }
+};
+
+export default {
+    state,
+    getters,
+    mutations,
+    actions
+};
