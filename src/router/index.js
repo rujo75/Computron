@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "@/views/Home";
-import Menu from "@/views/Menu";
+import Page from "@/views/Page";
 import Companies from "@/views/Companies";
 import Company from "@/views/Company";
 import Users from "@/views/Users";
@@ -19,10 +19,10 @@ const router = new Router({
       component: Home
     },
     {
-      path: "/Menu/:id",
+      path: "/Page/:id",
       props: true,
-      name: "Menu",
-      component: Menu
+      name: "Page",
+      component: Page
     },
     {
       path: "/Companies",

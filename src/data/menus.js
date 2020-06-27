@@ -5,7 +5,7 @@ export const MenuData = {
       id: "General Ledger",
       text: "General Ledger",
       icon: "fas fa-layer-group",
-      link: "/Menu/General Ledger",
+      link: "/Page/General Ledger",
       path: "General Ledger",
       items: []
     },
@@ -13,7 +13,7 @@ export const MenuData = {
       id: "Accounts Payable",
       text: "Accounts Payable",
       icon: "fas fa-money-bill-alt",
-      link: "/Menu/Accounts Payable",
+      link: "/Page/Accounts Payable",
       path: "Accounts Payable",
       items: []
     },
@@ -21,7 +21,7 @@ export const MenuData = {
       id: "Accounts Receivable",
       text: "Accounts Receivable",
       icon: "fas fa-cart-arrow-down",
-      link: "/Menu/Accounts Receivable",
+      link: "/Page/Accounts Receivable",
       path: "Accounts Receivable",
       items: []
     },
@@ -29,7 +29,7 @@ export const MenuData = {
       id: "Inventory",
       text: "Inventory",
       icon: "fas fa-archive",
-      link: "/Menu/Inventory",
+      link: "/Page/Inventory",
       path: "Inventory",
       items: []
     },
@@ -37,7 +37,7 @@ export const MenuData = {
       id: "Reports",
       text: "Reports",
       icon: "fas fa-file-invoice-dollar",
-      link: "/Menu/Reports",
+      link: "/Page/Reports",
       path: "Reports",
       items: []
     },
@@ -45,7 +45,7 @@ export const MenuData = {
       id: "Lists",
       text: "Lists",
       icon: "fas fa-list",
-      link: "/Menu/Lists",
+      link: "/Page/Lists",
       path: "Lists",
       items: [
         {
@@ -64,7 +64,7 @@ export const MenuData = {
       id: "Administration",
       text: "Administration",
       icon: "fas fa-cogs",
-      link: "/Menu/Administration",
+      link: "/Page/Administration",
       path: "Administration",
       items: [
         {
