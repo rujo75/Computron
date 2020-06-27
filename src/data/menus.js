@@ -42,6 +42,25 @@ export const MenuData = {
       items: []
     },
     {
+      id: "Lists",
+      text: "Lists",
+      icon: "fas fa-list",
+      link: "/Menu/Lists",
+      path: "Lists",
+      items: [
+        {
+          id: "BankAccounts",
+          text: "Bank Accounts",
+          description: "Create and manage your bank accounts.",
+          icon: "fas fa-university",
+          link: "/BankAccounts",
+          path: "Administration/BankAccounts",
+          favourite: false,
+          items: []
+        },
+      ]
+    },
+    {
       id: "Administration",
       text: "Administration",
       icon: "fas fa-cogs",
@@ -59,22 +78,22 @@ export const MenuData = {
           items: []
         },
         {
-          id: "Users",
-          text: "Users",
-          description: "Manage users and assign security roles.",
-          icon: "fas fa-users",
-          link: "/Users",
-          path: "Administration/Users",
-          favourite: false,
-          items: []
-        },
-        {
           id: "Settings",
           text: "Settings",
           description: "Customise and configure the application settings.",
           icon: "fas fa-cog",
           link: "/Settings",
           path: "Administration/Settings",
+          favourite: false,
+          items: []
+        },
+        {
+          id: "Users",
+          text: "Users",
+          description: "Manage users and assign security roles.",
+          icon: "fas fa-users",
+          link: "/Users",
+          path: "Administration/Users",
           favourite: false,
           items: []
         },

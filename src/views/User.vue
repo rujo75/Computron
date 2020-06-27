@@ -5,134 +5,132 @@
       <dx-item :options="cancelNavButtonOptions" location="before" widget="dxButton" />
     </dx-toolbar>
     <div class="widget-container">
-      <dx-scroll-view show-scrollbar="onHover" height="calc(100vh - 166px)">
-        <form>
-          <dx-accordion
-            :multiple="true"
-            :collapsible="true"
-            :deferRendering="false"
-            class="accordion"
-            @contentReady="onAccordionContentReady"
+      <dx-tab-panel
+        :items="tabsData"
+        :animation-enabled="true"
+        :swipe-enabled="false"
+        :deferRendering="false"
+        item-title-template="title"
+        class="tab-panel"
+      >
+        <template #title="{ data }">
+          <div>
+            <span>{{ data.title }}</span>
+            <i class="fas fa-exclamation-circle red" v-if="!data.isValid"></i>
+          </div>
+        </template>
+        <div class="tab" slot="GeneralTab">
+          <dx-form
+            ref="formGeneral"
+            class="form"
+            :form-data="formData"
+            :scrolling-enabled="true"
+            validation-group="userData"
+            @field-data-changed="onGeneralFieldDataChanged"
           >
-            <dx-accordion-item #default title="General">
-              <dx-form
-                ref="formGeneral"
-                :form-data="formData"
-                validation-group="userData"
-                labelLocation="top"
-              >
-                <dx-group-item :col-count="2">
-                  <dx-form-item data-field="userID" :editor-options="{disabled: true}">
-                    <dx-label text="User ID" />
-                  </dx-form-item>
-                  <dx-form-item data-field="userNo" :editor-options="{disabled: !isNewRecord}">
-                    <dx-label text="User No" />
-                    <dx-required-rule message="User No is required!" />
-                    <dx-pattern-rule
-                      :pattern="userNoPattern"
-                      message="Do not use spaces in the User No!"
-                    />
-                    <dx-string-length-rule
-                      :max="20"
-                      message="User No must have maximum 20 characters!"
-                    />
-                    <!--<DxAsyncRule
+            <dx-group-item :col-count="2">
+              <dx-form-item data-field="userID" :editor-options="{disabled: true}">
+                <dx-label text="User ID" />
+              </dx-form-item>
+              <dx-form-item data-field="userNo" :editor-options="{disabled: !isNewRecord}">
+                <dx-label text="User No" />
+                <dx-required-rule message="User No is required!" />
+                <dx-pattern-rule
+                  :pattern="userNoPattern"
+                  message="Do not use spaces in the User No!"
+                />
+                <dx-string-length-rule
+                  :max="20"
+                  message="User No must have maximum 20 characters!"
+                />
+                <!--<DxAsyncRule
                     :validation-callback="userNoValidationAsync"
                     message="User No is already used!"
-                    />-->
-                    <dx-custom-rule
-                      :validation-callback="userNoValidation"
-                      message="User No is already used!"
-                    />
-                  </dx-form-item>
-                  <dx-form-item data-field="userName">
-                    <dx-label text="User Name" />
-                    <dx-required-rule message="User Name is required!" />
-                    <dx-pattern-rule
-                      :pattern="userNamePattern"
-                      message="Do not use spaces in the User Name!"
-                    />
-                    <dx-string-length-rule
-                      :max="20"
-                      message="User Name must have maximum 20 characters!"
-                    />
-                    <dx-custom-rule
-                      :validation-callback="userNameValidation"
-                      message="User Name is already used!"
-                    />
-                  </dx-form-item>
-                  <dx-form-item data-field="fullName">
-                    <dx-label text="Full Name" />
-                    <dx-required-rule message="Full Name is required!" />
-                    <dx-string-length-rule
-                      :max="255"
-                      message="Full Name must have maximum 255 characters!"
-                    />
-                  </dx-form-item>
-                  <dx-form-item data-field="email">
-                    <dx-required-rule message="Email is required!" />
-                    <dx-email-rule message="Email is invalid!" />
-                    <dx-string-length-rule
-                      :max="255"
-                      message="Email must have maximum 255 characters!"
-                    />
-                    <dx-custom-rule
-                      :validation-callback="emailValidation"
-                      message="Email is already used!"
-                    />
-                  </dx-form-item>
-                  <!--<dx-form-item
+                />-->
+                <dx-custom-rule
+                  :validation-callback="userNoValidation"
+                  message="User No is already used!"
+                />
+              </dx-form-item>
+              <dx-form-item data-field="userName">
+                <dx-label text="User Name" />
+                <dx-required-rule message="User Name is required!" />
+                <dx-pattern-rule
+                  :pattern="userNamePattern"
+                  message="Do not use spaces in the User Name!"
+                />
+                <dx-string-length-rule
+                  :max="20"
+                  message="User Name must have maximum 20 characters!"
+                />
+                <dx-custom-rule
+                  :validation-callback="userNameValidation"
+                  message="User Name is already used!"
+                />
+              </dx-form-item>
+              <dx-form-item data-field="fullName">
+                <dx-label text="Full Name" />
+                <dx-required-rule message="Full Name is required!" />
+                <dx-string-length-rule
+                  :max="255"
+                  message="Full Name must have maximum 255 characters!"
+                />
+              </dx-form-item>
+              <dx-form-item data-field="email">
+                <dx-required-rule message="Email is required!" />
+                <dx-email-rule message="Email is invalid!" />
+                <dx-string-length-rule
+                  :max="255"
+                  message="Email must have maximum 255 characters!"
+                />
+                <dx-custom-rule
+                  :validation-callback="emailValidation"
+                  message="Email is already used!"
+                />
+              </dx-form-item>
+              <!--<dx-form-item
                 data-field="active"
                 editor-type="dxSwitch"
                 :editor-options="{switchedOffText: 'NO', switchedOnText: 'YES', width: '60'}"
-                  />-->
-                  <dx-form-item
-                    data-field="active"
-                    editor-type="dxCheckBox"
-                    :editor-options="{text: 'Active'}"
-                  >
-                    <dx-label :visible="false" />
-                  </dx-form-item>
-                  <dx-form-item data-field="expiryDate" editor-type="dxDateBox" />
-                </dx-group-item>
-              </dx-form>
-            </dx-accordion-item>
-            <dx-accordion-item #default title="Security">
-              <dx-form ref="formSecurity" :form-data="formData" labelLocation="top">
-                <dx-group-item :col-count="2">
-                  <dx-form-item data-field="password" :editor-options="{mode: 'password'}">
-                    <dx-required-rule message="Password is required!" />
-                    <dx-string-length-rule
-                      :max="50"
-                      message="Password must have maximum 50 characters!"
-                    />
-                  </dx-form-item>
-                  <dx-form-item
-                    :editor-options="{text: 'User must change password at next login'}"
-                    data-field="mustChangePassword"
-                    editor-type="dxCheckBox"
-                  >
-                    <dx-label :visible="false" />
-                  </dx-form-item>
-                  <!--<dx-form-item data-field="mustChangePassword" editor-type="dxCheckBox">
+              />-->
+              <dx-form-item
+                data-field="active"
+                editor-type="dxCheckBox"
+                :editor-options="{text: 'Active'}"
+              >
+                <dx-label :visible="false" />
+              </dx-form-item>
+              <dx-form-item data-field="expiryDate" editor-type="dxDateBox" />
+            </dx-group-item>
+            <dx-group-item :col-count="2">
+              <dx-form-item data-field="password" :editor-options="{mode: 'password'}">
+                <dx-required-rule message="Password is required!" />
+                <dx-string-length-rule
+                  :max="50"
+                  message="Password must have maximum 50 characters!"
+                />
+              </dx-form-item>
+              <dx-form-item
+                :editor-options="{text: 'User must change password at next login'}"
+                data-field="mustChangePassword"
+                editor-type="dxCheckBox"
+              >
+                <dx-label :visible="false" />
+              </dx-form-item>
+              <!--<dx-form-item data-field="mustChangePassword" editor-type="dxCheckBox">
                     <dx-label text="User must change password at next login" />
-                  </dx-form-item>-->
-                </dx-group-item>
-              </dx-form>
-            </dx-accordion-item>
-          </dx-accordion>
-        </form>
-      </dx-scroll-view>
+              </dx-form-item>-->
+            </dx-group-item>
+          </dx-form>
+        </div>
+      </dx-tab-panel>
     </div>
   </div>
 </template>
 
 <script>
-import {
-  DxAccordion,
-  DxItem as DxAccordionItem
-} from "devextreme-vue/accordion";
 import { DxToolbar, DxItem } from "devextreme-vue/toolbar";
+import DxTabPanel from "devextreme-vue/tab-panel";
 import {
   DxForm,
   DxItem as DxFormItem,
@@ -145,7 +143,6 @@ import {
   DxCustomRule
   //DxAsyncRule
 } from "devextreme-vue/form";
-import { DxScrollView } from "devextreme-vue/scroll-view";
 import { getNewId } from "../store/common";
 
 export default {
@@ -157,10 +154,9 @@ export default {
   },
   name: "user",
   components: {
-    DxAccordion,
-    DxAccordionItem,
     DxToolbar,
     DxItem,
+    DxTabPanel,
     DxForm,
     DxFormItem,
     DxGroupItem,
@@ -169,14 +165,20 @@ export default {
     DxPatternRule,
     DxEmailRule,
     DxStringLengthRule,
-    DxCustomRule,
-    DxScrollView
+    DxCustomRule
     //DxAsyncRule
   },
   data() {
     return {
       formData: null,
       formOriginalData: null,
+      tabsData: [
+        {
+          title: "General",
+          template: "GeneralTab",
+          isValid: true
+        }
+      ],
       saveNavButtonOptions: {
         icon: "fas fa-save",
         focusStateEnabled: false,
@@ -198,9 +200,6 @@ export default {
         type: "success",
         useSubmitBehavior: true
       },
-      validationRules: {
-        userName: [{ type: "pattern", pattern: "[^s]+" }]
-      },
       userNoPattern: /^[^\s]+$/,
       userNamePattern: /^[^\s]+$/
     };
@@ -217,10 +216,6 @@ export default {
     }
   },
   methods: {
-    onAccordionContentReady(e) {
-      // expand security item
-      e.component.expandItem(1);
-    },
     loadFormData: function() {
       //console.log("loadFormData");
       //console.log("id: " + this.id);
@@ -265,9 +260,11 @@ export default {
     },
     onSaveClick() {
       var resultGeneral = this.$refs["formGeneral"].instance.validate();
-      var resultSecurity = this.$refs["formSecurity"].instance.validate();
 
-      if (resultGeneral.isValid && resultSecurity.isValid) {
+      // update accordionItems
+      this.tabsData[0].isValid = resultGeneral.isValid;
+
+      if (resultGeneral.isValid) {
         // all data is valid
         let changed = this.isFormDataChanged();
         //console.log("changed: " + changed);
@@ -344,6 +341,11 @@ export default {
         // existing user
         return true;
       }
+    },
+    onGeneralFieldDataChanged() {
+      //console.log(e);
+      var result = this.$refs["formGeneral"].instance.validate();
+      this.tabsData[0].isValid = result.isValid;
     }
   },
   created() {
@@ -370,12 +372,22 @@ export default {
   border-bottom: 1px solid;
 }
 
-.form {
-  margin: 20px;
-  height: calc(100vh - 206px);
+.tab-panel {
+  margin: 10px;
+  height: calc(100vh - 186px);
 }
 
-.accordion {
-  margin: 10px;
+.tab {
+  padding: 15px 15px;
+}
+
+.form {
+  height: calc(100vh - 257px);
+}
+
+.red {
+  color: #d9534f;
+  font-size: 18px;
+  margin-left: 10px;
 }
 </style>
