@@ -68,7 +68,7 @@ export default {
   data() {
     return {
       backgroundColour: "rgb(42,42,42)",
-      formData: { username: "", password: "" },
+      formData: { username: "drusmir@tpg.com", password: "Passw0rd" },
       validationRules: {
         username: [{ type: "required", message: "Email is required!" }],
         password: [{ type: "required", message: "Password is required!" }]
