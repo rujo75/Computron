@@ -98,13 +98,11 @@
               <dx-form-item data-field="taxNo" :editor-options="taxNoEditorOptions">
                 <dx-label text="ABN" />
               </dx-form-item>
-              <dx-form-item
-                data-field="active"
-                editor-type="dxCheckBox"
-                :editor-options="{text: 'Active'}"
-              >
-                <dx-label :visible="false" />
-              </dx-form-item>
+            </dx-group-item>
+            <dx-group-item :col-count="2">
+              <!--:editor-options="{text: 'Active'}"-->
+              <!--<dx-label :visible="true" />-->
+              <dx-form-item data-field="active" editor-type="dxCheckBox" />
             </dx-group-item>
           </dx-form>
         </div>
@@ -166,8 +164,10 @@
                   message="Bank Name must have maximum 100 characters!"
                 />
               </dx-form-item>
-              <dx-form-item data-field="bankBranchNo"></dx-form-item>
-              <dx-form-item data-field="bankAccountNo"></dx-form-item>
+            </dx-group-item>
+            <dx-group-item :col-count="2">
+              <dx-form-item data-field="bankBranchNo" :editor-options="bankBranchNoEditorOptions" />
+              <dx-form-item data-field="bankAccountNo" />
               <dx-form-item data-field="swiftCode">
                 <dx-label text="SWIFT Code" />
               </dx-form-item>
@@ -289,6 +289,9 @@ export default {
       },
       taxNoEditorOptions: {
         mask: "00 000 000 000"
+      },
+      bankBranchNoEditorOptions: {
+        mask: "000-000"
       },
       companyNoPattern: /^[^\s]+$/
     };

@@ -62,13 +62,6 @@
       />
       <dx-column data-field="city" caption="City" data-type="string" :width="120" :visible="false" />
       <dx-column
-        data-field="state"
-        caption="State"
-        data-type="string"
-        :width="120"
-        :visible="false"
-      />
-      <dx-column
         data-field="postcode"
         caption="Postcode"
         data-type="string"
@@ -81,6 +74,21 @@
         data-type="string"
         :width="120"
         :visible="false"
+      />
+      <dx-column
+        data-field="state"
+        caption="State"
+        data-type="string"
+        :width="120"
+        :visible="false"
+      />
+      <dx-column
+        data-field="taxNo"
+        caption="ABN"
+        data-type="string"
+        :width="130"
+        :visible="false"
+        cell-template="TaxNoTemplate"
       />
       <dx-column
         data-field="phoneNo"
@@ -107,6 +115,13 @@
         cell-template="mobileNoTemplate"
       />
       <dx-column
+        data-field="contactName"
+        caption="Contact Name"
+        data-type="string"
+        :width="130"
+        :visible="false"
+      />
+      <dx-column
         data-field="email"
         caption="Email"
         data-type="string"
@@ -114,13 +129,43 @@
         :visible="false"
       />
       <dx-column
-        data-field="taxNo"
-        caption="ABN"
+        data-field="website"
+        caption="Home Page"
         data-type="string"
-        :width="130"
+        :width="200"
         :visible="false"
-        cell-template="TaxNoTemplate"
       />
+      <dx-column
+        data-field="bankName"
+        caption="Bank Name"
+        data-type="string"
+        :width="120"
+        :visible="false"
+      />
+      <dx-column
+        data-field="bankBranchNo"
+        caption="Bank Branch No"
+        data-type="string"
+        :width="100"
+        :visible="false"
+        cell-template="bankBranchNoTemplate"
+      />
+      <dx-column
+        data-field="bankAccountNo"
+        caption="Bank Account No"
+        data-type="string"
+        :width="100"
+        :visible="false"
+      />
+      <dx-column
+        data-field="swiftCode"
+        caption="SWIFT Code"
+        data-type="string"
+        :width="100"
+        :visible="false"
+      />
+      <dx-column data-field="iban" caption="IBAN" data-type="string" :width="100" :visible="false" />
+
       <dx-load-panel :enabled="false" />
       <dx-group-panel :visible="false" />
       <dx-search-panel :visible="true" :width="250" />
@@ -134,6 +179,10 @@
         slot="mobileNoTemplate"
         slot-scope="{ data: item }"
       >{{ item.value | VMask(mobileNoMask) }}</div>
+      <div
+        slot="bankBranchNoTemplate"
+        slot-scope="{ data: item }"
+      >{{ item.value | VMask(bankBranchNoMask) }}</div>
     </dx-data-grid>
   </div>
 </template>
@@ -173,6 +222,7 @@ export default {
       taxNoMask: "## ### ### ###",
       phoneNoMask: "(##) #### ####",
       mobileNoMask: "#### ### ###",
+      bankBranchNoMask: "###-###",
       stateStoring: {
         enabled: true,
         storageKey: "Companies",

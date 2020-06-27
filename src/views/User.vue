@@ -93,13 +93,6 @@
                 editor-type="dxSwitch"
                 :editor-options="{switchedOffText: 'NO', switchedOnText: 'YES', width: '60'}"
               />-->
-              <dx-form-item
-                data-field="active"
-                editor-type="dxCheckBox"
-                :editor-options="{text: 'Active'}"
-              >
-                <dx-label :visible="false" />
-              </dx-form-item>
               <dx-form-item data-field="expiryDate" editor-type="dxDateBox" />
             </dx-group-item>
             <dx-group-item :col-count="2">
@@ -114,12 +107,18 @@
                 :editor-options="{text: 'User must change password at next login'}"
                 data-field="mustChangePassword"
                 editor-type="dxCheckBox"
+                cssClass="change-password-checkbox"
               >
                 <dx-label :visible="false" />
               </dx-form-item>
               <!--<dx-form-item data-field="mustChangePassword" editor-type="dxCheckBox">
                     <dx-label text="User must change password at next login" />
               </dx-form-item>-->
+            </dx-group-item>
+            <dx-group-item :col-count="2">
+              <!--:editor-options="{text: 'Active'}"-->
+              <!--<dx-label :visible="true" />-->
+              <dx-form-item data-field="active" editor-type="dxCheckBox" />
             </dx-group-item>
           </dx-form>
         </div>
@@ -384,5 +383,11 @@ export default {
   color: #d9534f;
   font-size: 18px;
   margin-left: 10px;
+}
+</style>
+
+<style>
+.change-password-checkbox .dx-checkbox {
+  padding-top: 7px;
 }
 </style>

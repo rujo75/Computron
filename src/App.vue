@@ -76,10 +76,14 @@ body {
   /*color: red;*/
 }
 
-.dx-field-item .dx-checkbox {
-  padding-top: 7px; /* label inline */
-  /*padding-top: 29px;*/ /* lable on top */
-}
+/*.dx-field-item .dx-checkbox {*/
+/*padding-top: 7px;*/ /* label inline */
+/*padding-top: 29px;*/ /* lable on top */
+/*}*/
+
+/*.dx-field-item .dx-first-row .dx-checkbox {
+  padding-top: 7px;
+}*/
 
 .dx-field-item .dx-checkbox-text {
   padding-left: 30px;

@@ -52,38 +52,28 @@
                 <dx-label text="Bank Name" />
                 <dx-required-rule message="Bank Name is required!" />
                 <dx-string-length-rule
-                  :max="50"
-                  message="Bank Name must have maximum 50 characters!"
+                  :max="100"
+                  message="Bank Name must have maximum 100 characters!"
                 />
                 <dx-custom-rule
                   :validation-callback="bankNameValidation"
                   message="Bank Name is already used!"
                 />
               </dx-form-item>
-              <dx-form-item
-                data-field="active"
-                editor-type="dxCheckBox"
-                :editor-options="{text: 'Active'}"
-              >
-                <dx-label :visible="false" />
+            </dx-group-item>
+            <dx-group-item :col-count="2">
+              <dx-form-item data-field="bankBranchNo"></dx-form-item>
+              <dx-form-item data-field="bankAccountNo"></dx-form-item>
+              <dx-form-item data-field="swiftCode">
+                <dx-label text="SWIFT Code" />
+              </dx-form-item>
+              <dx-form-item data-field="iban">
+                <dx-label text="IBAN" />
               </dx-form-item>
             </dx-group-item>
-            <!--<dx-group-item :col-count="2">
-              <dx-form-item data-field="password" :editor-options="{mode: 'password'}">
-                <dx-required-rule message="Password is required!" />
-                <dx-string-length-rule
-                  :max="50"
-                  message="Password must have maximum 50 characters!"
-                />
-              </dx-form-item>
-              <dx-form-item
-                :editor-options="{text: 'User must change password at next login'}"
-                data-field="mustChangePassword"
-                editor-type="dxCheckBox"
-              >
-                <dx-label :visible="false" />
-              </dx-form-item>
-            </dx-group-item>-->
+            <dx-group-item :col-count="2">
+              <dx-form-item data-field="active" editor-type="dxCheckBox" />
+            </dx-group-item>
           </dx-form>
         </div>
       </dx-tab-panel>
