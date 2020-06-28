@@ -128,6 +128,11 @@ export default {
           title: "General",
           template: "GeneralTab",
           isValid: true
+        },
+        {
+          title: "Communication",
+          template: "CommunicationTab",
+          isValid: true
         }
       ],
       saveNavButtonOptions: {

@@ -11,6 +11,18 @@ const state = {
             bankAccountNo: "111111",
             swiftCode: "WPACAU2S",
             iban: "",
+            addressLine1: "16 Parkes Road",
+            addressLine2: "",
+            contactName: "John Globe",
+            city: "Melbourne",
+            state: "VIC",
+            postcode: "3000",
+            country: "AUS",
+            phoneNo: "0381005925",
+            faxNo: "",
+            mobileNo: "0488711256",
+            email: "admin@globeworks.com.au",
+            website: "www.globeworks.com.au",
             active: true
         }
     ]
