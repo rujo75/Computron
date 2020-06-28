@@ -48,6 +48,8 @@
                   message="Account No is already used!"
                 />
               </dx-form-item>
+            </dx-group-item>
+            <dx-group-item :col-count="2">
               <dx-form-item data-field="bankName">
                 <dx-label text="Bank Name" />
                 <dx-required-rule message="Bank Name is required!" />

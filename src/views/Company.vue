@@ -48,6 +48,8 @@
                   message="Company No is already used!"
                 />
               </dx-form-item>
+            </dx-group-item>
+            <dx-group-item :col-count="2">
               <dx-form-item data-field="companyName">
                 <dx-required-rule message="Company No is required!" />
                 <dx-string-length-rule

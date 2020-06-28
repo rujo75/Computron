@@ -72,7 +72,8 @@ body {
 }
 
 .dx-button .fa-star {
-  font-size: 16px;
+  /*font-size: 18px;*/
+  padding-right: 2px;
   /*color: red;*/
 }
 

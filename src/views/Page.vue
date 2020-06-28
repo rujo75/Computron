@@ -321,7 +321,8 @@ export default {
 }
 
 .material-icons,
-.fas {
+.fas,
+.svg-inline--fa {
   display: block;
   margin: auto;
   font-size: 24px;

@@ -42,19 +42,39 @@ export const MenuData = {
       items: []
     },
     {
-      id: "Lists",
-      text: "Lists",
-      icon: "fas fa-list",
-      link: "/Page/Lists",
-      path: "Lists",
+      id: "Contacts",
+      text: "Contacts",
+      icon: "fas fa-users",
+      link: "/Page/Contacts",
+      path: "Contacts",
       items: [
         {
-          id: "BankAccounts",
-          text: "Bank Accounts",
-          description: "Create and manage your bank accounts.",
-          icon: "fas fa-university",
-          link: "/BankAccounts",
-          path: "Lists/BankAccounts",
+          id: "Customers",
+          text: "Customers",
+          description: "Create and manage your customers.",
+          icon: "fas fa-store",
+          link: "/Customers",
+          path: "Contacts/Customers",
+          favourite: false,
+          items: []
+        },
+        {
+          id: "Employees",
+          text: "Employees",
+          description: "Create and manage your employees.",
+          icon: "fas fa-house-user",
+          link: "/Employees",
+          path: "Contacts/Employees",
+          favourite: false,
+          items: []
+        },
+        {
+          id: "Suppliers",
+          text: "Suppliers",
+          description: "Create and manage your suppliers.",
+          icon: "fas fa-industry",
+          link: "/Suppliers",
+          path: "Contacts/Suppliers",
           favourite: false,
           items: []
         },
@@ -67,6 +87,16 @@ export const MenuData = {
       link: "/Page/Administration",
       path: "Administration",
       items: [
+        {
+          id: "BankAccounts",
+          text: "Bank Accounts",
+          description: "Create and manage your bank accounts.",
+          icon: "fas fa-university",
+          link: "/BankAccounts",
+          path: "Administration/BankAccounts",
+          favourite: false,
+          items: []
+        },
         {
           id: "Companies",
           text: "Companies",
@@ -91,7 +121,7 @@ export const MenuData = {
           id: "Users",
           text: "Users",
           description: "Manage users and assign security roles.",
-          icon: "fas fa-users",
+          icon: "fas fa-users-cog",
           link: "/Users",
           path: "Administration/Users",
           favourite: false,

@@ -52,6 +52,8 @@
                   message="User No is already used!"
                 />
               </dx-form-item>
+            </dx-group-item>
+            <dx-group-item :col-count="2">
               <dx-form-item data-field="userName">
                 <dx-label text="User Name" />
                 <dx-required-rule message="User Name is required!" />
