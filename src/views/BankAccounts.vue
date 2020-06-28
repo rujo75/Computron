@@ -279,6 +279,10 @@ export default {
     //console.log(this.getCurrentPath);
     // Build breadcrumb path
     const menuIdPath = this.getCurrentPath.split("/");
+    console.log(menuIdPath);
+    // Save current side nave id
+    this.$store.dispatch("setSideNavSelectedItemId", menuIdPath[0]);
+
     let newBreadcrumbPath = [];
 
     for (let i = 0; i < menuIdPath.length; i++) {

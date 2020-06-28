@@ -1,6 +1,7 @@
 const state = {
     sideNavMenuOpenState: true,
     favouritesNavMenuOpenState: true,
+    sideNavSelectedItemId: "Home",
     currentPath: "",
     breadcrumbData: [],
     //formData: null
@@ -9,6 +10,7 @@ const state = {
 const getters = {
     getSideNavMenuOpenState: state => state.sideNavMenuOpenState,
     getFavouritesNavMenuOpenState: state => state.favouritesNavMenuOpenState,
+    getSideNavSelectedItemId: state => state.sideNavSelectedItemId,
     getCurrentPath: state => state.currentPath,
     getBreadcrumbData: state => state.breadcrumbData,
     //getFormData: state => state.formData
@@ -20,6 +22,9 @@ const mutations = {
     },
     toggleFavouritesNavMenuOpenState: function (state) {
         state.favouritesNavMenuOpenState = !state.favouritesNavMenuOpenState;
+    },
+    setSideNavSelectedItemId: function (state, id) {
+        state.sideNavSelectedItemId = id;
     },
     setCurrentPath: function (state, data) {
         state.currentPath = data;
@@ -33,6 +38,9 @@ const mutations = {
 }
 
 const actions = {
+    setSideNavSelectedItemId({ commit }, id) {
+        commit("setSideNavSelectedItemId", id);
+    },
     setCurrentPath({ commit }, data) {
         commit("setCurrentPath", data);
     },

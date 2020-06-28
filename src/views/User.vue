@@ -385,6 +385,7 @@ export default {
   color: #d9534f;
   font-size: 18px;
   margin-left: 10px;
+  vertical-align: -2px;
 }
 </style>
 

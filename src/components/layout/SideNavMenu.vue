@@ -5,7 +5,7 @@
       :active-state-enabled="true"
       :hover-state-enabled="true"
       :focus-state-enabled="true"
-      :selected-item-keys="[currentItem.id]"
+      :selected-item-keys="getSideNavSelectedItemKeys"
       selection-mode="single"
       class="panel-list dx-theme-border-color"
       @item-click="onNavigationItemClick"
@@ -17,6 +17,7 @@
 import { DxList } from "devextreme-vue/list";
 import ArrayStore from "devextreme/data/array_store";
 import { MenuData } from "./../../data/menus.js";
+import { mapGetters } from "vuex";
 
 export default {
   name: "sideNavMenu",
@@ -34,7 +35,18 @@ export default {
       currentItem: MenuData.items[0]
     };
   },
-  computed: {},
+  computed: {
+    ...mapGetters(["getSideNavSelectedItemId"]),
+
+    getSideNavSelectedItemKeys() {
+      console.log(this.getSideNavSelectedItemId);
+      if (this.getSideNavSelectedItemId) {
+        return [this.getSideNavSelectedItemId];
+      } else {
+        return [MenuData.items[0].id];
+      }
+    }
+  },
   methods: {
     onNavigationItemClick(e) {
       if (e.itemData.link) {
