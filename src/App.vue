@@ -108,6 +108,10 @@ body {
   padding-bottom: 3px;
 }
 
+.dx-tabpanel .dx-tab {
+  height: 42px;
+}
+
 /*.data-grid-hyperlink {
   color: #0b0080;
 }*/
