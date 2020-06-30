@@ -1,11 +1,13 @@
 <template>
   <div style="width: 250px">
+    {{getSelectedItemKeys}}
     <DxList
+      ref="list"
       :data-source="dataSource"
       :active-state-enabled="true"
       :hover-state-enabled="true"
       :focus-state-enabled="true"
-      :selected-item-keys="currentItem"
+      :selected-item-keys="getSelectedItemKeys"
       selection-mode="single"
       class="panel-list dx-theme-border-color"
       @item-click="onNavigationItemClick"
@@ -17,7 +19,7 @@
 import { DxList } from "devextreme-vue/list";
 import ArrayStore from "devextreme/data/array_store";
 import { MenuData } from "./../../data/menus.js";
-import { mapGetters } from "vuex";
+//import { mapGetters } from "vuex";
 
 export default {
   name: "sideNavMenu",
@@ -32,23 +34,32 @@ export default {
           key: "id"
         })
       },
-      currentItem: [MenuData.items[0].id]
+      selectedItemKeys: [MenuData.items[0].id]
     };
   },
   computed: {
-    ...mapGetters(["getSideNavSelectedItemId"])
+    //...mapGetters(["getSideNavSelectedItemId"]),
+
+    getSelectedItemKeys: {
+      get: function() {
+        let result = [];
+        let selectedId = this.$store.getters.getSideNavSelectedItemId;
+        result.push(selectedId);
+        return result;
+      }
+    }
   },
   watch: {
-    /*getSideNavSelectedItemId: {
+    getSideNavSelectedItemId: {
       handler(value) {
         //console.log("watch -> getSideNavSelectedItemId: " + value);
-        this.currentItem = [value];
+        this.selectedItemKeys.splice(0, 1, value);
       },
       deep: true
-    },*/
-    "$store.state.sideNavSelectedItemId": function() {
-      console.log(this.$store.state.sideNavSelectedItemId);
-      this.currentItem = [this.$store.state.sideNavSelectedItemId];
+    },
+    getSelectedItemKeys: function(value) {
+      //this.$refs["list"].instance.repaint();
+      console.log("getSelectedItemKeys: " + value);
     }
   },
   methods: {
