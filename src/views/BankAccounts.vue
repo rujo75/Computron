@@ -275,22 +275,6 @@ export default {
   },
   mounted() {
     //console.log("mounted");
-    // Set breadcrumb path
-    //console.log(this.getCurrentPath);
-    // Build breadcrumb path
-    const menuIdPath = this.getCurrentPath.split("/");
-    console.log(menuIdPath);
-    // Save current side nave id
-    this.$store.dispatch("setSideNavSelectedItemId", menuIdPath[0]);
-
-    let newBreadcrumbPath = [];
-
-    for (let i = 0; i < menuIdPath.length; i++) {
-      newBreadcrumbPath.push({ id: menuIdPath[i] });
-    }
-    //console.log(newBreadcrumbPath);
-    // Save new breadcrumb data path
-    this.$store.dispatch("setBreadcrumbData", newBreadcrumbPath);
   },
   created() {
     //console.log("created");

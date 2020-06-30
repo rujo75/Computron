@@ -387,16 +387,6 @@ export default {
   },
   mounted() {
     //console.log("mounted");
-    // Build breadcrumb path
-    const menuIdPath = this.getCurrentPath.split("/");
-    let newBreadcrumbPath = [];
-
-    for (let i = 0; i < menuIdPath.length; i++) {
-      newBreadcrumbPath.push({ id: menuIdPath[i] });
-    }
-    //console.log(newBreadcrumbPath);
-    // Save new breadcrumb data path
-    this.$store.dispatch("setBreadcrumbData", newBreadcrumbPath);
   },
   created() {
     //console.log("created");

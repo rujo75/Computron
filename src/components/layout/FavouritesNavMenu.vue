@@ -69,6 +69,7 @@ import { DxPopup } from "devextreme-vue/popup";
 import { DxForm, DxItem as DxFormItem } from "devextreme-vue/form";
 import { DxContextMenu } from "devextreme-vue/context-menu";
 import { mapGetters } from "vuex";
+import { MenuData } from "./../../data/menus.js";
 import { getNewId } from "./../../store/common.js";
 
 export default {
@@ -159,6 +160,15 @@ export default {
       }
     }
   },
+  watch: {
+    getFavouritesData: {
+      handler() {
+        //console.log("getFavouritesData changed!");
+        this.favouritesData = this._.map(this.getFavouritesData);
+      },
+      deep: true
+    }
+  },
   methods: {
     createNewFavouritesFolder(name) {
       const newId = getNewId();
@@ -212,6 +222,9 @@ export default {
         if (e.itemData.link) {
           // Check new link is different from current link
           if (this.$route.path !== e.itemData.link) {
+            let menu = this.findMenuById(MenuData, e.itemData.menuId);
+            // store current path
+            this.$store.dispatch("setCurrentPath", menu.path);
             // Re-route to new link
             this.$router.push(e.itemData.link);
           }
@@ -249,15 +262,23 @@ export default {
     },
     favouritesContextHiding() {
       this.$store.dispatch("setFavouritesSelectedItemData", null);
-    }
-  },
-  watch: {
-    getFavouritesData: {
-      handler() {
-        //console.log("getFavouritesData changed!");
-        this.favouritesData = this._.map(this.getFavouritesData);
-      },
-      deep: true
+    },
+    findMenuById(object, id) {
+      // Early return
+      if (object.id === id) {
+        return object;
+      }
+      var result, p;
+      for (p in object) {
+        // eslint-disable-next-line no-prototype-builtins
+        if (object.hasOwnProperty(p) && typeof object[p] === "object") {
+          result = this.findMenuById(object[p], id);
+          if (result) {
+            return result;
+          }
+        }
+      }
+      return result;
     }
   },
   created() {

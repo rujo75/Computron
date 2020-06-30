@@ -5,7 +5,7 @@
       :active-state-enabled="true"
       :hover-state-enabled="true"
       :focus-state-enabled="true"
-      :selected-item-keys="getSideNavSelectedItemKeys"
+      :selected-item-keys="currentItem"
       selection-mode="single"
       class="panel-list dx-theme-border-color"
       @item-click="onNavigationItemClick"
@@ -32,19 +32,23 @@ export default {
           key: "id"
         })
       },
-      currentItem: MenuData.items[0]
+      currentItem: [MenuData.items[0].id]
     };
   },
   computed: {
-    ...mapGetters(["getSideNavSelectedItemId"]),
-
-    getSideNavSelectedItemKeys() {
-      console.log(this.getSideNavSelectedItemId);
-      if (this.getSideNavSelectedItemId) {
-        return [this.getSideNavSelectedItemId];
-      } else {
-        return [MenuData.items[0].id];
-      }
+    ...mapGetters(["getSideNavSelectedItemId"])
+  },
+  watch: {
+    /*getSideNavSelectedItemId: {
+      handler(value) {
+        //console.log("watch -> getSideNavSelectedItemId: " + value);
+        this.currentItem = [value];
+      },
+      deep: true
+    },*/
+    "$store.state.sideNavSelectedItemId": function() {
+      console.log(this.$store.state.sideNavSelectedItemId);
+      this.currentItem = [this.$store.state.sideNavSelectedItemId];
     }
   },
   methods: {

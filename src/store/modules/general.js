@@ -4,7 +4,6 @@ const state = {
     sideNavSelectedItemId: "Home",
     currentPath: "",
     breadcrumbData: [],
-    //formData: null
 };
 
 const getters = {
@@ -13,7 +12,6 @@ const getters = {
     getSideNavSelectedItemId: state => state.sideNavSelectedItemId,
     getCurrentPath: state => state.currentPath,
     getBreadcrumbData: state => state.breadcrumbData,
-    //getFormData: state => state.formData
 };
 
 const mutations = {
@@ -25,31 +23,36 @@ const mutations = {
     },
     setSideNavSelectedItemId: function (state, id) {
         state.sideNavSelectedItemId = id;
+        //console.log("vuex -> setSideNavSelectedItemId: " + state.sideNavSelectedItemId)
     },
     setCurrentPath: function (state, data) {
         state.currentPath = data;
     },
     setBreadcrumbData: function (state, data) {
         state.breadcrumbData = data;
-    },
-    /*setFormData: function (state, data) {
-        state.formData = data;
-    }*/
+    }
 }
 
 const actions = {
-    setSideNavSelectedItemId({ commit }, id) {
-        commit("setSideNavSelectedItemId", id);
-    },
     setCurrentPath({ commit }, data) {
+        //console.log("vuex -> setCurrentPath: " + data)
+        //data: Administration/BankAccounts
         commit("setCurrentPath", data);
+        if (data) {
+            const menuIdPath = data.split("/");
+            let newBreadcrumbPath = [];
+            for (let i = 0; i < menuIdPath.length; i++) {
+                newBreadcrumbPath.push({ id: menuIdPath[i] });
+            }
+            // Save sude nave item
+            commit("setSideNavSelectedItemId", menuIdPath[0]);
+            // Save new breadcrumb data path
+            commit("setBreadcrumbData", newBreadcrumbPath);
+        }
     },
     setBreadcrumbData({ commit }, data) {
         commit("setBreadcrumbData", data);
     },
-    /*setFormData({ commit }, data) {
-        commit("setFormData", data);
-    }*/
 }
 
 export default {
