@@ -14,7 +14,8 @@ export default {
   computed: {},
   methods: {},
   mounted() {
-    this.$store.dispatch("setBreadcrumbData", [{ id: "Home" }]);
+    // store current path
+    this.$store.dispatch("setCurrentPath", "Home");
   }
 };
 </script>

@@ -1,13 +1,12 @@
 <template>
   <div style="width: 250px">
-    {{ mapSelectedItemKeys }}
     <DxList
       ref="list"
       :data-source="dataSource"
       :active-state-enabled="true"
       :hover-state-enabled="true"
       :focus-state-enabled="true"
-      :selected-item-keys.sync="mapSelectedItemKeys"
+      :selected-item-keys="mapSelectedItemKeys"
       selection-mode="single"
       class="panel-list dx-theme-border-color"
       @item-click="onNavigationItemClick"
@@ -20,7 +19,6 @@ import { DxList } from "devextreme-vue/list";
 import ArrayStore from "devextreme/data/array_store";
 import { MenuData } from "./../../data/menus.js";
 import { mapGetters } from "vuex";
-//import func from '../../../vue-temp/vue-editor-bridge';
 
 export default {
   name: "sideNavMenu",
@@ -35,46 +33,30 @@ export default {
           key: "id"
         })
       }
-      //selectedItemKeys: [MenuData.items[0].id]
-      //selectedItemKeys: this.mapSelectedItemKeys
     };
   },
   computed: {
     ...mapGetters(["getSideNavSelectedItemId"]),
 
-    /*getSelectedItemKeys: {
-      get: function() {
-        let result = [];
-        let selectedId = this.$store.getters.getSideNavSelectedItemId;
-        result.push(selectedId);
-        return result;
-      }
-    }*/
     mapSelectedItemKeys: {
       get: function() {
-        console.log(
-          "mapSelectedItemKeys -> get: " + this.getSideNavSelectedItemId
-        );
+        //console.log("mapSelectedItemKeys -> get: " + this.getSideNavSelectedItemId);
         return [this.getSideNavSelectedItemId];
       },
       set: function(value) {
-        console.log("mapSelectedItemKeys -> set: " + value);
-        this.$store.dispatch("setSideNavSelectedItemId", value);
+        //console.log("mapSelectedItemKeys -> set: " + value);
+        this.$store.dispatch("setCurrentPath", value);
       }
     }
   },
-  watch: {
-    /*getSideNavSelectedItemId: function(value) {
-      this.selectedItemKeys.splice(0, 1, value);
-    }*/
-  },
+  watch: {},
   methods: {
     onNavigationItemClick(e) {
       //console.log(e.itemData);
       if (e.itemData.link) {
         if (this.$route.path !== e.itemData.link) {
           // store current side nave item id
-          //this.$store.dispatch("setSideNavSelectedItemId", e.itemData.id);
+          this.mapSelectedItemKeys = e.itemData.id;
           this.$router.push(e.itemData.link);
         }
       }

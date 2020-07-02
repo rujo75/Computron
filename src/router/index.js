@@ -48,14 +48,20 @@ const router = new Router({
       component: Users
     },
     {
-      path: "/User",
+      path: "/CreateUser",
       name: "CreateUser",
       component: User
     },
     {
-      path: "/User/:id",
+      path: "/EditUser/:id",
       props: true,
       name: "EditUser",
+      component: User
+    },
+    {
+      path: "/CopyUser/:id",
+      props: true,
+      name: "CopyUser",
       component: User
     },
     {

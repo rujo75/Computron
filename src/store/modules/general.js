@@ -23,7 +23,6 @@ const mutations = {
     },
     setSideNavSelectedItemId: function (state, id) {
         state.sideNavSelectedItemId = id;
-        //console.log("vuex -> setSideNavSelectedItemId: " + state.sideNavSelectedItemId)
     },
     setCurrentPath: function (state, data) {
         state.currentPath = data;
@@ -34,10 +33,6 @@ const mutations = {
 }
 
 const actions = {
-    setSideNavSelectedItemId({ commit }, id) {
-        // Save side nav item
-        commit("setSideNavSelectedItemId", id);
-    },
     setCurrentPath({ commit }, data) {
         //console.log("vuex -> setCurrentPath: " + data)
         //data: Administration/BankAccounts
@@ -53,9 +48,6 @@ const actions = {
             // Save new breadcrumb data path
             commit("setBreadcrumbData", newBreadcrumbPath);
         }
-    },
-    setBreadcrumbData({ commit }, data) {
-        commit("setBreadcrumbData", data);
     },
 }
 

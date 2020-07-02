@@ -32,7 +32,10 @@
               <dx-form-item data-field="userID" :editor-options="{disabled: true}">
                 <dx-label text="User ID" />
               </dx-form-item>
-              <dx-form-item data-field="userNo" :editor-options="{disabled: !isNewRecord}">
+              <dx-form-item
+                data-field="userNo"
+                :editor-options="{disabled: this.currentRouteName === 'EditUser'}"
+              >
                 <dx-label text="User No" />
                 <dx-required-rule message="User No is required!" />
                 <dx-pattern-rule
@@ -201,21 +204,16 @@ export default {
     };
   },
   computed: {
-    isNewRecord() {
-      if (this.id === "") {
-        // new user
-        return true;
-      } else {
-        // existing user
-        return false;
-      }
+    currentRouteName() {
+      // returns NewUser or EditUser or CopyUser
+      return this.$route.name;
     }
   },
   methods: {
     loadFormData: function() {
       //console.log("loadFormData");
       //console.log("id: " + this.id);
-      if (this.isNewRecord) {
+      if (this.currentRouteName === "NewUser") {
         // create user
         let newUser = {
           userID: getNewId(),
@@ -232,7 +230,7 @@ export default {
         this.formData = newUser;
         // clone formData
         this.formOriginalData = this._.cloneDeep(this.formData);
-      } else {
+      } else if (this.currentRouteName === "EditUser") {
         // edit user
         // get user by id
         let user = this.$store.getters.getUserByID(this.id);
@@ -240,6 +238,29 @@ export default {
         if (user) {
           // clone user
           this.formData = this._.cloneDeep(user);
+          // clone formData
+          this.formOriginalData = this._.cloneDeep(this.formData);
+        }
+      } else {
+        // copy user
+        // get user by id
+        let user = this.$store.getters.getUserByID(this.id);
+        //console.log(user);
+        if (user) {
+          // copy user with new id
+          let newUser = {
+            userID: getNewId(),
+            userNo: user.userNo,
+            userName: user.userName,
+            fullName: user.fullName,
+            email: user.email,
+            active: true,
+            expiryDate: user.expiryDate,
+            password: "",
+            mustChangePassword: true
+          };
+          // use new user
+          this.formData = newUser;
           // clone formData
           this.formOriginalData = this._.cloneDeep(this.formData);
         }
@@ -271,12 +292,12 @@ export default {
       }
     },
     saveFormData() {
-      if (this.isNewRecord) {
-        // create user
-        this.$store.dispatch("createUser", this.formData);
-      } else {
+      if (this.currentRouteName === "EditUser") {
         // update user
         this.$store.dispatch("updateUser", this.formData);
+      } else {
+        // create user
+        this.$store.dispatch("createUser", this.formData);
       }
 
       // update formOriginalData with formData
@@ -309,33 +330,33 @@ export default {
       });*/
     },
     userNoValidation(e) {
-      if (this.isNewRecord) {
+      if (this.currentRouteName === "EditUser") {
+        // existing user
+        return true;
+      } else {
         // new user
         let result = this.$store.getters.userExistsByUserNo(e.value);
         return (result = !result);
-      } else {
-        // existing user
-        return true;
       }
     },
     userNameValidation(e) {
-      if (this.isNewRecord) {
+      if (this.currentRouteName === "EditUser") {
+        // existing user
+        return true;
+      } else {
         // new user
         let result = this.$store.getters.userExistsByUserName(e.value);
         return (result = !result);
-      } else {
-        // existing user
-        return true;
       }
     },
     emailValidation(e) {
-      if (this.isNewRecord) {
+      if (this.currentRouteName === "EditUser") {
+        // existing user
+        return true;
+      } else {
         // new user
         let result = this.$store.getters.userExistsByEmail(e.value);
         return (result = !result);
-      } else {
-        // existing user
-        return true;
       }
     },
     onGeneralFieldDataChanged() {
@@ -350,12 +371,12 @@ export default {
   },
   mounted() {
     //console.log("mounted");
-    if (this.isNewRecord) {
-      // new user
-      this.$refs["formGeneral"].instance.getEditor("userNo").focus();
-    } else {
+    if (this.currentRouteName === "EditUser") {
       // existing user
       this.$refs["formGeneral"].instance.getEditor("userName").focus();
+    } else {
+      // new user
+      this.$refs["formGeneral"].instance.getEditor("userNo").focus();
     }
   }
 };

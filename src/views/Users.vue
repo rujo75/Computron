@@ -81,6 +81,7 @@ import {
 import { mapGetters } from "vuex";
 
 var editToolbarButtonRef = null;
+var copyToolbarButtonRef = null;
 var deleteToolbarButtonRef = null;
 
 export default {
@@ -171,7 +172,7 @@ export default {
             focusStateEnabled: false,
             disabled: false,
             onClick: () => {
-              this.$router.push("/User");
+              this.$router.push("/CreateUser");
             }
           }
         },
@@ -189,7 +190,25 @@ export default {
             },
             onClick: () => {
               this.$store.dispatch("clearNewUserID");
-              this.$router.push("/User/" + this.focusedRowKey);
+              this.$router.push("/EditUser/" + this.focusedRowKey);
+            }
+          }
+        },
+        {
+          location: "before",
+          widget: "dxButton",
+          options: {
+            icon: "fas fa-copy",
+            stylingMode: "text",
+            text: "Copy",
+            focusStateEnabled: false,
+            disabled: true,
+            onInitialized: e => {
+              copyToolbarButtonRef = e.component;
+            },
+            onClick: () => {
+              this.$store.dispatch("clearNewUserID");
+              this.$router.push("/CopyUser/" + this.focusedRowKey);
             }
           }
         },
@@ -246,9 +265,11 @@ export default {
         //console.log("focusedRowKey value changed: " + value);
         if (value === "" || this.getUsers.length === 0) {
           editToolbarButtonRef.option("disabled", true);
+          copyToolbarButtonRef.option("disabled", true);
           deleteToolbarButtonRef.option("disabled", true);
         } else {
           editToolbarButtonRef.option("disabled", false);
+          copyToolbarButtonRef.option("disabled", false);
           deleteToolbarButtonRef.option("disabled", false);
         }
       }

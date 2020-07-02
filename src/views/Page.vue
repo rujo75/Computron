@@ -108,24 +108,6 @@ export default {
     },
     getMenuItems() {
       //console.log("Menu id: " + this.id);
-      // Build new breadcrumb data path
-      const menuIdPath = this.id.split(".");
-      let newBreadcrumbPath = [];
-      let tempBreadcrumb = "";
-      for (let i = 0; i < menuIdPath.length; i++) {
-        if (i === 0) {
-          tempBreadcrumb = menuIdPath[0];
-        } else {
-          tempBreadcrumb += "." + menuIdPath[i];
-        }
-        newBreadcrumbPath.push({ id: tempBreadcrumb });
-      }
-      //console.log("newBreadcrumbPath");
-      //console.log(newBreadcrumbPath);
-      // Save new breadcrumb data path
-      this.$store.dispatch("setBreadcrumbData", newBreadcrumbPath);
-
-      //console.log(menuData);
       // Get menu items
       let result = this.findMenuById(MenuData, this.id);
       //console.log(result);
