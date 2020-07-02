@@ -119,28 +119,17 @@ export default {
               state.focusedRowKey = "";
             }
 
-            // check new row key
-            if (this.newUserID !== "") {
-              newFocusedRowKey = this.newUserID;
-            }
+            // check the old key stored in the local storage
+            newFocusedRowKey = state.focusedRowKey;
             let index = this._.findIndex(this.getUsers, {
               userID: newFocusedRowKey
             });
-
             if (index === -1) {
-              // new row key not found
-              // check the old key stored in the local storage
-              newFocusedRowKey = state.focusedRowKey;
-              index = this._.findIndex(this.getUsers, {
-                userID: newFocusedRowKey
-              });
-              if (index === -1) {
-                // old key no longer exists
-                // check if we have any records
-                if (this.getUsers.length > 0) {
-                  // select the first row
-                  newFocusedRowKey = this.getUsers[0].userID;
-                }
+              // old key no longer exists
+              // check if we have any records
+              if (this.getUsers.length > 0) {
+                // select the first row
+                newFocusedRowKey = this.getUsers[0].userID;
               }
             }
 
@@ -157,7 +146,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getUsers", "newUserID", "getCurrentPath"])
+    ...mapGetters(["getUsers", "getCurrentPath"])
   },
   methods: {
     onToolbarPreparing(e) {
@@ -189,7 +178,6 @@ export default {
               editToolbarButtonRef = e.component;
             },
             onClick: () => {
-              this.$store.dispatch("clearNewUserID");
               this.$router.push("/EditUser/" + this.focusedRowKey);
             }
           }
@@ -207,7 +195,6 @@ export default {
               copyToolbarButtonRef = e.component;
             },
             onClick: () => {
-              this.$store.dispatch("clearNewUserID");
               this.$router.push("/CopyUser/" + this.focusedRowKey);
             }
           }
@@ -252,8 +239,7 @@ export default {
       //console.log("onIDClick");
       setTimeout(
         function() {
-          this.$store.dispatch("clearNewUserID");
-          this.$router.push("/User/" + this.focusedRowKey);
+          this.$router.push("/EditUser/" + this.focusedRowKey);
         }.bind(this),
         1
       );

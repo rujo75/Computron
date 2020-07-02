@@ -213,7 +213,7 @@ export default {
     loadFormData: function() {
       //console.log("loadFormData");
       //console.log("id: " + this.id);
-      if (this.currentRouteName === "NewUser") {
+      if (this.currentRouteName === "CreateUser") {
         // create user
         let newUser = {
           userID: getNewId(),
@@ -226,6 +226,7 @@ export default {
           password: "",
           mustChangePassword: true
         };
+        console.log(newUser);
         // use new user
         this.formData = newUser;
         // clone formData
@@ -298,6 +299,16 @@ export default {
       } else {
         // create user
         this.$store.dispatch("createUser", this.formData);
+        // update users grid state to set focus row to new record
+        // get grid state
+        var state = localStorage.getItem("Users");
+        //console.log(state);
+        if (state) {
+          state = JSON.parse(state);
+          state.focusedRowKey = this.formData.userID;
+          // save state
+          localStorage.setItem("Users", JSON.stringify(state));
+        }
       }
 
       // update formOriginalData with formData
@@ -340,24 +351,18 @@ export default {
       }
     },
     userNameValidation(e) {
-      if (this.currentRouteName === "EditUser") {
-        // existing user
-        return true;
-      } else {
-        // new user
-        let result = this.$store.getters.userExistsByUserName(e.value);
-        return (result = !result);
-      }
+      let result = this.$store.getters.userExistsByUserName(
+        this.formData.userID,
+        e.value
+      );
+      return (result = !result);
     },
     emailValidation(e) {
-      if (this.currentRouteName === "EditUser") {
-        // existing user
-        return true;
-      } else {
-        // new user
-        let result = this.$store.getters.userExistsByEmail(e.value);
-        return (result = !result);
-      }
+      let result = this.$store.getters.userExistsByEmail(
+        this.formData.userID,
+        e.value
+      );
+      return (result = !result);
     },
     onGeneralFieldDataChanged() {
       //console.log(e);

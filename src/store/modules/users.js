@@ -6,7 +6,6 @@ import _ from "lodash";
 
 const state = {
     currentUser: null,
-    newUserID: "",
     signInLoading: false,
     users: [
         {
@@ -49,8 +48,6 @@ const state = {
 const getters = {
     currentUser: state => state.currentUser,
 
-    newUserID: state => state.newUserID,
-
     signInLoading: state => state.signInLoading,
 
     getUsers: state => state.users,
@@ -67,16 +64,18 @@ const getters = {
         }
     },
 
-    userExistsByUserName: (state) => (userName) => {
-        if (state.users.find(user => user.userName.toUpperCase() === userName.toUpperCase())) {
+    userExistsByUserName: (state) => (id, userName) => {
+        console.log("id: " + id)
+        console.log("userName: " + userName)
+        if (state.users.find(user => (user.userName.toUpperCase() === userName.toUpperCase() && user.userID !== id))) {
             return true
         } else {
             return false
         }
     },
 
-    userExistsByEmail: (state) => (email) => {
-        if (state.users.find(user => user.email.toUpperCase() === email.toUpperCase())) {
+    userExistsByEmail: (state) => (id, email) => {
+        if (state.users.find(user => (user.email.toUpperCase() === email.toUpperCase() && user.userID !== id))) {
             return true
         } else {
             return false
@@ -98,10 +97,6 @@ const mutations = {
 
     createUser: (state, user) => {
         state.users.push(user);
-    },
-
-    setNewUserID: (state, id) => {
-        state.newUserID = id;
     },
 
     updateUser: (state, user) => {
@@ -160,11 +155,6 @@ const actions = {
 
     createUser: ({ commit }, user) => {
         commit("createUser", user);
-        commit("setNewUserID", user.userID);
-    },
-
-    clearNewUserID: ({ commit }) => {
-        commit("setNewUserID", "");
     },
 
     updateUser: ({ commit }, user) => {
