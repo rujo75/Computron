@@ -1,7 +1,6 @@
 import _ from "lodash";
 
 const state = {
-    newCompanyID: "",
     companies: [
         {
             companyID: "185bad2d-0a16-4e6b-a6a1-49ac2d380c57",
@@ -33,8 +32,6 @@ const state = {
 }
 
 const getters = {
-    newCompanyID: state => state.newCompanyID,
-
     getCompanies: state => state.companies,
 
     getCompanyByID: (state) => (id) => {
@@ -49,16 +46,16 @@ const getters = {
         }
     },
 
-    companyExistsByCompanyName: (state) => (companyName) => {
-        if (state.companies.find(company => company.companyName.toUpperCase() === companyName.toUpperCase())) {
+    companyExistsByCompanyName: (state) => (id, companyName) => {
+        if (state.companies.find(company => (company.companyName.toUpperCase() === companyName.toUpperCase() && company.companyID !== id))) {
             return true
         } else {
             return false
         }
     },
 
-    companyExistsByCompanyCode: (state) => (companyCode) => {
-        if (state.companies.find(company => company.companyCode.toUpperCase() === companyCode.toUpperCase())) {
+    companyExistsByCompanyCode: (state) => (id, companyCode) => {
+        if (state.companies.find(company => (company.companyCode.toUpperCase() === companyCode.toUpperCase() && company.companyID !== id))) {
             return true
         } else {
             return false
@@ -69,10 +66,6 @@ const getters = {
 const mutations = {
     createCompany: (state, company) => {
         state.companies.push(company);
-    },
-
-    setNewCompanyID: (state, id) => {
-        state.newCompanyID = id;
     },
 
     updateCompany: (state, company) => {
@@ -94,11 +87,6 @@ const mutations = {
 const actions = {
     createCompany: ({ commit }, company) => {
         commit("createCompany", company);
-        commit("setNewCompanyID", company.companyID);
-    },
-
-    clearNewCompanyID: ({ commit }) => {
-        commit("setNewCompanyID", "");
     },
 
     updateCompany: ({ commit }, company) => {

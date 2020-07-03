@@ -165,6 +165,13 @@
         :visible="false"
       />
       <dx-column data-field="iban" caption="IBAN" data-type="string" :width="100" :visible="false" />
+      <dx-column
+        data-field="active"
+        caption="Active"
+        data-type="boolean"
+        :width="80"
+        :visible="false"
+      />
 
       <dx-load-panel :enabled="false" />
       <dx-group-panel :visible="false" />
@@ -201,6 +208,7 @@ import {
 import { mapGetters } from "vuex";
 
 var editToolbarButtonRef = null;
+var copyToolbarButtonRef = null;
 var deleteToolbarButtonRef = null;
 
 export default {
@@ -243,28 +251,17 @@ export default {
               state.focusedRowKey = "";
             }
 
-            // check new row key
-            if (this.newCompanyID !== "") {
-              newFocusedRowKey = this.newCompanyID;
-            }
+            // check the old key stored in the local storage
+            newFocusedRowKey = state.focusedRowKey;
             let index = this._.findIndex(this.getCompanies, {
               companyID: newFocusedRowKey
             });
-
             if (index === -1) {
-              // new row key not found
-              // check the old key stored in the local storage
-              newFocusedRowKey = state.focusedRowKey;
-              index = this._.findIndex(this.getCompanies, {
-                companyID: newFocusedRowKey
-              });
-              if (index === -1) {
-                // old key no longer exists
-                // check if we have any records
-                if (this.getCompanies.length > 0) {
-                  // select the first row
-                  newFocusedRowKey = this.getCompanies[0].companyID;
-                }
+              // old key no longer exists
+              // check if we have any records
+              if (this.getCompanies.length > 0) {
+                // select the first row
+                newFocusedRowKey = this.getCompanies[0].companyID;
               }
             }
 
@@ -281,20 +278,9 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getCompanies", "newCompanyID", "getCurrentPath"])
-
-    /*getFormattedABN(e) {
-      console.log("getFormattedABN");
-      return numeral(e).format("00 000 000 000");
-    }*/
+    ...mapGetters(["getCompanies", "getCurrentPath"])
   },
   methods: {
-    getFormattedABN(e) {
-      console.log("getFormattedABN");
-      console.log(e);
-      //console.log(e.mask("00 000 000 000"));
-      //return numeral(e).format("00 000 000 000");
-    },
     onToolbarPreparing(e) {
       e.toolbarOptions.items.unshift(
         {
@@ -307,7 +293,7 @@ export default {
             focusStateEnabled: false,
             disabled: false,
             onClick: () => {
-              this.$router.push("/Company");
+              this.$router.push("/CreateCompany");
             }
           }
         },
@@ -324,8 +310,24 @@ export default {
               editToolbarButtonRef = e.component;
             },
             onClick: () => {
-              this.$store.dispatch("clearNewCompanyID");
-              this.$router.push("/Company/" + this.focusedRowKey);
+              this.$router.push("/EditCompany/" + this.focusedRowKey);
+            }
+          }
+        },
+        {
+          location: "before",
+          widget: "dxButton",
+          options: {
+            icon: "fas fa-copy",
+            stylingMode: "text",
+            text: "Copy",
+            focusStateEnabled: false,
+            disabled: true,
+            onInitialized: e => {
+              copyToolbarButtonRef = e.component;
+            },
+            onClick: () => {
+              this.$router.push("/CopyCompany/" + this.focusedRowKey);
             }
           }
         },
@@ -342,7 +344,6 @@ export default {
               deleteToolbarButtonRef = e.component;
             },
             onClick: () => {
-              this.$store.dispatch("deleteCompany", this.focusedRowKey);
               this.focusedRowKey = "";
             }
           }
@@ -365,7 +366,7 @@ export default {
       setTimeout(
         function() {
           this.$store.dispatch("clearNewCompanyID");
-          this.$router.push("/Company/" + this.focusedRowKey);
+          this.$router.push("/EditCompany/" + this.focusedRowKey);
         }.bind(this),
         1
       );
@@ -377,9 +378,11 @@ export default {
         //console.log("focusedRowKey value changed: " + value);
         if (value === "" || this.getCompanies.length === 0) {
           editToolbarButtonRef.option("disabled", true);
+          copyToolbarButtonRef.option("disabled", true);
           deleteToolbarButtonRef.option("disabled", true);
         } else {
           editToolbarButtonRef.option("disabled", false);
+          copyToolbarButtonRef.option("disabled", false);
           deleteToolbarButtonRef.option("disabled", false);
         }
       }

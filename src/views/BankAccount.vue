@@ -32,7 +32,10 @@
               <dx-form-item data-field="accountID" :editor-options="{disabled: true}">
                 <dx-label text="Account ID" />
               </dx-form-item>
-              <dx-form-item data-field="accountNo" :editor-options="{disabled: !isNewRecord}">
+              <dx-form-item
+                data-field="accountNo"
+                :editor-options="{disabled: this.currentRouteName === 'EditBankAccount'}"
+              >
                 <dx-label text="Account No" />
                 <dx-required-rule message="Account No is required!" />
                 <dx-pattern-rule
@@ -141,7 +144,7 @@ export default {
       type: String
     }
   },
-  name: "user",
+  name: "bankAccount",
   components: {
     DxToolbar,
     DxItem,
@@ -225,21 +228,16 @@ export default {
     };
   },
   computed: {
-    isNewRecord() {
-      if (this.id === "") {
-        // new account
-        return true;
-      } else {
-        // existing account
-        return false;
-      }
+    currentRouteName() {
+      // returns NewBankAccount or EditBankAccount or CopyBankAccount
+      return this.$route.name;
     }
   },
   methods: {
     loadFormData: function() {
       //console.log("loadFormData");
       //console.log("id: " + this.id);
-      if (this.isNewRecord) {
+      if (this.currentRouteName === "CreateBankAccount") {
         // create account
         let newAccount = {
           accountID: getNewId(),
@@ -249,13 +247,25 @@ export default {
           bankAccountNo: "",
           swiftCode: "",
           iban: "",
+          addressLine1: "",
+          addressLine2: "",
+          contactName: "",
+          city: "",
+          state: "",
+          postcode: "",
+          country: "",
+          phoneNo: "",
+          faxNo: "",
+          mobileNo: "",
+          email: "",
+          website: "",
           active: true
         };
         // use new account
         this.formData = newAccount;
         // clone formData
         this.formOriginalData = this._.cloneDeep(this.formData);
-      } else {
+      } else if (this.currentRouteName === "EditBankAccount") {
         // edit account
         // get account by id
         let account = this.$store.getters.getBankAccountByID(this.id);
@@ -263,6 +273,40 @@ export default {
         if (account) {
           // clone account
           this.formData = this._.cloneDeep(account);
+          // clone formData
+          this.formOriginalData = this._.cloneDeep(this.formData);
+        }
+      } else {
+        // copy account
+        // get account by id
+        let account = this.$store.getters.getBankAccountByID(this.id);
+        //console.log(account);
+        if (account) {
+          // copy account with new id
+          let newAccount = {
+            accountID: getNewId(),
+            accountNo: account.accountNo,
+            bankName: account.bankName,
+            bankBranchNo: account.bankBranchNo,
+            bankAccountNo: account.bankAccountNo,
+            swiftCode: account.swiftCode,
+            iban: account.iban,
+            addressLine1: account.addressLine1,
+            addressLine2: account.addressLine2,
+            contactName: account.contactName,
+            city: account.city,
+            state: account.state,
+            postcode: account.postcode,
+            country: account.country,
+            phoneNo: account.phoneNo,
+            faxNo: account.faxNo,
+            mobileNo: account.mobileNo,
+            email: account.email,
+            website: account.website,
+            active: true
+          };
+          // use new account
+          this.formData = newAccount;
           // clone formData
           this.formOriginalData = this._.cloneDeep(this.formData);
         }
@@ -298,25 +342,35 @@ export default {
       }
     },
     saveFormData() {
-      if (this.isNewRecord) {
-        // create account
-        this.$store.dispatch("createBankAccount", this.formData);
-      } else {
+      if (this.currentRouteName === "EditBankAccount") {
         // update account
         this.$store.dispatch("updateBankAccount", this.formData);
+      } else {
+        // create account
+        this.$store.dispatch("createBankAccount", this.formData);
+        // update bank accounts grid state to set focus row to new record
+        // get grid state
+        var state = localStorage.getItem("BankAccounts");
+        //console.log(state);
+        if (state) {
+          state = JSON.parse(state);
+          state.focusedRowKey = this.formData.accountID;
+          // save state
+          localStorage.setItem("BankAccounts", JSON.stringify(state));
+        }
       }
 
       // update formOriginalData with formData
       this.formOriginalData = this.formData;
     },
     accountNoValidation(e) {
-      if (this.isNewRecord) {
+      if (this.currentRouteName === "EditBankAccount") {
+        // existing account
+        return true;
+      } else {
         // new account
         let result = this.$store.getters.bankAccountExistsByAccountNo(e.value);
         return (result = !result);
-      } else {
-        // existing account
-        return true;
       }
     },
     onGeneralFieldDataChanged() {
@@ -336,12 +390,12 @@ export default {
   },
   mounted() {
     //console.log("mounted");
-    if (this.isNewRecord) {
-      // new account
-      this.$refs["formGeneral"].instance.getEditor("accountNo").focus();
-    } else {
+    if (this.currentRouteName === "EditBankAccount") {
       // existing account
       this.$refs["formGeneral"].instance.getEditor("bankName").focus();
+    } else {
+      // new account
+      this.$refs["formGeneral"].instance.getEditor("accountNo").focus();
     }
   }
 };

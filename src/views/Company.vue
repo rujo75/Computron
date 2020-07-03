@@ -32,7 +32,10 @@
               <dx-form-item data-field="companyID" :editor-options="{disabled: true}">
                 <dx-label text="Company ID" />
               </dx-form-item>
-              <dx-form-item data-field="companyNo" :editor-options="{disabled: !isNewRecord}">
+              <dx-form-item
+                data-field="companyNo"
+                :editor-options="{disabled: this.currentRouteName === 'EditCompany'}"
+              >
                 <dx-label text="Company No" />
                 <dx-required-rule message="Company No is required!" />
                 <dx-pattern-rule
@@ -158,6 +161,7 @@
             :form-data="formData"
             :scrolling-enabled="true"
             validation-group="companyData3"
+            @field-data-changed="onPaymentsFieldDataChanged"
           >
             <dx-group-item :col-count="2">
               <dx-form-item data-field="bankName">
@@ -299,21 +303,16 @@ export default {
     };
   },
   computed: {
-    isNewRecord() {
-      if (this.id === "") {
-        // new company
-        return true;
-      } else {
-        // company company
-        return false;
-      }
+    currentRouteName() {
+      // returns NewCompany or EditCompany or CopyCompany
+      return this.$route.name;
     }
   },
   methods: {
     loadFormData: function() {
       //console.log("loadFormData");
       //console.log("id: " + this.id);
-      if (this.isNewRecord) {
+      if (this.currentRouteName === "CreateCompany") {
         // create company
         let newCompany = {
           companyID: getNewId(),
@@ -328,12 +327,9 @@ export default {
           postcode: "",
           country: "",
           phoneNo: "",
-          phoneNoFormatted: "",
           faxNo: "",
           mobileNo: "",
-          mobileNoFormatted: "",
           taxNo: "",
-          taxNoFormatted: "",
           email: "",
           website: "",
           logo: "",
@@ -348,7 +344,7 @@ export default {
         this.formData = newCompany;
         // clone formData
         this.formOriginalData = this._.cloneDeep(this.formData);
-      } else {
+      } else if (this.currentRouteName === "EditCompany") {
         // edit company
         // get company by id
         let company = this.$store.getters.getCompanyByID(this.id);
@@ -356,6 +352,44 @@ export default {
         if (company) {
           // clone company
           this.formData = this._.cloneDeep(company);
+          // clone formData
+          this.formOriginalData = this._.cloneDeep(this.formData);
+        }
+      } else {
+        // copy company
+        // get company by id
+        let company = this.$store.getters.getCompanyByID(this.id);
+        //console.log(company);
+        if (company) {
+          // copy user with new id
+          let newCompany = {
+            companyID: getNewId(),
+            companyNo: company.companyNo,
+            companyName: company.companyName,
+            companyCode: company.companyCode,
+            addressLine1: company.addressLine1,
+            addressLine2: company.addressLine2,
+            contactName: company.contactName,
+            city: company.city,
+            state: company.state,
+            postcode: company.postcode,
+            country: company.country,
+            phoneNo: company.phoneNo,
+            faxNo: company.faxNo,
+            mobileNo: company.mobileNo,
+            taxNo: company.taxNo,
+            email: company.email,
+            website: company.website,
+            logo: company.logo,
+            bankName: company.bankName,
+            bankBranchNo: company.bankBranchNo,
+            bankAccountNo: company.bankAccountNo,
+            swiftCode: company.swiftCode,
+            iban: company.iban,
+            active: true
+          };
+          // use new company
+          this.formData = newCompany;
           // clone formData
           this.formOriginalData = this._.cloneDeep(this.formData);
         }
@@ -403,46 +437,50 @@ export default {
     },
     saveFormData() {
       //console.log("saveFormData");
-      if (this.isNewRecord) {
-        // create company
-        this.$store.dispatch("createCompany", this.formData);
-      } else {
+      if (this.currentRouteName === "EditCompany") {
         // update company
         this.$store.dispatch("updateCompany", this.formData);
+      } else {
+        // create company
+        this.$store.dispatch("createCompany", this.formData);
+        // update company grid state to set focus row to new record
+        // get grid state
+        var state = localStorage.getItem("Companies");
+        //console.log(state);
+        if (state) {
+          state = JSON.parse(state);
+          state.focusedRowKey = this.formData.companyID;
+          // save state
+          localStorage.setItem("Companies", JSON.stringify(state));
+        }
       }
 
       // update formOriginalData with formData
       this.formOriginalData = this.formData;
     },
     companyNoValidation(e) {
-      if (this.isNewRecord) {
+      if (this.currentRouteName === "EditCompany") {
+        // existing company
+        return true;
+      } else {
         // new company
         let result = this.$store.getters.companyExistsByCompanyNo(e.value);
         return (result = !result);
-      } else {
-        // existing company
-        return true;
       }
     },
     companyNameValidation(e) {
-      if (this.isNewRecord) {
-        // new company
-        let result = this.$store.getters.companyExistsByCompanyName(e.value);
-        return (result = !result);
-      } else {
-        // existing company
-        return true;
-      }
+      let result = this.$store.getters.companyExistsByCompanyName(
+        this.formData.companyID,
+        e.value
+      );
+      return (result = !result);
     },
     companyCodeValidation(e) {
-      if (this.isNewRecord) {
-        // new company
-        let result = this.$store.getters.companyExistsByCompanyCode(e.value);
-        return (result = !result);
-      } else {
-        // existing company
-        return true;
-      }
+      let result = this.$store.getters.companyExistsByCompanyCode(
+        this.formData.companyID,
+        e.value
+      );
+      return (result = !result);
     },
     onGeneralFieldDataChanged() {
       //console.log(e);
@@ -453,6 +491,11 @@ export default {
       //console.log(e);
       var result = this.$refs["formCommunication"].instance.validate();
       this.tabsData[1].isValid = result.isValid;
+    },
+    onPaymentsFieldDataChanged() {
+      //console.log(e);
+      var result = this.$refs["formPayments"].instance.validate();
+      this.tabsData[2].isValid = result.isValid;
     }
   },
   created() {
@@ -461,12 +504,12 @@ export default {
   },
   mounted() {
     //console.log("mounted");
-    if (this.isNewRecord) {
-      // new company
-      this.$refs["formGeneral"].instance.getEditor("companyNo").focus();
-    } else {
+    if (this.currentRouteName === "EditCompany") {
       // existing company
       this.$refs["formGeneral"].instance.getEditor("companyName").focus();
+    } else {
+      // new company
+      this.$refs["formGeneral"].instance.getEditor("companyNo").focus();
     }
   }
 };

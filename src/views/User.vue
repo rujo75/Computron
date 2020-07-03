@@ -314,8 +314,8 @@ export default {
       // update formOriginalData with formData
       this.formOriginalData = this.formData;
     },
-    userNoValidationAsync(params) {
-      console.log("params.value: " + params.value);
+    userNoValidationAsync() {
+      //console.log("params.value: " + params.value);
       /*return new Promise((resolve, reject) => {
         if (params.value === "1") {
           resolve();
@@ -323,13 +323,11 @@ export default {
           reject("User No is already used!");
         }
       });*/
-
       /*return new Promise(resolve => {
         setTimeout(function() {
           resolve(params.value === "1");
         }, 1000);
       });*/
-
       /*return new Promise((resolve, reject) => {
         setTimeout(function() {
           if (params.value === "1") {

@@ -49,28 +49,101 @@
         :width="150"
       />
       <dx-column
+        data-field="swiftCode"
+        caption="SWIFT Code"
+        data-type="string"
+        :width="100"
+        :visible="false"
+      />
+      <dx-column data-field="iban" caption="IBAN" data-type="string" :width="100" :visible="false" />
+      <dx-column
+        data-field="addressLine1"
+        caption="Address Line 1"
+        data-type="string"
+        :width="200"
+        :visible="false"
+      />
+      <dx-column
+        data-field="addressLine2"
+        caption="Address Line 2"
+        data-type="string"
+        :width="200"
+        :visible="false"
+      />
+      <dx-column
+        data-field="contactName"
+        caption="Contact Name"
+        data-type="string"
+        :width="130"
+        :visible="false"
+      />
+      <dx-column data-field="city" caption="City" data-type="string" :width="120" :visible="false" />
+      <dx-column
+        data-field="postcode"
+        caption="Postcode"
+        data-type="string"
+        :width="90"
+        :visible="false"
+      />
+      <dx-column
+        data-field="country"
+        caption="Country"
+        data-type="string"
+        :width="120"
+        :visible="false"
+      />
+      <dx-column
+        data-field="state"
+        caption="State"
+        data-type="string"
+        :width="120"
+        :visible="false"
+      />
+      <dx-column
+        data-field="phoneNo"
+        caption="Phone No"
+        data-type="string"
+        :width="120"
+        :visible="false"
+        cell-template="phoneNoTemplate"
+      />
+      <dx-column
+        data-field="faxNo"
+        caption="Fax No"
+        data-type="string"
+        :width="120"
+        :visible="false"
+        cell-template="phoneNoTemplate"
+      />
+      <dx-column
+        data-field="mobileNo"
+        caption="Mobile No"
+        data-type="string"
+        :width="120"
+        :visible="false"
+        cell-template="mobileNoTemplate"
+      />
+      <dx-column
+        data-field="email"
+        caption="Email"
+        data-type="string"
+        :width="200"
+        :visible="false"
+      />
+      <dx-column
+        data-field="website"
+        caption="Home Page"
+        data-type="string"
+        :width="200"
+        :visible="false"
+      />
+      <dx-column
         data-field="active"
         caption="Active"
         data-type="boolean"
         :width="80"
         :visible="false"
       />
-      <!--<dx-column data-field="email" caption="Email" data-type="string" :width="250" />
-      <dx-column data-field="fullName" caption="Full Name" data-type="string" :width="300" />
-      <dx-column
-        data-field="expiryDate"
-        caption="Expiry Date"
-        data-type="date"
-        :width="150"
-        :visible="false"
-      />
-      <dx-column
-        data-field="mustChangePassword"
-        caption="Change Password"
-        data-type="boolean"
-        :width="150"
-        :visible="false"
-      />-->
       <dx-load-panel :enabled="false" />
       <dx-group-panel :visible="false" />
       <dx-search-panel :visible="true" :width="250" />
@@ -78,6 +151,11 @@
       <div slot="IDTemplate" slot-scope="{ data: item }">
         <span @click.stop.prevent="onIDClick(item);" class="data-grid-hyperlink">{{ item.value }}</span>
       </div>
+      <div slot="phoneNoTemplate" slot-scope="{ data: item }">{{ item.value | VMask(phoneNoMask) }}</div>
+      <div
+        slot="mobileNoTemplate"
+        slot-scope="{ data: item }"
+      >{{ item.value | VMask(mobileNoMask) }}</div>
       <div
         slot="bankBranchNoTemplate"
         slot-scope="{ data: item }"
@@ -99,6 +177,7 @@ import {
 import { mapGetters } from "vuex";
 
 var editToolbarButtonRef = null;
+var copyToolbarButtonRef = null;
 var deleteToolbarButtonRef = null;
 
 export default {
@@ -116,6 +195,8 @@ export default {
     return {
       pageSizes: [10, 15, 20, 25, 50, 100],
       focusedRowKey: "",
+      phoneNoMask: "(##) #### ####",
+      mobileNoMask: "#### ### ###",
       bankBranchNoMask: "###-###",
       stateStoring: {
         enabled: true,
@@ -137,28 +218,17 @@ export default {
               state.focusedRowKey = "";
             }
 
-            // check new row key
-            if (this.newUserID !== "") {
-              newFocusedRowKey = this.newBankAccountID;
-            }
+            // check the old key stored in the local storage
+            newFocusedRowKey = state.focusedRowKey;
             let index = this._.findIndex(this.getBankAccounts, {
               accountID: newFocusedRowKey
             });
-
             if (index === -1) {
-              // new row key not found
-              // check the old key stored in the local storage
-              newFocusedRowKey = state.focusedRowKey;
-              index = this._.findIndex(this.getBankAccounts, {
-                accountID: newFocusedRowKey
-              });
-              if (index === -1) {
-                // old key no longer exists
-                // check if we have any records
-                if (this.getBankAccounts.length > 0) {
-                  // select the first row
-                  newFocusedRowKey = this.getBankAccounts[0].accountID;
-                }
+              // old key no longer exists
+              // check if we have any records
+              if (this.getBankAccounts.length > 0) {
+                // select the first row
+                newFocusedRowKey = this.getBankAccounts[0].accountID;
               }
             }
 
@@ -175,7 +245,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getBankAccounts", "newBankAccountID", "getCurrentPath"])
+    ...mapGetters(["getBankAccounts", "getCurrentPath"])
   },
   methods: {
     onToolbarPreparing(e) {
@@ -190,7 +260,7 @@ export default {
             focusStateEnabled: false,
             disabled: false,
             onClick: () => {
-              this.$router.push("/BankAccount");
+              this.$router.push("/CreateBankAccount");
             }
           }
         },
@@ -207,8 +277,24 @@ export default {
               editToolbarButtonRef = e.component;
             },
             onClick: () => {
-              this.$store.dispatch("clearNewBankAccountID");
-              this.$router.push("/BankAccount/" + this.focusedRowKey);
+              this.$router.push("/EditBankAccount/" + this.focusedRowKey);
+            }
+          }
+        },
+        {
+          location: "before",
+          widget: "dxButton",
+          options: {
+            icon: "fas fa-copy",
+            stylingMode: "text",
+            text: "Copy",
+            focusStateEnabled: false,
+            disabled: true,
+            onInitialized: e => {
+              copyToolbarButtonRef = e.component;
+            },
+            onClick: () => {
+              this.$router.push("/CopyBankAccount/" + this.focusedRowKey);
             }
           }
         },
@@ -252,8 +338,7 @@ export default {
       //console.log("onIDClick");
       setTimeout(
         function() {
-          this.$store.dispatch("clearNewBankAccountID");
-          this.$router.push("/BankAccount/" + this.focusedRowKey);
+          this.$router.push("/EditBankAccount/" + this.focusedRowKey);
         }.bind(this),
         1
       );
@@ -265,9 +350,11 @@ export default {
         //console.log("focusedRowKey value changed: " + value);
         if (value === "" || this.getBankAccounts.length === 0) {
           editToolbarButtonRef.option("disabled", true);
+          copyToolbarButtonRef.option("disabled", true);
           deleteToolbarButtonRef.option("disabled", true);
         } else {
           editToolbarButtonRef.option("disabled", false);
+          copyToolbarButtonRef.option("disabled", false);
           deleteToolbarButtonRef.option("disabled", false);
         }
       }

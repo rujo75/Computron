@@ -32,14 +32,20 @@ const router = new Router({
       component: Companies
     },
     {
-      path: "/Company",
+      path: "/CreateCompany",
       name: "CreateCompany",
       component: Company
     },
     {
-      path: "/Company/:id",
+      path: "/EditCompany/:id",
       props: true,
       name: "EditCompany",
+      component: Company
+    },
+    {
+      path: "/CopyCompany/:id",
+      props: true,
+      name: "CopyCompany",
       component: Company
     },
     {
@@ -75,14 +81,20 @@ const router = new Router({
       component: BankAccounts
     },
     {
-      path: "/BankAccount",
+      path: "/CreateBankAccount",
       name: "CreateBankAccount",
       component: BankAccount
     },
     {
-      path: "/BankAccount/:id",
+      path: "/EditBankAccount/:id",
       props: true,
       name: "EditBankAccount",
+      component: BankAccount
+    },
+    {
+      path: "/CopyBankAccount/:id",
+      props: true,
+      name: "CopyBankAccount",
       component: BankAccount
     },
   ]

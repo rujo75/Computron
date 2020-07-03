@@ -1,7 +1,6 @@
 import _ from "lodash";
 
 const state = {
-    newBankAccountID: "",
     bankAccounts: [
         {
             accountID: "185bad2d-0a16-4e6b-a6a1-49ac2d380c57",
@@ -29,8 +28,6 @@ const state = {
 }
 
 const getters = {
-    newBankAccountID: state => state.newBankAccountID,
-
     getBankAccounts: state => state.bankAccounts,
 
     getBankAccountByID: (state) => (id) => {
@@ -52,23 +49,11 @@ const getters = {
             return false
         }
     },
-
-    /*bankAccountExistsByCompanyCode: (state) => (companyCode) => {
-        if (state.companies.find(company => company.companyCode.toUpperCase() === companyCode.toUpperCase())) {
-            return true
-        } else {
-            return false
-        }
-    }*/
 };
 
 const mutations = {
     createBankAccount: (state, account) => {
         state.bankAccounts.push(account);
-    },
-
-    setNewBankAccountID: (state, id) => {
-        state.newBankAccountID = id;
     },
 
     updateBankAccount: (state, account) => {
@@ -90,11 +75,6 @@ const mutations = {
 const actions = {
     createBankAccount: ({ commit }, account) => {
         commit("createBankAccount", account);
-        commit("setNewBankAccountID", account.accountID);
-    },
-
-    clearNewBankAccountID: ({ commit }) => {
-        commit("setNewBankAccountID", "");
     },
 
     updateBankAccount: ({ commit }, account) => {

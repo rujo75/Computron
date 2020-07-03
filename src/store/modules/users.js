@@ -65,8 +65,6 @@ const getters = {
     },
 
     userExistsByUserName: (state) => (id, userName) => {
-        console.log("id: " + id)
-        console.log("userName: " + userName)
         if (state.users.find(user => (user.userName.toUpperCase() === userName.toUpperCase() && user.userID !== id))) {
             return true
         } else {
@@ -129,7 +127,7 @@ const actions = {
             );
             state.signInLoading = false;
             commit("userStatus", userData.user);
-            console.log(userData.user)
+            //console.log(userData.user)
         } catch (error) {
             const errorCode = error.code;
             const errorMessage = error.message;

@@ -37,13 +37,6 @@
       <dx-column data-field="email" caption="Email" data-type="string" :width="250" />
       <dx-column data-field="fullName" caption="Full Name" data-type="string" :width="300" />
       <dx-column
-        data-field="active"
-        caption="Active"
-        data-type="boolean"
-        :width="80"
-        :visible="false"
-      />
-      <dx-column
         data-field="expiryDate"
         caption="Expiry Date"
         data-type="date"
@@ -55,6 +48,13 @@
         caption="Change Password"
         data-type="boolean"
         :width="150"
+        :visible="false"
+      />
+      <dx-column
+        data-field="active"
+        caption="Active"
+        data-type="boolean"
+        :width="80"
         :visible="false"
       />
       <dx-load-panel :enabled="false" />
