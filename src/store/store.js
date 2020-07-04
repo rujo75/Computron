@@ -5,6 +5,7 @@ import users from "./modules/users";
 import companies from "./modules/companies";
 import bankAccounts from "./modules/bankAccounts";
 import favourites from "./modules/favourites";
+import vendors from "./modules/vendors";
 import { vuexfireMutations } from "vuexfire";
 
 Vue.use(Vuex);
@@ -16,6 +17,7 @@ export const store = new Vuex.Store({
         users,
         companies,
         bankAccounts,
-        favourites
+        favourites,
+        vendors
     }
 });

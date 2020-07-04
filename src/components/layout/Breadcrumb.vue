@@ -87,8 +87,12 @@ export default {
     onButtonClick(e) {
       if (e.component.option("link")) {
         if (this.$route.path !== e.component.option("link")) {
-          console.log("Breadcrumb button click");
-          console.log(e.component.option("link"));
+          //console.log("Breadcrumb button click");
+          //console.log(e.component.option("link"));
+          // store current path
+          // e.component.option("link") = /Page/Administration
+          const menuIdPath = e.component.option("link").split("/");
+          this.$store.dispatch("setCurrentPath", menuIdPath[2]);
           // navigate to new page
           this.$router.push(e.component.option("link"));
         }
@@ -97,8 +101,8 @@ export default {
     onItemClick(e) {
       if (e.itemData.link) {
         if (this.$route.path !== e.itemData.link) {
-          console.log("Breadcrumb item click");
-          console.log(e.itemData.link);
+          //console.log("Breadcrumb item click");
+          //console.log(e.itemData.link);
           // store current path
           this.$store.dispatch("setCurrentPath", e.itemData.path);
           // navigate to new page

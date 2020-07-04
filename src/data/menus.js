@@ -69,12 +69,12 @@ export const MenuData = {
           items: []
         },
         {
-          id: "Suppliers",
-          text: "Suppliers",
-          description: "Create and manage your suppliers.",
+          id: "Vendors",
+          text: "Vendors",
+          description: "Create and manage your vendors.",
           icon: "fas fa-industry",
-          link: "/Suppliers",
-          path: "Contacts/Suppliers",
+          link: "/Vendors",
+          path: "Contacts/Vendors",
           favourite: false,
           items: []
         },
