@@ -33,22 +33,21 @@
                 <dx-label text="Company ID" />
               </dx-form-item>
               <dx-form-item
-                data-field="companyNo"
+                data-field="companyCode"
                 :editor-options="{disabled: this.currentRouteName === 'EditCompany'}"
               >
-                <dx-label text="Company No" />
-                <dx-required-rule message="Company No is required!" />
+                <dx-required-rule message="Company Code is required!" />
                 <dx-pattern-rule
-                  :pattern="companyNoPattern"
-                  message="Do not use spaces in the Company No!"
+                  :pattern="companyCodePattern"
+                  message="Do not use spaces in the Company Code!"
                 />
                 <dx-string-length-rule
                   :max="20"
-                  message="Company No must have maximum 20 characters!"
+                  message="Company Code must have maximum 20 characters!"
                 />
                 <dx-custom-rule
-                  :validation-callback="companyNoValidation"
-                  message="Company No is already used!"
+                  :validation-callback="companyCodeValidation"
+                  message="Company Code is already used!"
                 />
               </dx-form-item>
             </dx-group-item>
@@ -62,16 +61,6 @@
                 <dx-custom-rule
                   :validation-callback="companyNameValidation"
                   message="Company Name is already used!"
-                />
-              </dx-form-item>
-              <dx-form-item data-field="companyCode">
-                <dx-string-length-rule
-                  :max="20"
-                  message="Company Code must have maximum 20 characters!"
-                />
-                <dx-custom-rule
-                  :validation-callback="companyCodeValidation"
-                  message="Company Code is already used!"
                 />
               </dx-form-item>
               <dx-form-item data-field="addressLine1">
@@ -299,7 +288,7 @@ export default {
       bankBranchNoEditorOptions: {
         mask: "000-000"
       },
-      companyNoPattern: /^[^\s]+$/
+      companyCodePattern: /^[^\s]+$/
     };
   },
   computed: {
@@ -316,9 +305,8 @@ export default {
         // create company
         let newCompany = {
           companyID: getNewId(),
-          companyNo: "",
-          companyName: "",
           companyCode: "",
+          companyName: "",
           addressLine1: "",
           addressLine2: "",
           contactName: "",
@@ -364,9 +352,8 @@ export default {
           // copy user with new id
           let newCompany = {
             companyID: getNewId(),
-            companyNo: company.companyNo,
-            companyName: company.companyName,
             companyCode: company.companyCode,
+            companyName: company.companyName,
             addressLine1: company.addressLine1,
             addressLine2: company.addressLine2,
             contactName: company.contactName,
@@ -458,16 +445,6 @@ export default {
       // update formOriginalData with formData
       this.formOriginalData = this.formData;
     },
-    companyNoValidation(e) {
-      if (this.currentRouteName === "EditCompany") {
-        // existing company
-        return true;
-      } else {
-        // new company
-        let result = this.$store.getters.companyExistsByCompanyNo(e.value);
-        return (result = !result);
-      }
-    },
     companyNameValidation(e) {
       let result = this.$store.getters.companyExistsByCompanyName(
         this.formData.companyID,
@@ -509,7 +486,7 @@ export default {
       this.$refs["formGeneral"].instance.getEditor("companyName").focus();
     } else {
       // new company
-      this.$refs["formGeneral"].instance.getEditor("companyNo").focus();
+      this.$refs["formGeneral"].instance.getEditor("companyCode").focus();
     }
   }
 };

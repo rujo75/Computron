@@ -4,9 +4,8 @@ const state = {
     companies: [
         {
             companyID: "185bad2d-0a16-4e6b-a6a1-49ac2d380c57",
-            companyNo: "1",
-            companyName: "Globeworks",
             companyCode: "GLB",
+            companyName: "Globeworks",
             addressLine1: "16 Parkes Road",
             addressLine2: "",
             contactName: "John Globe",
@@ -38,8 +37,8 @@ const getters = {
         return state.companies.find(company => company.companyID === id)
     },
 
-    companyExistsByCompanyNo: (state) => (companyNo) => {
-        if (state.companies.find(company => company.companyNo.toUpperCase() === companyNo.toUpperCase())) {
+    companyExistsByCompanyCode: (state) => (id, companyCode) => {
+        if (state.companies.find(company => (company.companyCode.toUpperCase() === companyCode.toUpperCase() && company.companyID !== id))) {
             return true
         } else {
             return false
@@ -53,14 +52,6 @@ const getters = {
             return false
         }
     },
-
-    companyExistsByCompanyCode: (state) => (id, companyCode) => {
-        if (state.companies.find(company => (company.companyCode.toUpperCase() === companyCode.toUpperCase() && company.companyID !== id))) {
-            return true
-        } else {
-            return false
-        }
-    }
 };
 
 const mutations = {
