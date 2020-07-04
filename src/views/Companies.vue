@@ -32,19 +32,18 @@
         :visible="false"
         cell-template="IDTemplate"
       />
-      <dx-column data-field="companyNo" caption="Company No" data-type="string" :width="120" />
-      <dx-column
-        data-field="companyName"
-        caption="Company Name"
-        data-type="string"
-        :min-width="200"
-      />
       <dx-column
         data-field="companyCode"
         caption="Company Code"
         data-type="string"
         :width="130"
         :visible="false"
+      />
+      <dx-column
+        data-field="companyName"
+        caption="Company Name"
+        data-type="string"
+        :min-width="200"
       />
       <dx-column
         data-field="addressLine1"

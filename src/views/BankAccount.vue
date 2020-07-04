@@ -33,22 +33,22 @@
                 <dx-label text="Account ID" />
               </dx-form-item>
               <dx-form-item
-                data-field="accountNo"
+                data-field="accountCode"
                 :editor-options="{disabled: this.currentRouteName === 'EditBankAccount'}"
               >
-                <dx-label text="Account No" />
-                <dx-required-rule message="Account No is required!" />
+                <dx-label text="Account Code" />
+                <dx-required-rule message="Account Code is required!" />
                 <dx-pattern-rule
-                  :pattern="accountNoPattern"
-                  message="Do not use spaces in the Account No!"
+                  :pattern="accountCodePattern"
+                  message="Do not use spaces in the Account Code!"
                 />
                 <dx-string-length-rule
                   :max="20"
-                  message="Account No must have maximum 20 characters!"
+                  message="Account Code must have maximum 20 characters!"
                 />
                 <dx-custom-rule
-                  :validation-callback="accountNoValidation"
-                  message="Account No is already used!"
+                  :validation-callback="accountCodeValidation"
+                  message="Account Code is already used!"
                 />
               </dx-form-item>
             </dx-group-item>
@@ -224,7 +224,7 @@ export default {
       bankBranchNoEditorOptions: {
         mask: "000-000"
       },
-      accountNoPattern: /^[^\s]+$/
+      accountCodePattern: /^[^\s]+$/
     };
   },
   computed: {
@@ -241,7 +241,7 @@ export default {
         // create account
         let newAccount = {
           accountID: getNewId(),
-          accountNo: "",
+          accountCode: "",
           bankName: "",
           bankBranchNo: "",
           bankAccountNo: "",
@@ -285,7 +285,7 @@ export default {
           // copy account with new id
           let newAccount = {
             accountID: getNewId(),
-            accountNo: account.accountNo,
+            accountCode: account.accountCode,
             bankName: account.bankName,
             bankBranchNo: account.bankBranchNo,
             bankAccountNo: account.bankAccountNo,
@@ -363,13 +363,15 @@ export default {
       // update formOriginalData with formData
       this.formOriginalData = this.formData;
     },
-    accountNoValidation(e) {
+    accountCodeValidation(e) {
       if (this.currentRouteName === "EditBankAccount") {
         // existing account
         return true;
       } else {
         // new account
-        let result = this.$store.getters.bankAccountExistsByAccountNo(e.value);
+        let result = this.$store.getters.bankAccountExistsByaccountCode(
+          e.value
+        );
         return (result = !result);
       }
     },
@@ -395,7 +397,7 @@ export default {
       this.$refs["formGeneral"].instance.getEditor("bankName").focus();
     } else {
       // new account
-      this.$refs["formGeneral"].instance.getEditor("accountNo").focus();
+      this.$refs["formGeneral"].instance.getEditor("accountCode").focus();
     }
   }
 };

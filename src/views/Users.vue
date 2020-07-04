@@ -32,7 +32,7 @@
         :visible="false"
         cell-template="IDTemplate"
       />
-      <dx-column data-field="userNo" caption="User No" data-type="string" :width="150" />
+      <dx-column data-field="userCode" caption="User Code" data-type="string" :width="150" />
       <dx-column data-field="userName" caption="User Name" data-type="string" :width="150" />
       <dx-column data-field="email" caption="Email" data-type="string" :width="250" />
       <dx-column data-field="fullName" caption="Full Name" data-type="string" :width="300" />

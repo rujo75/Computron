@@ -4,7 +4,7 @@ const state = {
     bankAccounts: [
         {
             accountID: "185bad2d-0a16-4e6b-a6a1-49ac2d380c57",
-            accountNo: "1",
+            accountCode: "1",
             bankName: "Westpac",
             bankBranchNo: "032050",
             bankAccountNo: "111111",
@@ -34,8 +34,8 @@ const getters = {
         return state.bankAccounts.find(account => account.accountID === id)
     },
 
-    bankAccountExistsByAccountNo: (state) => (accountNo) => {
-        if (state.bankAccounts.find(account => account.accountNo.toUpperCase() === accountNo.toUpperCase())) {
+    bankAccountExistsByaccountCode: (state) => (accountCode) => {
+        if (state.bankAccounts.find(account => account.accountCode.toUpperCase() === accountCode.toUpperCase())) {
             return true
         } else {
             return false

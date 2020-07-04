@@ -10,7 +10,7 @@ const state = {
     users: [
         {
             userID: "185bad2d-0a16-4e6b-a6a1-49ac2d380c57",
-            userNo: "1",
+            userCode: "1",
             userName: "drusmir",
             fullName: "Dal Rusmir",
             email: "drusmir@tpg.com",
@@ -21,7 +21,7 @@ const state = {
         },
         {
             userID: "f274ab28-59af-45af-86f5-97a149104476",
-            userNo: "2",
+            userCode: "2",
             userName: "jsmith",
             fullName: "John Smith",
             email: "jsmith@tpg.com",
@@ -32,7 +32,7 @@ const state = {
         },
         {
             userID: "2652c185-09ab-4b8a-8518-7f184a4f2baf",
-            userNo: "3",
+            userCode: "3",
             userName: "jpike",
             fullName: "Jane Pike",
             email: "jpike@tpg.com",
@@ -56,8 +56,8 @@ const getters = {
         return state.users.find(user => user.userID === id)
     },
 
-    userExistsByUserNo: (state) => (userNo) => {
-        if (state.users.find(user => user.userNo.toUpperCase() === userNo.toUpperCase())) {
+    userExistsByuserCode: (state) => (userCode) => {
+        if (state.users.find(user => user.userCode.toUpperCase() === userCode.toUpperCase())) {
             return true
         } else {
             return false

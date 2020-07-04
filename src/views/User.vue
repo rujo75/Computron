@@ -33,26 +33,26 @@
                 <dx-label text="User ID" />
               </dx-form-item>
               <dx-form-item
-                data-field="userNo"
+                data-field="userCode"
                 :editor-options="{disabled: this.currentRouteName === 'EditUser'}"
               >
-                <dx-label text="User No" />
-                <dx-required-rule message="User No is required!" />
+                <dx-label text="User Code" />
+                <dx-required-rule message="User Code is required!" />
                 <dx-pattern-rule
-                  :pattern="userNoPattern"
-                  message="Do not use spaces in the User No!"
+                  :pattern="userCodePattern"
+                  message="Do not use spaces in the User Code!"
                 />
                 <dx-string-length-rule
                   :max="20"
-                  message="User No must have maximum 20 characters!"
+                  message="User Code must have maximum 20 characters!"
                 />
                 <!--<DxAsyncRule
-                    :validation-callback="userNoValidationAsync"
-                    message="User No is already used!"
+                    :validation-callback="userCodeValidationAsync"
+                    message="User Code is already used!"
                 />-->
                 <dx-custom-rule
-                  :validation-callback="userNoValidation"
-                  message="User No is already used!"
+                  :validation-callback="userCodeValidation"
+                  message="User Code is already used!"
                 />
               </dx-form-item>
             </dx-group-item>
@@ -199,7 +199,7 @@ export default {
           this.$router.back();
         }
       },
-      userNoPattern: /^[^\s]+$/,
+      userCodePattern: /^[^\s]+$/,
       userNamePattern: /^[^\s]+$/
     };
   },
@@ -217,7 +217,7 @@ export default {
         // create user
         let newUser = {
           userID: getNewId(),
-          userNo: "",
+          userCode: "",
           userName: "",
           fullName: "",
           email: "",
@@ -226,7 +226,7 @@ export default {
           password: "",
           mustChangePassword: true
         };
-        console.log(newUser);
+        //console.log(newUser);
         // use new user
         this.formData = newUser;
         // clone formData
@@ -251,7 +251,7 @@ export default {
           // copy user with new id
           let newUser = {
             userID: getNewId(),
-            userNo: user.userNo,
+            userCode: user.userCode,
             userName: user.userName,
             fullName: user.fullName,
             email: user.email,
@@ -314,7 +314,7 @@ export default {
       // update formOriginalData with formData
       this.formOriginalData = this.formData;
     },
-    userNoValidationAsync() {
+    userCodeValidationAsync() {
       //console.log("params.value: " + params.value);
       /*return new Promise((resolve, reject) => {
         if (params.value === "1") {
@@ -338,13 +338,13 @@ export default {
         }, 1000);
       });*/
     },
-    userNoValidation(e) {
+    userCodeValidation(e) {
       if (this.currentRouteName === "EditUser") {
         // existing user
         return true;
       } else {
         // new user
-        let result = this.$store.getters.userExistsByUserNo(e.value);
+        let result = this.$store.getters.userExistsByuserCode(e.value);
         return (result = !result);
       }
     },
@@ -379,7 +379,7 @@ export default {
       this.$refs["formGeneral"].instance.getEditor("userName").focus();
     } else {
       // new user
-      this.$refs["formGeneral"].instance.getEditor("userNo").focus();
+      this.$refs["formGeneral"].instance.getEditor("userCode").focus();
     }
   }
 };

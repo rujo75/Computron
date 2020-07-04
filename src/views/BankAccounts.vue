@@ -32,7 +32,7 @@
         :visible="false"
         cell-template="IDTemplate"
       />
-      <dx-column data-field="accountNo" caption="Account No" data-type="string" :width="150" />
+      <dx-column data-field="accountCode" caption="Account Code" data-type="string" :width="150" />
       <dx-column data-field="bankName" caption="Bank Name" data-type="string" :width="150" />
       <dx-column
         data-field="bankBranchNo"
