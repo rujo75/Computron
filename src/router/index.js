@@ -9,6 +9,8 @@ import User from "@/views/User";
 import Settings from "@/views/Settings";
 import BankAccounts from "@/views/BankAccounts";
 import BankAccount from "@/views/BankAccount";
+import Vendors from "@/views/Vendors";
+import Vendor from "@/views/Vendor";
 
 Vue.use(Router);
 
@@ -96,6 +98,28 @@ const router = new Router({
       props: true,
       name: "CopyBankAccount",
       component: BankAccount
+    },
+    {
+      path: "/Vendors",
+      name: "Vendors",
+      component: Vendors
+    },
+    {
+      path: "/CreateVendor",
+      name: "CreateVendor",
+      component: Vendor
+    },
+    {
+      path: "/EditVendor/:id",
+      props: true,
+      name: "EditVendor",
+      component: Vendor
+    },
+    {
+      path: "/CopyVendor/:id",
+      props: true,
+      name: "CopyVendor",
+      component: Vendor
     },
   ]
 });

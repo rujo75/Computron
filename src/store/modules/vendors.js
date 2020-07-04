@@ -1,4 +1,4 @@
-//import _ from "lodash";
+import _ from "lodash";
 
 const state = {
     vendors: [
@@ -56,11 +56,64 @@ const state = {
     ]
 }
 
-const getters = {}
+const getters = {
+    getVendors: state => state.vendors,
 
-const mutations = {}
+    getVendorByID: (state) => (id) => {
+        return state.vendors.find(vendor => vendor.vendorID === id)
+    },
 
-const actions = {}
+    vendorExistsByVendorCode: (state) => (vendorCode) => {
+        if (state.vendors.find(vendor => vendor.vendorCode.toUpperCase() === vendorCode.toUpperCase())) {
+            return true
+        } else {
+            return false
+        }
+    },
+
+    vendorExistsByVendorName: (state) => (id, vendorName) => {
+        if (state.vendors.find(vendor => (vendor.vendorName.toUpperCase() === vendorName.toUpperCase() && vendor.vendorID !== id))) {
+            return true
+        } else {
+            return false
+        }
+    },
+}
+
+const mutations = {
+    createVendor: (state, vendor) => {
+        state.vendors.push(vendor);
+    },
+
+    updateVendor: (state, vendor) => {
+        let index = _.findIndex(state.vendors, { vendorID: vendor.vendorID });
+        //console.log(index)
+        if (index >= 0) {
+            state.vendors.splice(index, 1, vendor)
+        }
+    },
+
+    deleteVendor: (state, id) => {
+        let index = _.findIndex(state.vendors, { vendorID: id });
+        if (index >= 0) {
+            state.vendors.splice(index, 1)
+        }
+    }
+}
+
+const actions = {
+    createVendor: ({ commit }, vendor) => {
+        commit("createVendor", vendor);
+    },
+
+    updateVendor: ({ commit }, vendor) => {
+        commit("updateVendor", vendor);
+    },
+
+    deleteVendor: ({ commit }, id) => {
+        commit("deleteVendor", id);
+    }
+}
 
 export default {
     state,

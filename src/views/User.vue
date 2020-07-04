@@ -344,7 +344,7 @@ export default {
         return true;
       } else {
         // new user
-        let result = this.$store.getters.userExistsByuserCode(e.value);
+        let result = this.$store.getters.userExistsByUserCode(e.value);
         return (result = !result);
       }
     },

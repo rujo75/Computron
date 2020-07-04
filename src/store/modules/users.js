@@ -56,7 +56,7 @@ const getters = {
         return state.users.find(user => user.userID === id)
     },
 
-    userExistsByuserCode: (state) => (userCode) => {
+    userExistsByUserCode: (state) => (userCode) => {
         if (state.users.find(user => user.userCode.toUpperCase() === userCode.toUpperCase())) {
             return true
         } else {

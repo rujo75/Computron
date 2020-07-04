@@ -2,8 +2,8 @@
   <div class="grid-panel">
     <dx-data-grid
       ref="grid"
-      key-expr="companyID"
-      :data-source="getCompanies"
+      key-expr="vendorID"
+      :data-source="getVendors"
       :remote-operations="false"
       :allow-column-resizing="true"
       :allow-column-reordering="true"
@@ -22,30 +22,25 @@
       @toolbar-preparing="onToolbarPreparing($event);"
       @focused-row-changed="onFocusedRowChanged"
     >
-      <dx-export :enabled="true" :allow-export-selected-data="false" file-name="Companies" />
+      <dx-export :enabled="true" :allow-export-selected-data="false" file-name="Vendors" />
       <dx-column-chooser :enabled="true" />
       <dx-column
-        data-field="companyID"
-        caption="Company ID"
+        data-field="vendorID"
+        caption="Vendor ID"
         data-type="string"
         :width="300"
         :visible="false"
         cell-template="IDTemplate"
       />
       <dx-column
-        data-field="companyCode"
-        caption="Company Code"
+        data-field="vendorCode"
+        caption="Vendor Code"
         data-type="string"
         :width="130"
         :visible="false"
       />
-      <dx-column
-        data-field="companyName"
-        caption="Company Name"
-        data-type="string"
-        :min-width="200"
-      />
-      <dx-column
+      <dx-column data-field="vendorName" caption="Vendor Name" data-type="string" :min-width="200" />
+      <!--<dx-column
         data-field="addressLine1"
         caption="Address Line 1"
         data-type="string"
@@ -163,7 +158,7 @@
         :width="100"
         :visible="false"
       />
-      <dx-column data-field="iban" caption="IBAN" data-type="string" :width="100" :visible="false" />
+      <dx-column data-field="iban" caption="IBAN" data-type="string" :width="100" :visible="false" />-->
       <dx-column
         data-field="active"
         caption="Active"
@@ -202,7 +197,6 @@ import {
   DxSearchPanel,
   DxColumnChooser,
   DxExport
-  //DxSelection
 } from "devextreme-vue/data-grid";
 import { mapGetters } from "vuex";
 
@@ -211,7 +205,7 @@ var copyToolbarButtonRef = null;
 var deleteToolbarButtonRef = null;
 
 export default {
-  name: "companies",
+  name: "vendors",
   components: {
     DxDataGrid,
     DxColumn,
@@ -220,7 +214,6 @@ export default {
     DxSearchPanel,
     DxColumnChooser,
     DxExport
-    //DxSelection
   },
   data() {
     return {
@@ -232,7 +225,7 @@ export default {
       bankBranchNoMask: "###-###",
       stateStoring: {
         enabled: true,
-        storageKey: "Companies",
+        storageKey: "Vendors",
         type: "custom",
         savingTimeout: 0,
         customLoad: function() {
@@ -252,15 +245,15 @@ export default {
 
             // check the old key stored in the local storage
             newFocusedRowKey = state.focusedRowKey;
-            let index = this._.findIndex(this.getCompanies, {
-              companyID: newFocusedRowKey
+            let index = this._.findIndex(this.getVendors, {
+              vendorID: newFocusedRowKey
             });
             if (index === -1) {
               // old key no longer exists
               // check if we have any records
-              if (this.getCompanies.length > 0) {
+              if (this.getVendors.length > 0) {
                 // select the first row
-                newFocusedRowKey = this.getCompanies[0].companyID;
+                newFocusedRowKey = this.getVendors[0].vendorID;
               }
             }
 
@@ -277,7 +270,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getCompanies", "getCurrentPath"])
+    ...mapGetters(["getVendors", "getCurrentPath"])
   },
   methods: {
     onToolbarPreparing(e) {
@@ -292,7 +285,7 @@ export default {
             focusStateEnabled: false,
             disabled: false,
             onClick: () => {
-              this.$router.push("/CreateCompany");
+              this.$router.push("/CreateVendor");
             }
           }
         },
@@ -309,7 +302,7 @@ export default {
               editToolbarButtonRef = e.component;
             },
             onClick: () => {
-              this.$router.push("/EditCompany/" + this.focusedRowKey);
+              this.$router.push("/EditVendor/" + this.focusedRowKey);
             }
           }
         },
@@ -326,7 +319,7 @@ export default {
               copyToolbarButtonRef = e.component;
             },
             onClick: () => {
-              this.$router.push("/CopyCompany/" + this.focusedRowKey);
+              this.$router.push("/CopyVendor/" + this.focusedRowKey);
             }
           }
         },
@@ -343,7 +336,7 @@ export default {
               deleteToolbarButtonRef = e.component;
             },
             onClick: () => {
-              this.$store.dispatch("deleteCompany", this.focusedRowKey);
+              this.$store.dispatch("deleteVendor", this.focusedRowKey);
               this.focusedRowKey = "";
             }
           }
@@ -365,7 +358,7 @@ export default {
       //console.log("onIDClick");
       setTimeout(
         function() {
-          this.$router.push("/EditCompany/" + this.focusedRowKey);
+          this.$router.push("/EditVendor/" + this.focusedRowKey);
         }.bind(this),
         1
       );
@@ -375,7 +368,7 @@ export default {
     focusedRowKey: {
       handler(value) {
         //console.log("focusedRowKey value changed: " + value);
-        if (value === "" || this.getCompanies.length === 0) {
+        if (value === "" || this.getVendors.length === 0) {
           editToolbarButtonRef.option("disabled", true);
           copyToolbarButtonRef.option("disabled", true);
           deleteToolbarButtonRef.option("disabled", true);
