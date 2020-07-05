@@ -6,6 +6,20 @@ const state = {
             vendorID: "185bad2d-0a16-4e6b-a6a1-49ac2d380c57",
             vendorCode: "1",
             vendorName: "Tyre and Wheels Pty Ltd",
+            contacts: [
+                {
+                    contactID: "185bad2d-0a16-4e6b-a6a1-49ac2d380c57",
+                    contactCode: "1",
+                    contactName: "Jenet Changhi",
+                    jobTitle: "Sales Manager",
+                    department: "Sales",
+                    phoneNo: "0230767856",
+                    faxNo: "",
+                    mobileNo: "",
+                    email: "jchanghi@tyreandwheels.com.au",
+                    active: true
+                }
+            ],
             addresses: [
                 {
                     addressID: "185bad2d-0a16-4e6b-a6a1-49ac2d380c57",
@@ -18,10 +32,10 @@ const state = {
                     state: "VIC",
                     postcode: "3000",
                     country: "AUS",
-                    phoneNo: "",
+                    phoneNo: "0274585434",
                     faxNo: "",
                     mobileNo: "",
-                    email: "admin@tyreandwheels.com.au",
+                    email: "sales@tyreandwheels.com.au",
                     website: "www.tyreandwheels.com.au",
                     active: true
                 }
@@ -51,6 +65,9 @@ const state = {
                 }
             ],
             taxNo: "56765454758",
+            pricesIncludeTax: false,
+            lastDateModified: "",
+            lastUserModified: "",
             active: true
         }
     ]

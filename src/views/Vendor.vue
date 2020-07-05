@@ -28,7 +28,7 @@
             validation-group="vendorData"
             @field-data-changed="onGeneralFieldDataChanged"
           >
-            <dx-group-item :col-count="2">
+            <dx-group-item :col-count="2" caption="Vendor Information">
               <dx-form-item data-field="vendorID" :editor-options="{disabled: true}">
                 <dx-label text="Vendor ID" />
               </dx-form-item>
@@ -61,13 +61,67 @@
                   message="Vendor Name must have maximum 255 characters!"
                 />
               </dx-form-item>
+              <dx-form-item data-field="taxNo" :editor-options="taxNoEditorOptions">
+                <dx-label text="ABN" />
+              </dx-form-item>
             </dx-group-item>
             <dx-group-item :col-count="2">
               <dx-form-item data-field="active" editor-type="dxCheckBox" />
             </dx-group-item>
+            <dx-group-item :col-count="2">
+              <dx-group-item :col-count="1" caption="Address">
+                <dx-form-item data-field="addressName"></dx-form-item>
+                <dx-form-item data-field="addressLine1"></dx-form-item>
+                <dx-form-item data-field="addressLine2"></dx-form-item>
+                <dx-form-item data-field="city"></dx-form-item>
+                <dx-form-item data-field="postcode" :editor-options="postcodeEditorOptions" />
+                <dx-form-item
+                  data-field="country"
+                  editor-type="dxSelectBox"
+                  :editor-options="countryEditorOptions"
+                />
+                <dx-form-item
+                  data-field="state"
+                  editor-type="dxSelectBox"
+                  :editor-options="stateEditorOptions"
+                />
+              </dx-group-item>
+              <dx-group-item :col-count="1" caption="Contact">
+                <dx-form-item data-field="contactCode"></dx-form-item>
+                <dx-form-item data-field="contactName">
+                  <dx-string-length-rule
+                    :max="255"
+                    message="Contact Name must have maximum 255 characters!"
+                  />
+                </dx-form-item>
+                <dx-form-item data-field="phoneNo" :editor-options="telephoneNoEditorOptions">
+                  <dx-label text="Phone No" />
+                </dx-form-item>
+                <dx-form-item data-field="faxNo" :editor-options="telephoneNoEditorOptions">
+                  <dx-label text="Fax No" />
+                </dx-form-item>
+                <dx-form-item data-field="mobileNo" :editor-options="mobileNoEditorOptions">
+                  <dx-label text="Mobile No" />
+                </dx-form-item>
+                <dx-form-item data-field="email">
+                  <dx-email-rule message="Email is invalid!" />
+                  <dx-string-length-rule
+                    :max="255"
+                    message="Email must have maximum 255 characters!"
+                  />
+                </dx-form-item>
+                <dx-form-item data-field="website">
+                  <dx-label text="Home Page" />
+                  <dx-string-length-rule
+                    :max="255"
+                    message="Home Page must have maximum 255 characters!"
+                  />
+                </dx-form-item>
+              </dx-group-item>
+            </dx-group-item>
           </dx-form>
         </div>
-        <div class="tab" slot="CommunicationTab">
+        <div class="grid-tab" slot="ContactsTab">
           <dx-data-grid
             ref="grid"
             key-expr="addressID"
@@ -86,7 +140,7 @@
             :state-storing="stateStoring"
             column-resizing-mode="widget"
             width="100%"
-            height="calc(100vh - 259px)"
+            height="calc(100vh - 251px)"
             @toolbar-preparing="onCommunicationToolbarPreparing($event);"
             @focused-row-changed="onCommunicationFocusedRowChanged"
           >
@@ -112,7 +166,8 @@
             </div>
           </dx-data-grid>
         </div>
-        <div class="tab" slot="PaymentsTab"></div>
+        <div class="grid-tab" slot="AddressesTab"></div>
+        <div class="grid-tab" slot="BankAccountsTab"></div>
       </dx-tab-panel>
     </div>
   </div>
@@ -187,13 +242,18 @@ export default {
           isValid: true
         },
         {
-          title: "Communication",
-          template: "CommunicationTab",
+          title: "Contacts",
+          template: "ContactsTab",
           isValid: true
         },
         {
-          title: "Payments",
-          template: "PaymentsTab",
+          title: "Addresses",
+          template: "AddressesTab",
+          isValid: true
+        },
+        {
+          title: "Bank Accounts",
+          template: "BankAccountsTab",
           isValid: true
         }
       ],
@@ -525,7 +585,11 @@ export default {
 }
 
 .tab {
-  padding: 15px 15px;
+  padding: 15px;
+}
+
+.grid-tab {
+  padding: 10px;
 }
 
 .form {
