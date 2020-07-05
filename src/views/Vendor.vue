@@ -87,7 +87,7 @@
                 />
               </dx-group-item>
               <dx-group-item :col-count="1" caption="Contact">
-                <dx-form-item data-field="contactCode"></dx-form-item>
+                <dx-form-item data-field="contactCode" editor-type="dxLookup" />
                 <dx-form-item data-field="contactName">
                   <dx-string-length-rule
                     :max="255"
