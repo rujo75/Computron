@@ -87,7 +87,7 @@
                 />
               </dx-group-item>
               <dx-group-item :col-count="1" caption="Contact">
-                <dx-form-item data-field="contactCode" editor-type="dxLookup" />
+                <dx-form-item data-field="contactCode" template="contactCodeTemplate" />
                 <dx-form-item data-field="contactName">
                   <dx-string-length-rule
                     :max="255"
@@ -119,6 +119,15 @@
                 </dx-form-item>
               </dx-group-item>
             </dx-group-item>
+            <!--contactCodeTemplate-->
+            <template #contactCodeTemplate>
+              <Div>
+                <DxLookup>
+                  <!--<DxDropDownOptions :show-title="false" />-->
+                </DxLookup>
+                <DxButton name="createContactCode" :options="createContactCodeButton" />
+              </Div>
+            </template>
           </dx-form>
         </div>
         <div class="grid-tab" slot="ContactsTab">
@@ -196,6 +205,8 @@ import {
   DxColumnChooser
   //DxExport
 } from "devextreme-vue/data-grid";
+import { DxLookup } from "devextreme-vue/lookup";
+import { DxButton } from "devextreme-vue";
 import { getNewId } from "../store/common";
 
 var editToolbarButtonRef = null;
@@ -228,7 +239,10 @@ export default {
     DxLoadPanel,
     DxGroupPanel,
     DxSearchPanel,
-    DxColumnChooser
+    DxColumnChooser,
+    DxLookup,
+    //DxDropDownOptions,
+    DxButton
     //DxExport
   },
   data() {
@@ -274,6 +288,9 @@ export default {
         }
       },
       vendorCodePattern: /^[^\s]+$/,
+      createContactCodeButton: {
+        icon: "fas fa-times"
+      },
       pageSizes: [10, 15, 20, 25, 50, 100],
       communicationFocusedRowKey: "",
       stateStoring: {
