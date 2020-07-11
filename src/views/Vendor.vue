@@ -70,6 +70,7 @@
             </dx-group-item>
             <dx-group-item :col-count="2">
               <dx-group-item :col-count="1" caption="Address">
+                <dx-form-item data-field="addressCode" template="addressCodeTemplate" />
                 <dx-form-item data-field="addressName"></dx-form-item>
                 <dx-form-item data-field="addressLine1"></dx-form-item>
                 <dx-form-item data-field="addressLine2"></dx-form-item>
@@ -119,14 +120,31 @@
                 </dx-form-item>
               </dx-group-item>
             </dx-group-item>
-            <!--contactCodeTemplate-->
-            <template #contactCodeTemplate>
-              <Div>
-                <DxLookup>
+            <template #addressCodeTemplate>
+              <div class="dx-texteditor-container">
+                <dx-lookup class="dx-lookup-container">
                   <!--<DxDropDownOptions :show-title="false" />-->
-                </DxLookup>
-                <DxButton name="createContactCode" :options="createContactCodeButton" />
-              </Div>
+                </dx-lookup>
+                <dx-button
+                  name="createAddressCode"
+                  icon="fas fa-plus"
+                  hint="Create Address"
+                  class="dx-lookup-button-container"
+                />
+              </div>
+            </template>
+            <template #contactCodeTemplate>
+              <div class="dx-texteditor-container">
+                <dx-lookup class="dx-lookup-container" :items="tabsData.contacts">
+                  <!--<dx-drop-down-options :show-title="false" />-->
+                </dx-lookup>
+                <dx-button
+                  name="createContactCode"
+                  icon="fas fa-plus"
+                  hint="Create Contact"
+                  class="dx-lookup-button-container"
+                />
+              </div>
             </template>
           </dx-form>
         </div>
@@ -192,7 +210,7 @@ import {
   DxLabel,
   DxRequiredRule,
   DxPatternRule,
-  //DxEmailRule,
+  DxEmailRule,
   DxStringLengthRule,
   DxCustomRule
 } from "devextreme-vue/form";
@@ -205,7 +223,10 @@ import {
   DxColumnChooser
   //DxExport
 } from "devextreme-vue/data-grid";
-import { DxLookup } from "devextreme-vue/lookup";
+import {
+  DxLookup
+  //DxDropDownOptions
+} from "devextreme-vue/lookup";
 import { DxButton } from "devextreme-vue";
 import { getNewId } from "../store/common";
 
@@ -231,7 +252,7 @@ export default {
     DxLabel,
     DxRequiredRule,
     DxPatternRule,
-    //DxEmailRule,
+    DxEmailRule,
     DxStringLengthRule,
     DxCustomRule,
     DxDataGrid,
@@ -288,9 +309,6 @@ export default {
         }
       },
       vendorCodePattern: /^[^\s]+$/,
-      createContactCodeButton: {
-        icon: "fas fa-times"
-      },
       pageSizes: [10, 15, 20, 25, 50, 100],
       communicationFocusedRowKey: "",
       stateStoring: {
@@ -374,6 +392,7 @@ export default {
           this.formData = this._.cloneDeep(vendor);
           // clone formData
           this.formOriginalData = this._.cloneDeep(this.formData);
+          console.log(this.formData);
         }
       } else {
         // copy vendor
@@ -619,6 +638,41 @@ export default {
   margin-left: 10px;
   vertical-align: -2px;
 }
+
+.dx-lookup-container {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  position: relative;
+  -webkit-box-align: baseline;
+  -webkit-align-items: baseline;
+  -ms-flex-align: baseline;
+  align-items: baseline;
+}
+
+.dx-lookup-button-container {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: auto;
+  -webkit-box-flex: 0;
+  -webkit-flex-grow: 0;
+  -ms-flex-positive: 0;
+  flex-grow: 0;
+  -webkit-flex-basis: content;
+  -ms-flex-preferred-size: content;
+  flex-basis: content;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
 </style>
 
 <style>
@@ -626,3 +680,4 @@ export default {
   padding-top: 7px;
 }
 </style>
+
