@@ -35,6 +35,30 @@ const state = {
                     mobileNo: "",
                     email: "jchanghi@tyreandwheels.com.au",
                     active: true
+                },
+                {
+                    contactID: "2652c185-09ab-4b8a-8518-7f184a4f2baf",
+                    contactCode: "2",
+                    contactName: "Gayle Grice",
+                    jobTitle: "Sales Associate",
+                    department: "Sales",
+                    phoneNo: "0230767857",
+                    faxNo: "",
+                    mobileNo: "",
+                    email: "ggrice@tyreandwheels.com.au",
+                    active: true
+                },
+                {
+                    contactID: "f274ab28-59af-45af-86f5-97a149104476",
+                    contactCode: "3",
+                    contactName: "James Dyal",
+                    jobTitle: "Sales Specialist",
+                    department: "Sales",
+                    phoneNo: "0230767858",
+                    faxNo: "",
+                    mobileNo: "",
+                    email: "jdyal@tyreandwheels.com.au",
+                    active: true
                 }
             ],
             addresses: [

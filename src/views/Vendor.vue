@@ -129,19 +129,40 @@
                   name="createAddressCode"
                   icon="fas fa-plus"
                   hint="Create Address"
+                  :focus-state-enabled="false"
+                  class="dx-lookup-button-container"
+                />
+                <dx-button
+                  name="editAddressCode"
+                  icon="fas fa-edit"
+                  hint="Edit Address"
+                  :focus-state-enabled="false"
                   class="dx-lookup-button-container"
                 />
               </div>
             </template>
             <template #contactCodeTemplate>
               <div class="dx-texteditor-container">
-                <dx-lookup class="dx-lookup-container" :items="tabsData.contacts">
+                <dx-lookup
+                  class="dx-lookup-container"
+                  :items="formData.contacts"
+                  value-expr="contactID"
+                  display-expr="contactName"
+                >
                   <!--<dx-drop-down-options :show-title="false" />-->
                 </dx-lookup>
                 <dx-button
                   name="createContactCode"
                   icon="fas fa-plus"
                   hint="Create Contact"
+                  :focus-state-enabled="false"
+                  class="dx-lookup-button-container"
+                />
+                <dx-button
+                  name="editContactCode"
+                  icon="fas fa-edit"
+                  hint="Edit Contact"
+                  :focus-state-enabled="false"
                   class="dx-lookup-button-container"
                 />
               </div>
@@ -149,6 +170,7 @@
           </dx-form>
         </div>
         <div class="grid-tab" slot="ContactsTab">
+          <!--:state-storing="stateStoring"-->
           <dx-data-grid
             ref="grid"
             key-expr="addressID"
@@ -164,7 +186,6 @@
             :focused-row-enabled="true"
             :auto-navigate-to-focused-row="true"
             :focused-row-key.sync="communicationFocusedRowKey"
-            :state-storing="stateStoring"
             column-resizing-mode="widget"
             width="100%"
             height="calc(100vh - 251px)"
@@ -300,13 +321,49 @@ export default {
         onClick: this.onSaveClick.bind(this)
       },
       cancelNavButtonOptions: {
-        icon: "fas fa-times",
+        icon: "fas fa-times-circle",
         focusStateEnabled: false,
         stylingMode: "text",
         text: "Cancel",
         onClick: () => {
           this.$router.back();
         }
+      },
+      stateEditorOptions: {
+        items: [
+          { id: "ACT", text: "Australian Capital Territory" },
+          { id: "NSW", text: "New South Wales" },
+          { id: "NT", text: "Northern Territory" },
+          { id: "QLD", text: "Queensland" },
+          { id: "SA", text: "South Australia" },
+          { id: "TAS", text: "Tasmania" },
+          { id: "VIC", text: "Victoria" },
+          { id: "WA", text: "Western Australia" }
+        ],
+        displayExpr: "text",
+        valueExpr: "id",
+        showClearButton: true
+      },
+      postcodeEditorOptions: {
+        mask: "0000"
+      },
+      countryEditorOptions: {
+        items: [{ id: "AUS", text: "Australia" }],
+        displayExpr: "text",
+        valueExpr: "id",
+        showClearButton: true
+      },
+      telephoneNoEditorOptions: {
+        mask: "(00) 0000 0000"
+      },
+      mobileNoEditorOptions: {
+        mask: "0000 000 000"
+      },
+      taxNoEditorOptions: {
+        mask: "00 000 000 000"
+      },
+      bankBranchNoEditorOptions: {
+        mask: "000-000"
       },
       vendorCodePattern: /^[^\s]+$/,
       pageSizes: [10, 15, 20, 25, 50, 100],
@@ -320,7 +377,7 @@ export default {
           //console.log("stateStoring customLoad");
           //console.log(this.stateStoring);
           var state = localStorage.getItem(this.stateStoring.storageKey);
-          if (state) {
+          /*if (state) {
             state = JSON.parse(state);
             //console.log(state);
             let newFocusedRowKey = "";
@@ -347,7 +404,7 @@ export default {
 
             // assign new focused row key
             state.focusedRowKey = newFocusedRowKey;
-          }
+          }*/
           return state;
         }.bind(this),
         customSave: function(state) {
@@ -577,12 +634,12 @@ export default {
     communicationFocusedRowKey: {
       handler(value) {
         //console.log("communicationFocusedRowKey value changed: " + value);
-        if (value === "" || this.getVendors.length === 0) {
+        if (value === "" || this.tabsData.contacts.length === 0) {
           editToolbarButtonRef.option("disabled", true);
           copyToolbarButtonRef.option("disabled", true);
           deleteToolbarButtonRef.option("disabled", true);
         } else {
-          if (this.getVendors.addresses.length === 0) {
+          if (this.tabsData.contacts.length === 0) {
             editToolbarButtonRef.option("disabled", true);
             copyToolbarButtonRef.option("disabled", true);
             deleteToolbarButtonRef.option("disabled", true);
