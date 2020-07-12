@@ -88,34 +88,37 @@
                 />
               </dx-group-item>
               <dx-group-item :col-count="1" caption="Contact">
-                <dx-form-item data-field="contactCode" template="contactCodeTemplate" />
+                <dx-form-item data-field="contactID" template="contactIDTemplate" />
                 <dx-form-item data-field="contactName">
                   <dx-string-length-rule
                     :max="255"
                     message="Contact Name must have maximum 255 characters!"
                   />
                 </dx-form-item>
-                <dx-form-item data-field="phoneNo" :editor-options="telephoneNoEditorOptions">
+                <dx-form-item data-field="contactJobTitle" :editor-options="{disabled: true}">
+                  <dx-label text="Job Title" />
+                </dx-form-item>
+                <dx-form-item data-field="contactDepartment" :editor-options="{disabled: true}">
+                  <dx-label text="Department" />
+                </dx-form-item>
+                <dx-form-item
+                  data-field="contactPhoneNo"
+                  :editor-options="telephoneNoEditorOptions"
+                >
                   <dx-label text="Phone No" />
                 </dx-form-item>
-                <dx-form-item data-field="faxNo" :editor-options="telephoneNoEditorOptions">
+                <dx-form-item data-field="contactFaxNo" :editor-options="telephoneNoEditorOptions">
                   <dx-label text="Fax No" />
                 </dx-form-item>
-                <dx-form-item data-field="mobileNo" :editor-options="mobileNoEditorOptions">
+                <dx-form-item data-field="contactMobileNo" :editor-options="mobileNoEditorOptions">
                   <dx-label text="Mobile No" />
                 </dx-form-item>
-                <dx-form-item data-field="email">
+                <dx-form-item data-field="contactEmail">
+                  <dx-label text="Email" />
                   <dx-email-rule message="Email is invalid!" />
                   <dx-string-length-rule
                     :max="255"
                     message="Email must have maximum 255 characters!"
-                  />
-                </dx-form-item>
-                <dx-form-item data-field="website">
-                  <dx-label text="Home Page" />
-                  <dx-string-length-rule
-                    :max="255"
-                    message="Home Page must have maximum 255 characters!"
                   />
                 </dx-form-item>
               </dx-group-item>
@@ -141,16 +144,16 @@
                 />
               </div>
             </template>
-            <template #contactCodeTemplate>
+            <template #contactIDTemplate>
               <div class="dx-texteditor-container">
                 <dx-lookup
                   class="dx-lookup-container"
                   :items="formData.contacts"
                   value-expr="contactID"
                   display-expr="contactName"
-                >
-                  <!--<dx-drop-down-options :show-title="false" />-->
-                </dx-lookup>
+                  :drop-down-options="dropDownOptions"
+                  @item-click="setSelectedContact"
+                />
                 <dx-button
                   name="createContactCode"
                   icon="fas fa-plus"
@@ -245,8 +248,7 @@ import {
   //DxExport
 } from "devextreme-vue/data-grid";
 import {
-  DxLookup
-  //DxDropDownOptions
+  DxLookup //DxDropDownOptions
 } from "devextreme-vue/lookup";
 import { DxButton } from "devextreme-vue";
 import { getNewId } from "../store/common";
@@ -328,6 +330,10 @@ export default {
         onClick: () => {
           this.$router.back();
         }
+      },
+      dropDownOptions: {
+        closeOnOutsideClick: true,
+        showTitle: false
       },
       stateEditorOptions: {
         items: [
@@ -624,6 +630,18 @@ export default {
         }.bind(this),
         1
       );
+    },
+    setSelectedContact(e) {
+      //console.log(e.itemData);
+      this.formData.contactID = e.itemData.contactID;
+      this.formData.contactCode = e.itemData.contactCode;
+      this.formData.contactName = e.itemData.contactName;
+      this.formData.contactJobTitle = e.itemData.jobTitle;
+      this.formData.contactDepartment = e.itemData.department;
+      this.formData.contactPhoneNo = e.itemData.phoneNo;
+      this.formData.contactFaxNo = e.itemData.faxNo;
+      this.formData.contactMobileNo = e.itemData.mobileNo;
+      this.formData.contactEmail = e.itemData.email;
     }
   },
   created() {
