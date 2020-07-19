@@ -89,12 +89,7 @@
               </dx-group-item>
               <dx-group-item :col-count="1" caption="Contact">
                 <dx-form-item data-field="contactID" template="contactIDTemplate" />
-                <dx-form-item data-field="contactName">
-                  <dx-string-length-rule
-                    :max="255"
-                    message="Contact Name must have maximum 255 characters!"
-                  />
-                </dx-form-item>
+                <dx-form-item data-field="contactName" :editor-options="{disabled: true}" />
                 <dx-form-item data-field="contactJobTitle" :editor-options="{disabled: true}">
                   <dx-label text="Job Title" />
                 </dx-form-item>
@@ -113,13 +108,8 @@
                 <dx-form-item data-field="contactMobileNo" :editor-options="mobileNoEditorOptions">
                   <dx-label text="Mobile No" />
                 </dx-form-item>
-                <dx-form-item data-field="contactEmail">
+                <dx-form-item data-field="contactEmail" :editor-options="{disabled: true}">
                   <dx-label text="Email" />
-                  <dx-email-rule message="Email is invalid!" />
-                  <dx-string-length-rule
-                    :max="255"
-                    message="Email must have maximum 255 characters!"
-                  />
                 </dx-form-item>
               </dx-group-item>
             </dx-group-item>
@@ -234,7 +224,7 @@ import {
   DxLabel,
   DxRequiredRule,
   DxPatternRule,
-  DxEmailRule,
+  //DxEmailRule,
   DxStringLengthRule,
   DxCustomRule
 } from "devextreme-vue/form";
@@ -275,7 +265,7 @@ export default {
     DxLabel,
     DxRequiredRule,
     DxPatternRule,
-    DxEmailRule,
+    //DxEmailRule,
     DxStringLengthRule,
     DxCustomRule,
     DxDataGrid,
@@ -360,10 +350,12 @@ export default {
         showClearButton: true
       },
       telephoneNoEditorOptions: {
-        mask: "(00) 0000 0000"
+        mask: "(00) 0000 0000",
+        disabled: true
       },
       mobileNoEditorOptions: {
-        mask: "0000 000 000"
+        mask: "0000 000 000",
+        disabled: true
       },
       taxNoEditorOptions: {
         mask: "00 000 000 000"
