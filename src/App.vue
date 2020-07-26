@@ -124,4 +124,43 @@ body {
 .data-grid-hyperlink:active {
   text-decoration: underline;
 }
+
+/*.fa-home {
+  color: red;
+}*/
+
+.svg-inline--fa {
+  color: #1ca8dd;
+}
+
+.dx-list-item-selected .svg-inline--fa {
+  color: #dedede;
+}
+
+.dx-list-item-selected.dx-state-focused .svg-inline--fa {
+  color: #2a2a2a;
+}
+
+.fa-edit {
+  color: #f0c066;
+}
+
+.fa-copy {
+  color: #bb4ddd;
+}
+
+.fa-save,
+.fa-plus,
+.dx-button-mode-contained .dx-icon {
+  color: #74bf83;
+}
+
+.fa-times-circle,
+.fa-trash-alt {
+  color: #ff7467;
+}
+
+.dx-toolbar-text-auto-hide .dx-button .dx-icon {
+  color: #1ca8dd;
+}
 </style>

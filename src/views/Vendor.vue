@@ -70,11 +70,12 @@
             </dx-group-item>
             <dx-group-item :col-count="2">
               <dx-group-item :col-count="1" caption="Address">
-                <dx-form-item data-field="addressCode" template="addressCodeTemplate" />
-                <dx-form-item data-field="addressName"></dx-form-item>
-                <dx-form-item data-field="addressLine1"></dx-form-item>
-                <dx-form-item data-field="addressLine2"></dx-form-item>
-                <dx-form-item data-field="city"></dx-form-item>
+                <dx-form-item template="addressTemplate">
+                  <dx-label text="Address" />
+                </dx-form-item>
+                <dx-form-item data-field="addressLine1" :editor-options="{disabled: true}" />
+                <dx-form-item data-field="addressLine2" :editor-options="{disabled: true}" />
+                <dx-form-item data-field="city" :editor-options="{disabled: true}" />
                 <dx-form-item data-field="postcode" :editor-options="postcodeEditorOptions" />
                 <dx-form-item
                   data-field="country"
@@ -88,8 +89,9 @@
                 />
               </dx-group-item>
               <dx-group-item :col-count="1" caption="Contact">
-                <dx-form-item data-field="contactID" template="contactIDTemplate" />
-                <dx-form-item data-field="contactName" :editor-options="{disabled: true}" />
+                <dx-form-item template="contactTemplate">
+                  <dx-label text="Contact" />
+                </dx-form-item>
                 <dx-form-item data-field="contactJobTitle" :editor-options="{disabled: true}">
                   <dx-label text="Job Title" />
                 </dx-form-item>
@@ -113,11 +115,17 @@
                 </dx-form-item>
               </dx-group-item>
             </dx-group-item>
-            <template #addressCodeTemplate>
+            <template #addressTemplate>
               <div class="dx-texteditor-container">
-                <dx-lookup class="dx-lookup-container">
-                  <!--<DxDropDownOptions :show-title="false" />-->
-                </dx-lookup>
+                <dx-lookup
+                  class="dx-lookup-container"
+                  :items="formData.addresses"
+                  value-expr="addressID"
+                  display-expr="addressName"
+                  :drop-down-options="dropDownOptions"
+                  :value="formData.addressID"
+                  @item-click="setSelectedAddress"
+                />
                 <dx-button
                   name="createAddressCode"
                   icon="fas fa-plus"
@@ -134,7 +142,7 @@
                 />
               </div>
             </template>
-            <template #contactIDTemplate>
+            <template #contactTemplate>
               <div class="dx-texteditor-container">
                 <dx-lookup
                   class="dx-lookup-container"
@@ -142,6 +150,7 @@
                   value-expr="contactID"
                   display-expr="contactName"
                   :drop-down-options="dropDownOptions"
+                  :value="formData.contactID"
                   @item-click="setSelectedContact"
                 />
                 <dx-button
@@ -338,16 +347,19 @@ export default {
         ],
         displayExpr: "text",
         valueExpr: "id",
-        showClearButton: true
+        showClearButton: true,
+        disabled: true
       },
       postcodeEditorOptions: {
-        mask: "0000"
+        mask: "0000",
+        disabled: true
       },
       countryEditorOptions: {
         items: [{ id: "AUS", text: "Australia" }],
         displayExpr: "text",
         valueExpr: "id",
-        showClearButton: true
+        showClearButton: true,
+        disabled: true
       },
       telephoneNoEditorOptions: {
         mask: "(00) 0000 0000",
@@ -634,6 +646,19 @@ export default {
       this.formData.contactFaxNo = e.itemData.faxNo;
       this.formData.contactMobileNo = e.itemData.mobileNo;
       this.formData.contactEmail = e.itemData.email;
+    },
+    setSelectedAddress(e) {
+      this.formData.addressID = e.itemData.addressID;
+      this.formData.addressCode = e.itemData.addressCode;
+      this.formData.addressName = e.itemData.addressName;
+      this.formData.addressLine1 = e.itemData.addressLine1;
+      this.formData.addressLine2 = e.itemData.addressLine2;
+      this.formData.city = e.itemData.city;
+      this.formData.state = e.itemData.state;
+      this.formData.postcode = e.itemData.postcode;
+      this.formData.country = e.itemData.country;
+      this.formData.email = e.itemData.email;
+      this.formData.website = e.itemData.website;
     }
   },
   created() {
