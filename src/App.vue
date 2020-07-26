@@ -150,14 +150,17 @@ body {
 }
 
 .fa-save,
-.fa-plus,
-.dx-button-mode-contained .dx-icon {
+.fa-plus {
   color: #74bf83;
 }
 
 .fa-times-circle,
 .fa-trash-alt {
   color: #ff7467;
+}
+
+.dx-datagrid-export-button .dx-icon-export-excel-button {
+  color: #74bf83;
 }
 
 .dx-toolbar-text-auto-hide .dx-button .dx-icon {

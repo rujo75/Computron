@@ -172,11 +172,10 @@
           </dx-form>
         </div>
         <div class="grid-tab" slot="ContactsTab">
-          <!--:state-storing="stateStoring"-->
           <dx-data-grid
             ref="grid"
-            key-expr="addressID"
-            :data-source="formData.addresses"
+            key-expr="contactID"
+            :data-source="formData.contacts"
             :remote-operations="false"
             :allow-column-resizing="true"
             :allow-column-reordering="true"
@@ -187,23 +186,91 @@
             :show-borders="true"
             :focused-row-enabled="true"
             :auto-navigate-to-focused-row="true"
-            :focused-row-key.sync="communicationFocusedRowKey"
+            :focused-row-key.sync="contactsFocusedRowKey"
+            :state-storing="contactsStateStoring"
             column-resizing-mode="widget"
             width="100%"
             height="calc(100vh - 251px)"
-            @toolbar-preparing="onCommunicationToolbarPreparing($event);"
-            @focused-row-changed="onCommunicationFocusedRowChanged"
+            @toolbar-preparing="onContactsToolbarPreparing($event);"
+            @focused-row-changed="onContactsFocusedRowChanged"
           >
+            <dx-export
+              :enabled="true"
+              :allow-export-selected-data="false"
+              file-name="Vendor Contacts"
+            />
             <dx-column-chooser :enabled="true" />
             <dx-column
-              data-field="addressID"
+              data-field="contactID"
               caption="Contact ID"
               data-type="string"
               :width="300"
               :visible="false"
               cell-template="IDTemplate"
             />
-
+            <dx-column
+              data-field="contactCode"
+              caption="Contact Code"
+              data-type="string"
+              :width="130"
+              :visible="false"
+            />
+            <dx-column
+              data-field="contactName"
+              caption="Contact Name"
+              data-type="string"
+              :min-width="200"
+            />
+            <dx-column
+              data-field="jobTitle"
+              caption="Job Title"
+              data-type="string"
+              :min-width="150"
+            />
+            <dx-column
+              data-field="department"
+              caption="Department"
+              data-type="string"
+              :min-width="150"
+            />
+            <dx-column
+              data-field="phoneNo"
+              caption="Phone No"
+              data-type="string"
+              :width="120"
+              :visible="false"
+              cell-template="phoneNoTemplate"
+            />
+            <dx-column
+              data-field="faxNo"
+              caption="Fax No"
+              data-type="string"
+              :width="120"
+              :visible="false"
+              cell-template="phoneNoTemplate"
+            />
+            <dx-column
+              data-field="mobileNo"
+              caption="Mobile No"
+              data-type="string"
+              :width="120"
+              :visible="false"
+              cell-template="mobileNoTemplate"
+            />
+            <dx-column
+              data-field="email"
+              caption="Email"
+              data-type="string"
+              :width="200"
+              :visible="false"
+            />
+            <dx-column
+              data-field="active"
+              caption="Active"
+              data-type="boolean"
+              :width="80"
+              :visible="false"
+            />
             <dx-load-panel :enabled="false" />
             <dx-group-panel :visible="false" />
             <dx-search-panel :visible="true" :width="250" />
@@ -214,6 +281,14 @@
                 class="data-grid-hyperlink"
               >{{ item.value }}</span>
             </div>
+            <div
+              slot="phoneNoTemplate"
+              slot-scope="{ data: item }"
+            >{{ item.value | VMask(phoneNoMask) }}</div>
+            <div
+              slot="mobileNoTemplate"
+              slot-scope="{ data: item }"
+            >{{ item.value | VMask(mobileNoMask) }}</div>
           </dx-data-grid>
         </div>
         <div class="grid-tab" slot="AddressesTab"></div>
@@ -292,6 +367,8 @@ export default {
     return {
       formData: null,
       formOriginalData: null,
+      phoneNoMask: "(##) #### ####",
+      mobileNoMask: "#### ### ###",
       tabsData: [
         {
           title: "General",
@@ -377,17 +454,19 @@ export default {
       },
       vendorCodePattern: /^[^\s]+$/,
       pageSizes: [10, 15, 20, 25, 50, 100],
-      communicationFocusedRowKey: "",
-      stateStoring: {
+      contactsFocusedRowKey: "",
+      contactsStateStoring: {
         enabled: true,
-        storageKey: "VendorAddresses",
+        storageKey: "VendorContacts",
         type: "custom",
         savingTimeout: 0,
         customLoad: function() {
-          //console.log("stateStoring customLoad");
-          //console.log(this.stateStoring);
-          var state = localStorage.getItem(this.stateStoring.storageKey);
-          /*if (state) {
+          //console.log("contactsStateStoring customLoad");
+          //console.log(this.contactsStateStoring);
+          var state = localStorage.getItem(
+            this.contactsStateStoring.storageKey
+          );
+          if (state) {
             state = JSON.parse(state);
             //console.log(state);
             let newFocusedRowKey = "";
@@ -399,26 +478,26 @@ export default {
             }
 
             // check the old key stored in the local storage
-            newFocusedRowKey = state.focusedRowKey;
-            let index = this._.findIndex(this.getVendors[0].addresses, {
-              addressID: newFocusedRowKey
+            newFocusedRowKey = state.contactsFocusedRowKey;
+            let index = this._.findIndex(this.getVendors[0].contacts, {
+              contactID: newFocusedRowKey
             });
             if (index === -1) {
               // old key no longer exists
               // check if we have any records
-              if (this.getVendors.addresses.length > 0) {
+              if (this.getVendors.contacts.length > 0) {
                 // select the first row
-                newFocusedRowKey = this.getVendors[0].addressID;
+                newFocusedRowKey = this.getVendors[0].contactID;
               }
             }
 
             // assign new focused row key
-            state.focusedRowKey = newFocusedRowKey;
-          }*/
+            state.contactsFocusedRowKey = newFocusedRowKey;
+          }
           return state;
         }.bind(this),
         customSave: function(state) {
-          //console.log("stateStoring customSave");
+          //console.log("contactsStateStoring customSave");
           localStorage.setItem(this.storageKey, JSON.stringify(state));
         }
       }
@@ -545,7 +624,7 @@ export default {
       var result = this.$refs["formGeneral"].instance.validate();
       this.tabsData[0].isValid = result.isValid;
     },
-    onCommunicationToolbarPreparing(e) {
+    onContactsToolbarPreparing(e) {
       e.toolbarOptions.items.unshift(
         {
           location: "before",
@@ -615,8 +694,8 @@ export default {
         }
       );
     },
-    onCommunicationFocusedRowChanged(e) {
-      //console.log("onCommunicationFocusedRowChanged");
+    onContactsFocusedRowChanged(e) {
+      //console.log("onContactsFocusedRowChanged");
       // save grid state in case it was manually set from the code
       if (e.component.state()) {
         localStorage.setItem(
