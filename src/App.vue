@@ -21,11 +21,11 @@ export default {
     NavBar,
     MainPage,
     StatusBar,
-    SignIn
+    SignIn,
   },
   data() {
     return {
-      locale: null
+      locale: null,
     };
   },
   methods: {
@@ -33,7 +33,7 @@ export default {
       var lang = navigator.language || navigator.userLanguage;
       //console.log(lang);
       return lang != null ? lang : "en";
-    }
+    },
   },
   created() {
     this.locale = this.getLocale();
@@ -46,7 +46,7 @@ export default {
     if (this.$route.path !== "/") {
       this.$router.push("/");
     }
-  }
+  },
 };
 </script>
 

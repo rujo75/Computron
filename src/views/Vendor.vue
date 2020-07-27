@@ -310,7 +310,7 @@ import {
   DxPatternRule,
   //DxEmailRule,
   DxStringLengthRule,
-  DxCustomRule
+  DxCustomRule,
 } from "devextreme-vue/form";
 import {
   DxDataGrid,
@@ -318,25 +318,25 @@ import {
   DxLoadPanel,
   DxGroupPanel,
   DxSearchPanel,
-  DxColumnChooser
-  //DxExport
+  DxColumnChooser,
+  DxExport,
 } from "devextreme-vue/data-grid";
 import {
-  DxLookup //DxDropDownOptions
+  DxLookup, //DxDropDownOptions
 } from "devextreme-vue/lookup";
 import { DxButton } from "devextreme-vue";
 import { getNewId } from "../store/common";
 
-var editToolbarButtonRef = null;
-var copyToolbarButtonRef = null;
-var deleteToolbarButtonRef = null;
+var editContactsToolbarButtonRef = null;
+var copyContactsToolbarButtonRef = null;
+var deleteContactsToolbarButtonRef = null;
 
 export default {
   props: {
     id: {
       default: "",
-      type: String
-    }
+      type: String,
+    },
   },
   name: "vendor",
   components: {
@@ -360,8 +360,8 @@ export default {
     DxColumnChooser,
     DxLookup,
     //DxDropDownOptions,
-    DxButton
-    //DxExport
+    DxButton,
+    DxExport,
   },
   data() {
     return {
@@ -373,30 +373,30 @@ export default {
         {
           title: "General",
           template: "GeneralTab",
-          isValid: true
+          isValid: true,
         },
         {
           title: "Contacts",
           template: "ContactsTab",
-          isValid: true
+          isValid: true,
         },
         {
           title: "Addresses",
           template: "AddressesTab",
-          isValid: true
+          isValid: true,
         },
         {
           title: "Bank Accounts",
           template: "BankAccountsTab",
-          isValid: true
-        }
+          isValid: true,
+        },
       ],
       saveNavButtonOptions: {
         icon: "fas fa-save",
         focusStateEnabled: false,
         stylingMode: "text",
         text: "Save",
-        onClick: this.onSaveClick.bind(this)
+        onClick: this.onSaveClick.bind(this),
       },
       cancelNavButtonOptions: {
         icon: "fas fa-times-circle",
@@ -405,11 +405,11 @@ export default {
         text: "Cancel",
         onClick: () => {
           this.$router.back();
-        }
+        },
       },
       dropDownOptions: {
         closeOnOutsideClick: true,
-        showTitle: false
+        showTitle: false,
       },
       stateEditorOptions: {
         items: [
@@ -420,37 +420,37 @@ export default {
           { id: "SA", text: "South Australia" },
           { id: "TAS", text: "Tasmania" },
           { id: "VIC", text: "Victoria" },
-          { id: "WA", text: "Western Australia" }
+          { id: "WA", text: "Western Australia" },
         ],
         displayExpr: "text",
         valueExpr: "id",
         showClearButton: true,
-        disabled: true
+        disabled: true,
       },
       postcodeEditorOptions: {
         mask: "0000",
-        disabled: true
+        disabled: true,
       },
       countryEditorOptions: {
         items: [{ id: "AUS", text: "Australia" }],
         displayExpr: "text",
         valueExpr: "id",
         showClearButton: true,
-        disabled: true
+        disabled: true,
       },
       telephoneNoEditorOptions: {
         mask: "(00) 0000 0000",
-        disabled: true
+        disabled: true,
       },
       mobileNoEditorOptions: {
         mask: "0000 000 000",
-        disabled: true
+        disabled: true,
       },
       taxNoEditorOptions: {
-        mask: "00 000 000 000"
+        mask: "00 000 000 000",
       },
       bankBranchNoEditorOptions: {
-        mask: "000-000"
+        mask: "000-000",
       },
       vendorCodePattern: /^[^\s]+$/,
       pageSizes: [10, 15, 20, 25, 50, 100],
@@ -460,7 +460,7 @@ export default {
         storageKey: "VendorContacts",
         type: "custom",
         savingTimeout: 0,
-        customLoad: function() {
+        customLoad: function () {
           //console.log("contactsStateStoring customLoad");
           //console.log(this.contactsStateStoring);
           var state = localStorage.getItem(
@@ -479,15 +479,15 @@ export default {
 
             // check the old key stored in the local storage
             newFocusedRowKey = state.contactsFocusedRowKey;
-            let index = this._.findIndex(this.getVendors[0].contacts, {
-              contactID: newFocusedRowKey
+            let index = this._.findIndex(this.formData.contacts, {
+              contactID: newFocusedRowKey,
             });
             if (index === -1) {
               // old key no longer exists
               // check if we have any records
-              if (this.getVendors.contacts.length > 0) {
+              if (this.formData.contacts.length > 0) {
                 // select the first row
-                newFocusedRowKey = this.getVendors[0].contactID;
+                newFocusedRowKey = this.formData.contactID;
               }
             }
 
@@ -496,21 +496,21 @@ export default {
           }
           return state;
         }.bind(this),
-        customSave: function(state) {
+        customSave: function (state) {
           //console.log("contactsStateStoring customSave");
           localStorage.setItem(this.storageKey, JSON.stringify(state));
-        }
-      }
+        },
+      },
     };
   },
   computed: {
     currentRouteName() {
       // returns NewVendor or EditVendor or CopyVendor
       return this.$route.name;
-    }
+    },
   },
   methods: {
-    loadFormData: function() {
+    loadFormData: function () {
       //console.log("loadFormData");
       //console.log("id: " + this.id);
       if (this.currentRouteName === "CreateVendor") {
@@ -521,7 +521,7 @@ export default {
           vendorName: "",
           taxNo: "",
           addresses: [],
-          active: true
+          active: true,
         };
         //console.log(newVendor);
         // use new vendor
@@ -553,7 +553,7 @@ export default {
             vendorName: vendor.vendorName,
             taxNo: vendor.taxNo,
             addresses: [],
-            active: true
+            active: true,
           };
           // use new vendor
           this.formData = newVendor;
@@ -562,7 +562,7 @@ export default {
         }
       }
     },
-    isFormDataChanged: function() {
+    isFormDataChanged: function () {
       // check the main form data
       let isFormDataNotChanged = this._.isEqual(
         this.formData,
@@ -637,8 +637,8 @@ export default {
             disabled: false,
             onClick: () => {
               this.$router.push("/CreateVendor");
-            }
-          }
+            },
+          },
         },
         {
           location: "before",
@@ -649,13 +649,13 @@ export default {
             text: "Edit",
             focusStateEnabled: false,
             disabled: true,
-            onInitialized: e => {
-              editToolbarButtonRef = e.component;
+            onInitialized: (e) => {
+              editContactsToolbarButtonRef = e.component;
             },
             onClick: () => {
               this.$router.push("/EditVendor/" + this.focusedRowKey);
-            }
-          }
+            },
+          },
         },
         {
           location: "before",
@@ -666,13 +666,13 @@ export default {
             text: "Copy",
             focusStateEnabled: false,
             disabled: true,
-            onInitialized: e => {
-              copyToolbarButtonRef = e.component;
+            onInitialized: (e) => {
+              copyContactsToolbarButtonRef = e.component;
             },
             onClick: () => {
               this.$router.push("/CopyVendor/" + this.focusedRowKey);
-            }
-          }
+            },
+          },
         },
         {
           location: "before",
@@ -683,14 +683,14 @@ export default {
             text: "Delete",
             focusStateEnabled: false,
             disabled: true,
-            onInitialized: e => {
-              deleteToolbarButtonRef = e.component;
+            onInitialized: (e) => {
+              deleteContactsToolbarButtonRef = e.component;
             },
             onClick: () => {
               this.$store.dispatch("deleteVendor", this.focusedRowKey);
               this.focusedRowKey = "";
-            }
-          }
+            },
+          },
         }
       );
     },
@@ -699,7 +699,7 @@ export default {
       // save grid state in case it was manually set from the code
       if (e.component.state()) {
         localStorage.setItem(
-          this.stateStoring.storageKey,
+          this.contactsStateStoring.storageKey,
           JSON.stringify(e.component.state())
         );
       }
@@ -708,7 +708,7 @@ export default {
       //alert(e.text);
       //console.log("onIDClick");
       setTimeout(
-        function() {
+        function () {
           this.$router.push("/EditContact/" + this.communicationFocusedRowKey);
         }.bind(this),
         1
@@ -738,33 +738,33 @@ export default {
       this.formData.country = e.itemData.country;
       this.formData.email = e.itemData.email;
       this.formData.website = e.itemData.website;
-    }
+    },
   },
   created() {
     //console.log("created");
     this.loadFormData();
   },
   watch: {
-    communicationFocusedRowKey: {
+    contactsFocusedRowKey: {
       handler(value) {
-        //console.log("communicationFocusedRowKey value changed: " + value);
-        if (value === "" || this.tabsData.contacts.length === 0) {
-          editToolbarButtonRef.option("disabled", true);
-          copyToolbarButtonRef.option("disabled", true);
-          deleteToolbarButtonRef.option("disabled", true);
+        //console.log("contactsFocusedRowKey value changed: " + value);
+        if (value === "" || this.formData.contacts.length === 0) {
+          editContactsToolbarButtonRef.option("disabled", true);
+          copyContactsToolbarButtonRef.option("disabled", true);
+          deleteContactsToolbarButtonRef.option("disabled", true);
         } else {
-          if (this.tabsData.contacts.length === 0) {
-            editToolbarButtonRef.option("disabled", true);
-            copyToolbarButtonRef.option("disabled", true);
-            deleteToolbarButtonRef.option("disabled", true);
+          if (this.formData.contacts.length === 0) {
+            editContactsToolbarButtonRef.option("disabled", true);
+            copyContactsToolbarButtonRef.option("disabled", true);
+            deleteContactsToolbarButtonRef.option("disabled", true);
           } else {
-            editToolbarButtonRef.option("disabled", false);
-            copyToolbarButtonRef.option("disabled", false);
-            deleteToolbarButtonRef.option("disabled", false);
+            editContactsToolbarButtonRef.option("disabled", false);
+            copyContactsToolbarButtonRef.option("disabled", false);
+            deleteContactsToolbarButtonRef.option("disabled", false);
           }
         }
-      }
-    }
+      },
+    },
   },
   mounted() {
     //console.log("mounted");
@@ -775,7 +775,7 @@ export default {
       // new vendor
       this.$refs["formGeneral"].instance.getEditor("vendorCode").focus();
     }
-  }
+  },
 };
 </script>
 
