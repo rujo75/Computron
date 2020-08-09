@@ -9,7 +9,7 @@
         :items="tabsData"
         :animation-enabled="true"
         :swipe-enabled="false"
-        :deferRendering="false"
+        :deferRendering="true"
         item-title-template="title"
         class="tab-panel"
       >
@@ -173,7 +173,7 @@
         </div>
         <div class="grid-tab" slot="ContactsTab">
           <dx-data-grid
-            ref="grid"
+            ref="contactsGrid"
             key-expr="contactID"
             :data-source="formData.contacts"
             :remote-operations="false"
@@ -291,7 +291,105 @@
             >{{ item.value | VMask(mobileNoMask) }}</div>
           </dx-data-grid>
         </div>
-        <div class="grid-tab" slot="AddressesTab"></div>
+        <div class="grid-tab" slot="AddressesTab">
+          <dx-data-grid
+            ref="addressesGrid"
+            key-expr="addressID"
+            :data-source="formData.addresses"
+            :remote-operations="false"
+            :allow-column-resizing="true"
+            :allow-column-reordering="true"
+            :column-min-width="50"
+            :column-auto-width="true"
+            :row-alternation-enabled="false"
+            :hover-state-enabled="true"
+            :show-borders="true"
+            :focused-row-enabled="true"
+            :auto-navigate-to-focused-row="true"
+            :focused-row-key.sync="addressesFocusedRowKey"
+            :state-storing="addressesStateStoring"
+            column-resizing-mode="widget"
+            width="100%"
+            height="calc(100vh - 251px)"
+            @toolbar-preparing="onAddressesToolbarPreparing($event);"
+            @focused-row-changed="onAddressesFocusedRowChanged"
+          >
+            <dx-export
+              :enabled="true"
+              :allow-export-selected-data="false"
+              file-name="Vendor Addresses"
+            />
+            <dx-column-chooser :enabled="true" />
+            <dx-column
+              data-field="addressID"
+              caption="Address ID"
+              data-type="string"
+              :width="300"
+              :visible="false"
+              cell-template="IDTemplate"
+            />
+            <dx-column
+              data-field="addressCode"
+              caption="Address Code"
+              data-type="string"
+              :width="130"
+              :visible="false"
+            />
+            <dx-column
+              data-field="addressName"
+              caption="Address Name"
+              data-type="string"
+              :min-width="200"
+            />
+            <dx-column
+              data-field="addressLine1"
+              caption="Address Line 1"
+              data-type="string"
+              :min-width="200"
+            />
+            <dx-column
+              data-field="addressLine2"
+              caption="Address Line 2"
+              data-type="string"
+              :min-width="200"
+              :visible="false"
+            />
+            <dx-column data-field="city" caption="City" data-type="string" :width="120" />
+            <dx-column data-field="postcode" caption="Postcode" data-type="string" :width="90" />
+            <dx-column
+              data-field="country"
+              caption="Country"
+              data-type="string"
+              :width="120"
+              :visible="false"
+            />
+            <dx-column data-field="state" caption="State" data-type="string" :width="120" />
+            <dx-column
+              data-field="email"
+              caption="Email"
+              data-type="string"
+              :width="200"
+              :visible="false"
+            />
+            <dx-column
+              data-field="active"
+              caption="Active"
+              data-type="boolean"
+              :width="80"
+              :visible="false"
+            />
+            <dx-load-panel :enabled="false" />
+            <dx-group-panel :visible="false" />
+            <dx-search-panel :visible="true" :width="250" />
+
+            <div slot="IDTemplate" slot-scope="{ data: item }">
+              <span
+                @click.stop.prevent="onIDClick(item);"
+                class="data-grid-hyperlink"
+              >{{ item.value }}</span>
+            </div>
+          </dx-data-grid>
+        </div>
         <div class="grid-tab" slot="BankAccountsTab"></div>
       </dx-tab-panel>
     </div>
@@ -330,6 +428,10 @@ import { getNewId } from "../store/common";
 var editContactsToolbarButtonRef = null;
 var copyContactsToolbarButtonRef = null;
 var deleteContactsToolbarButtonRef = null;
+
+var editAddressesToolbarButtonRef = null;
+var copyAddressesToolbarButtonRef = null;
+var deleteAddressesToolbarButtonRef = null;
 
 export default {
   props: {
@@ -498,6 +600,53 @@ export default {
         }.bind(this),
         customSave: function (state) {
           //console.log("contactsStateStoring customSave");
+          localStorage.setItem(this.storageKey, JSON.stringify(state));
+        },
+      },
+      addressesFocusedRowKey: "",
+      addressesStateStoring: {
+        enabled: true,
+        storageKey: "VendorAddresses",
+        type: "custom",
+        savingTimeout: 0,
+        customLoad: function () {
+          //console.log("addressesStateStoring customLoad");
+          //console.log(this.addressesStateStoring);
+          var state = localStorage.getItem(
+            this.addressesStateStoring.storageKey
+          );
+          if (state) {
+            state = JSON.parse(state);
+            //console.log(state);
+            let newFocusedRowKey = "";
+
+            // make sure state has focusedRowKey property
+            // eslint-disable-next-line no-prototype-builtins
+            if (!state.hasOwnProperty("focusedRowKey")) {
+              state.focusedRowKey = "";
+            }
+
+            // check the old key stored in the local storage
+            newFocusedRowKey = state.addressesFocusedRowKey;
+            let index = this._.findIndex(this.formData.addresses, {
+              addressID: newFocusedRowKey,
+            });
+            if (index === -1) {
+              // old key no longer exists
+              // check if we have any records
+              if (this.formData.addresses.length > 0) {
+                // select the first row
+                newFocusedRowKey = this.formData.addressID;
+              }
+            }
+
+            // assign new focused row key
+            state.addressesFocusedRowKey = newFocusedRowKey;
+          }
+          return state;
+        }.bind(this),
+        customSave: function (state) {
+          //console.log("addressesStateStoring customSave");
           localStorage.setItem(this.storageKey, JSON.stringify(state));
         },
       },
@@ -714,6 +863,86 @@ export default {
         1
       );
     },
+    onAddressesToolbarPreparing(e) {
+      e.toolbarOptions.items.unshift(
+        {
+          location: "before",
+          widget: "dxButton",
+          options: {
+            icon: "fas fa-plus",
+            stylingMode: "text",
+            text: "Create",
+            focusStateEnabled: false,
+            disabled: false,
+            onClick: () => {
+              this.$router.push("/CreateVendor");
+            },
+          },
+        },
+        {
+          location: "before",
+          widget: "dxButton",
+          options: {
+            icon: "fas fa-edit",
+            stylingMode: "text",
+            text: "Edit",
+            focusStateEnabled: false,
+            disabled: true,
+            onInitialized: (e) => {
+              editAddressesToolbarButtonRef = e.component;
+            },
+            onClick: () => {
+              this.$router.push("/EditVendor/" + this.focusedRowKey);
+            },
+          },
+        },
+        {
+          location: "before",
+          widget: "dxButton",
+          options: {
+            icon: "fas fa-copy",
+            stylingMode: "text",
+            text: "Copy",
+            focusStateEnabled: false,
+            disabled: true,
+            onInitialized: (e) => {
+              copyAddressesToolbarButtonRef = e.component;
+            },
+            onClick: () => {
+              this.$router.push("/CopyVendor/" + this.focusedRowKey);
+            },
+          },
+        },
+        {
+          location: "before",
+          widget: "dxButton",
+          options: {
+            icon: "fas fa-trash-alt",
+            stylingMode: "text",
+            text: "Delete",
+            focusStateEnabled: false,
+            disabled: true,
+            onInitialized: (e) => {
+              deleteAddressesToolbarButtonRef = e.component;
+            },
+            onClick: () => {
+              this.$store.dispatch("deleteVendor", this.focusedRowKey);
+              this.focusedRowKey = "";
+            },
+          },
+        }
+      );
+    },
+    onAddressesFocusedRowChanged(e) {
+      //console.log("onAddressesFocusedRowChanged");
+      // save grid state in case it was manually set from the code
+      if (e.component.state()) {
+        localStorage.setItem(
+          this.addressesStateStoring.storageKey,
+          JSON.stringify(e.component.state())
+        );
+      }
+    },
     setSelectedContact(e) {
       //console.log(e.itemData);
       this.formData.contactID = e.itemData.contactID;
@@ -761,6 +990,26 @@ export default {
             editContactsToolbarButtonRef.option("disabled", false);
             copyContactsToolbarButtonRef.option("disabled", false);
             deleteContactsToolbarButtonRef.option("disabled", false);
+          }
+        }
+      },
+    },
+    addressesFocusedRowKey: {
+      handler(value) {
+        //console.log("addressesFocusedRowKey value changed: " + value);
+        if (value === "" || this.formData.addresses.length === 0) {
+          editAddressesToolbarButtonRef.option("disabled", true);
+          copyAddressesToolbarButtonRef.option("disabled", true);
+          deleteAddressesToolbarButtonRef.option("disabled", true);
+        } else {
+          if (this.formData.addresses.length === 0) {
+            editAddressesToolbarButtonRef.option("disabled", true);
+            copyAddressesToolbarButtonRef.option("disabled", true);
+            deleteAddressesToolbarButtonRef.option("disabled", true);
+          } else {
+            editAddressesToolbarButtonRef.option("disabled", false);
+            copyAddressesToolbarButtonRef.option("disabled", false);
+            deleteAddressesToolbarButtonRef.option("disabled", false);
           }
         }
       },
