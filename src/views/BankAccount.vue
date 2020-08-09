@@ -183,7 +183,7 @@ export default {
         onClick: this.onSaveClick.bind(this),
       },
       cancelNavButtonOptions: {
-        icon: "fas fa-times",
+        icon: "fas fa-ban",
         focusStateEnabled: false,
         stylingMode: "text",
         text: "Cancel",

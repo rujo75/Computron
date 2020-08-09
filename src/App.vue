@@ -156,8 +156,14 @@ body {
 
 .fa-times,
 .fa-times-circle,
-.fa-trash-alt {
-  color: #ff7467;
+.fa-trash-alt,
+.fa-ban {
+  /*color: #ff7467;*/
+  color: #f95858;
+}
+
+.fa-times {
+  font-size: 20px;
 }
 
 .dx-datagrid-export-button .dx-icon-export-excel-button {
