@@ -35,7 +35,7 @@ export default {
   components: {
     DxToolbar,
     DxItem,
-    DxTabPanel
+    DxTabPanel,
   },
   data() {
     return {
@@ -45,32 +45,32 @@ export default {
         {
           title: "General",
           template: "GeneralTab",
-          isValid: true
-        }
+          isValid: true,
+        },
       ],
       saveNavButtonOptions: {
         icon: "fas fa-save",
         focusStateEnabled: false,
         stylingMode: "text",
         text: "Save",
-        onClick: this.onSaveClick.bind(this)
+        onClick: this.onSaveClick.bind(this),
       },
       cancelNavButtonOptions: {
-        icon: "fas fa-times-circle",
+        icon: "fas fa-times",
         focusStateEnabled: false,
         stylingMode: "text",
         text: "Cancel",
         onClick: () => {
           this.$router.back();
-        }
-      }
+        },
+      },
     };
   },
   computed: {
-    ...mapGetters(["getCurrentPath"])
+    ...mapGetters(["getCurrentPath"]),
   },
   methods: {
-    onSaveClick() {}
+    onSaveClick() {},
   },
   created() {
     //console.log("created");
@@ -78,7 +78,7 @@ export default {
   },
   mounted() {
     //console.log("mounted");
-  }
+  },
 };
 </script>
 

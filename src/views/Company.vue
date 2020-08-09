@@ -189,7 +189,7 @@ import {
   DxPatternRule,
   DxEmailRule,
   DxStringLengthRule,
-  DxCustomRule
+  DxCustomRule,
 } from "devextreme-vue/form";
 import { getNewId } from "../store/common";
 
@@ -197,8 +197,8 @@ export default {
   props: {
     id: {
       default: "",
-      type: String
-    }
+      type: String,
+    },
   },
   name: "company",
   components: {
@@ -213,7 +213,7 @@ export default {
     DxPatternRule,
     DxEmailRule,
     DxStringLengthRule,
-    DxCustomRule
+    DxCustomRule,
   },
   data() {
     return {
@@ -223,34 +223,34 @@ export default {
         {
           title: "General",
           template: "GeneralTab",
-          isValid: true
+          isValid: true,
         },
         {
           title: "Communication",
           template: "CommunicationTab",
-          isValid: true
+          isValid: true,
         },
         {
           title: "Payments",
           template: "PaymentsTab",
-          isValid: true
-        }
+          isValid: true,
+        },
       ],
       saveNavButtonOptions: {
         icon: "fas fa-save",
         focusStateEnabled: false,
         stylingMode: "text",
         text: "Save",
-        onClick: this.onSaveClick.bind(this)
+        onClick: this.onSaveClick.bind(this),
       },
       cancelNavButtonOptions: {
-        icon: "fas fa-times-circle",
+        icon: "fas fa-times",
         focusStateEnabled: false,
         stylingMode: "text",
         text: "Cancel",
         onClick: () => {
           this.$router.back();
-        }
+        },
       },
       stateEditorOptions: {
         items: [
@@ -261,44 +261,44 @@ export default {
           { id: "SA", text: "South Australia" },
           { id: "TAS", text: "Tasmania" },
           { id: "VIC", text: "Victoria" },
-          { id: "WA", text: "Western Australia" }
+          { id: "WA", text: "Western Australia" },
         ],
         displayExpr: "text",
         valueExpr: "id",
-        showClearButton: true
+        showClearButton: true,
       },
       postcodeEditorOptions: {
-        mask: "0000"
+        mask: "0000",
       },
       countryEditorOptions: {
         items: [{ id: "AUS", text: "Australia" }],
         displayExpr: "text",
         valueExpr: "id",
-        showClearButton: true
+        showClearButton: true,
       },
       telephoneNoEditorOptions: {
-        mask: "(00) 0000 0000"
+        mask: "(00) 0000 0000",
       },
       mobileNoEditorOptions: {
-        mask: "0000 000 000"
+        mask: "0000 000 000",
       },
       taxNoEditorOptions: {
-        mask: "00 000 000 000"
+        mask: "00 000 000 000",
       },
       bankBranchNoEditorOptions: {
-        mask: "000-000"
+        mask: "000-000",
       },
-      companyCodePattern: /^[^\s]+$/
+      companyCodePattern: /^[^\s]+$/,
     };
   },
   computed: {
     currentRouteName() {
       // returns NewCompany or EditCompany or CopyCompany
       return this.$route.name;
-    }
+    },
   },
   methods: {
-    loadFormData: function() {
+    loadFormData: function () {
       //console.log("loadFormData");
       //console.log("id: " + this.id);
       if (this.currentRouteName === "CreateCompany") {
@@ -326,7 +326,7 @@ export default {
           bankAccountNo: "",
           swiftCode: "",
           iban: "",
-          active: true
+          active: true,
         };
         // use new company
         this.formData = newCompany;
@@ -373,7 +373,7 @@ export default {
             bankAccountNo: company.bankAccountNo,
             swiftCode: company.swiftCode,
             iban: company.iban,
-            active: true
+            active: true,
           };
           // use new company
           this.formData = newCompany;
@@ -382,7 +382,7 @@ export default {
         }
       }
     },
-    isFormDataChanged: function() {
+    isFormDataChanged: function () {
       // check the main form data
       let isFormDataNotChanged = this._.isEqual(
         this.formData,
@@ -473,7 +473,7 @@ export default {
       //console.log(e);
       var result = this.$refs["formPayments"].instance.validate();
       this.tabsData[2].isValid = result.isValid;
-    }
+    },
   },
   created() {
     //console.log("created");
@@ -488,7 +488,7 @@ export default {
       // new company
       this.$refs["formGeneral"].instance.getEditor("companyCode").focus();
     }
-  }
+  },
 };
 </script>
 

@@ -78,7 +78,7 @@ import { getNewId } from "./../store/common.js";
 
 export default {
   props: {
-    id: String
+    id: String,
   },
   name: "page",
   components: {
@@ -86,14 +86,14 @@ export default {
     DxPopup,
     DxForm,
     DxFormItem,
-    DxScrollView
+    DxScrollView,
   },
   data() {
     return {
       formData: { id: "", saveTo: "" },
       validationRules: {
-        saveTo: [{ type: "required", message: "Save to folder is required." }]
-      }
+        saveTo: [{ type: "required", message: "Save to folder is required." }],
+      },
     };
   },
   computed: {
@@ -103,7 +103,7 @@ export default {
       return {
         dataSource: this.getFavouritesData,
         displayExpr: "text",
-        valueExpr: "id"
+        valueExpr: "id",
       };
     },
     getMenuItems() {
@@ -116,7 +116,7 @@ export default {
       } else {
         return [];
       }
-    }
+    },
   },
   methods: {
     getItemFavouritesIcon(item) {
@@ -199,8 +199,8 @@ export default {
             text: menu.text,
             icon: menu.icon,
             isFolder: false,
-            link: menu.link
-          }
+            link: menu.link,
+          },
         };
         //alert("saveTo: " + this.formData.saveTo);
         this.$store.dispatch("addFavouriteToFavouritesData", data);
@@ -227,7 +227,7 @@ export default {
       if (this.getLastSelectedFavouriteFolder) {
         // Check if folder still exists in array
         let index = this.getFavouritesData.findIndex(
-          obj => obj.id === this.getLastSelectedFavouriteFolder
+          (obj) => obj.id === this.getLastSelectedFavouriteFolder
         );
         if (index >= 0) {
           this.formData.saveTo = this.getLastSelectedFavouriteFolder;
@@ -249,11 +249,11 @@ export default {
     },
     popupFormHiding() {
       this.$refs["formFavourites"].instance.resetValues();
-    }
+    },
   },
   mounted() {
     //console.log("Menu Id: " + this.id);
-  }
+  },
 };
 </script>
 
@@ -283,7 +283,7 @@ export default {
 }
 
 .my-card:hover {
-  box-shadow: 0 0 0 1px;
+  box-shadow: 0 0 0 1px #1ca8dd;
 }
 
 .card-header {

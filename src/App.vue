@@ -133,9 +133,9 @@ body {
   color: #1ca8dd;
 }
 
-.dx-list-item-selected .svg-inline--fa {
+/*.dx-list-item-selected .svg-inline--fa {
   color: #dedede;
-}
+}*/
 
 .dx-list-item-selected.dx-state-focused .svg-inline--fa {
   color: #2a2a2a;
@@ -154,6 +154,7 @@ body {
   color: #74bf83;
 }
 
+.fa-times,
 .fa-times-circle,
 .fa-trash-alt {
   color: #ff7467;

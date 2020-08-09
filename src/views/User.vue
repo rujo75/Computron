@@ -144,7 +144,7 @@ import {
   DxPatternRule,
   DxEmailRule,
   DxStringLengthRule,
-  DxCustomRule
+  DxCustomRule,
   //DxAsyncRule
 } from "devextreme-vue/form";
 import { getNewId } from "../store/common";
@@ -153,8 +153,8 @@ export default {
   props: {
     id: {
       default: "",
-      type: String
-    }
+      type: String,
+    },
   },
   name: "user",
   components: {
@@ -169,7 +169,7 @@ export default {
     DxPatternRule,
     DxEmailRule,
     DxStringLengthRule,
-    DxCustomRule
+    DxCustomRule,
     //DxAsyncRule
   },
   data() {
@@ -180,37 +180,37 @@ export default {
         {
           title: "General",
           template: "GeneralTab",
-          isValid: true
-        }
+          isValid: true,
+        },
       ],
       saveNavButtonOptions: {
         icon: "fas fa-save",
         focusStateEnabled: false,
         stylingMode: "text",
         text: "Save",
-        onClick: this.onSaveClick.bind(this)
+        onClick: this.onSaveClick.bind(this),
       },
       cancelNavButtonOptions: {
-        icon: "fas fa-times-circle",
+        icon: "fas fa-times",
         focusStateEnabled: false,
         stylingMode: "text",
         text: "Cancel",
         onClick: () => {
           this.$router.back();
-        }
+        },
       },
       userCodePattern: /^[^\s]+$/,
-      userNamePattern: /^[^\s]+$/
+      userNamePattern: /^[^\s]+$/,
     };
   },
   computed: {
     currentRouteName() {
       // returns NewUser or EditUser or CopyUser
       return this.$route.name;
-    }
+    },
   },
   methods: {
-    loadFormData: function() {
+    loadFormData: function () {
       //console.log("loadFormData");
       //console.log("id: " + this.id);
       if (this.currentRouteName === "CreateUser") {
@@ -224,7 +224,7 @@ export default {
           active: true,
           expiryDate: "",
           password: "",
-          mustChangePassword: true
+          mustChangePassword: true,
         };
         //console.log(newUser);
         // use new user
@@ -258,7 +258,7 @@ export default {
             active: true,
             expiryDate: user.expiryDate,
             password: "",
-            mustChangePassword: true
+            mustChangePassword: true,
           };
           // use new user
           this.formData = newUser;
@@ -267,7 +267,7 @@ export default {
         }
       }
     },
-    isFormDataChanged: function() {
+    isFormDataChanged: function () {
       // check the main form data
       let isFormDataNotChanged = this._.isEqual(
         this.formData,
@@ -366,7 +366,7 @@ export default {
       //console.log(e);
       var result = this.$refs["formGeneral"].instance.validate();
       this.tabsData[0].isValid = result.isValid;
-    }
+    },
   },
   created() {
     //console.log("created");
@@ -381,7 +381,7 @@ export default {
       // new user
       this.$refs["formGeneral"].instance.getEditor("userCode").focus();
     }
-  }
+  },
 };
 </script>
 

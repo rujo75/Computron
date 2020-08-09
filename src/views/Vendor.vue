@@ -399,7 +399,7 @@ export default {
         onClick: this.onSaveClick.bind(this),
       },
       cancelNavButtonOptions: {
-        icon: "fas fa-times-circle",
+        icon: "fas fa-times",
         focusStateEnabled: false,
         stylingMode: "text",
         text: "Cancel",
