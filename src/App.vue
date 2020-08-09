@@ -157,9 +157,11 @@ body {
 .fa-times,
 .fa-times-circle,
 .fa-trash-alt,
-.fa-ban {
+.fa-ban,
+.fa-exclamation-circle {
   /*color: #ff7467;*/
-  color: #f95858;
+  /*color: #f95858;*/
+  color: #d9534f;
 }
 
 .fa-times {
