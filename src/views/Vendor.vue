@@ -669,6 +669,7 @@ export default {
           vendorCode: "",
           vendorName: "",
           taxNo: "",
+          contacts: [],
           addresses: [],
           active: true,
         };
@@ -701,6 +702,7 @@ export default {
             vendorCode: vendor.vendorCode,
             vendorName: vendor.vendorName,
             taxNo: vendor.taxNo,
+            contacts: [],
             addresses: [],
             active: true,
           };
