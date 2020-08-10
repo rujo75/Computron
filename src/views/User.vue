@@ -9,7 +9,7 @@
         :items="tabsData"
         :animation-enabled="true"
         :swipe-enabled="false"
-        :deferRendering="false"
+        :deferRendering="true"
         item-title-template="title"
         class="tab-panel"
       >
@@ -28,7 +28,7 @@
             validation-group="userData"
             @field-data-changed="onGeneralFieldDataChanged"
           >
-            <dx-group-item :col-count="2">
+            <dx-group-item :col-count="2" caption="User Information">
               <dx-form-item data-field="userID" :editor-options="{disabled: true}">
                 <dx-label text="User ID" />
               </dx-form-item>

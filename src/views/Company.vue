@@ -9,7 +9,7 @@
         :items="tabsData"
         :animation-enabled="true"
         :swipe-enabled="false"
-        :deferRendering="false"
+        :deferRendering="true"
         item-title-template="title"
         class="tab-panel"
       >
@@ -28,7 +28,7 @@
             validation-group="companyData1"
             @field-data-changed="onGeneralFieldDataChanged"
           >
-            <dx-group-item :col-count="2">
+            <dx-group-item :col-count="2" caption="Company Information">
               <dx-form-item data-field="companyID" :editor-options="{disabled: true}">
                 <dx-label text="Company ID" />
               </dx-form-item>
@@ -98,18 +98,8 @@
               <!--<dx-label :visible="true" />-->
               <dx-form-item data-field="active" editor-type="dxCheckBox" />
             </dx-group-item>
-          </dx-form>
-        </div>
-        <div class="tab" slot="CommunicationTab">
-          <dx-form
-            ref="formCommunication"
-            class="form"
-            :form-data="formData"
-            :scrolling-enabled="true"
-            validation-group="companyData2"
-            @field-data-changed="onCommunicationFieldDataChanged"
-          >
-            <dx-group-item :col-count="2">
+
+            <dx-group-item :col-count="2" caption="Communication">
               <dx-form-item data-field="phoneNo" :editor-options="telephoneNoEditorOptions">
                 <dx-label text="Phone No" />
               </dx-form-item>
@@ -141,18 +131,8 @@
                 />
               </dx-form-item>
             </dx-group-item>
-          </dx-form>
-        </div>
-        <div class="tab" slot="PaymentsTab">
-          <dx-form
-            ref="formPayments"
-            class="form"
-            :form-data="formData"
-            :scrolling-enabled="true"
-            validation-group="companyData3"
-            @field-data-changed="onPaymentsFieldDataChanged"
-          >
-            <dx-group-item :col-count="2">
+
+            <dx-group-item :col-count="2" caption="Payments">
               <dx-form-item data-field="bankName">
                 <dx-string-length-rule
                   :max="100"
@@ -223,16 +203,6 @@ export default {
         {
           title: "General",
           template: "GeneralTab",
-          isValid: true,
-        },
-        {
-          title: "Communication",
-          template: "CommunicationTab",
-          isValid: true,
-        },
-        {
-          title: "Payments",
-          template: "PaymentsTab",
           isValid: true,
         },
       ],
@@ -394,25 +364,12 @@ export default {
     onSaveClick() {
       //console.log("onSaveClick");
       var resultGeneral = this.$refs["formGeneral"].instance.validate();
-      var resultCommunication = this.$refs[
-        "formCommunication"
-      ].instance.validate();
-      var resultPayments = this.$refs["formPayments"].instance.validate();
-
       //console.log(resultGeneral.isValid);
-      //console.log(resultCommunication.isValid);
-      //console.log(resultPayments.isValid);
 
       // update accordionItems
       this.tabsData[0].isValid = resultGeneral.isValid;
-      this.tabsData[1].isValid = resultCommunication.isValid;
-      this.tabsData[2].isValid = resultPayments.isValid;
 
-      if (
-        resultGeneral.isValid &&
-        resultCommunication.isValid &&
-        resultPayments.isValid
-      ) {
+      if (resultGeneral.isValid) {
         // all data is valid
         let changed = this.isFormDataChanged();
         //console.log("changed: " + changed);
@@ -463,16 +420,6 @@ export default {
       //console.log(e);
       var result = this.$refs["formGeneral"].instance.validate();
       this.tabsData[0].isValid = result.isValid;
-    },
-    onCommunicationFieldDataChanged() {
-      //console.log(e);
-      var result = this.$refs["formCommunication"].instance.validate();
-      this.tabsData[1].isValid = result.isValid;
-    },
-    onPaymentsFieldDataChanged() {
-      //console.log(e);
-      var result = this.$refs["formPayments"].instance.validate();
-      this.tabsData[2].isValid = result.isValid;
     },
   },
   created() {

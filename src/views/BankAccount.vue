@@ -9,7 +9,7 @@
         :items="tabsData"
         :animation-enabled="true"
         :swipe-enabled="false"
-        :deferRendering="false"
+        :deferRendering="true"
         item-title-template="title"
         class="tab-panel"
       >
@@ -28,7 +28,7 @@
             validation-group="bankAccountData1"
             @field-data-changed="onGeneralFieldDataChanged"
           >
-            <dx-group-item :col-count="2">
+            <dx-group-item :col-count="2" caption="Account Information">
               <dx-form-item data-field="accountID" :editor-options="{disabled: true}">
                 <dx-label text="Account ID" />
               </dx-form-item>
@@ -75,18 +75,7 @@
             <dx-group-item :col-count="2">
               <dx-form-item data-field="active" editor-type="dxCheckBox" />
             </dx-group-item>
-          </dx-form>
-        </div>
-        <div class="tab" slot="CommunicationTab">
-          <dx-form
-            ref="formCommunication"
-            class="form"
-            :form-data="formData"
-            :scrolling-enabled="true"
-            validation-group="bankAccountData2"
-            @field-data-changed="onCommunicationFieldDataChanged"
-          >
-            <dx-group-item :col-count="2">
+            <dx-group-item :col-count="2" caption="Address">
               <dx-form-item data-field="addressLine1">
                 <dx-string-length-rule
                   :max="255"
@@ -167,11 +156,6 @@ export default {
         {
           title: "General",
           template: "GeneralTab",
-          isValid: true,
-        },
-        {
-          title: "Communication",
-          template: "CommunicationTab",
           isValid: true,
         },
       ],
@@ -323,15 +307,11 @@ export default {
     },
     onSaveClick() {
       var resultGeneral = this.$refs["formGeneral"].instance.validate();
-      var resultCommunication = this.$refs[
-        "formCommunication"
-      ].instance.validate();
 
       // update accordionItems
       this.tabsData[0].isValid = resultGeneral.isValid;
-      this.tabsData[1].isValid = resultCommunication.isValid;
 
-      if (resultGeneral.isValid && resultCommunication.isValid) {
+      if (resultGeneral.isValid) {
         // all data is valid
         let changed = this.isFormDataChanged();
         //console.log("changed: " + changed);
@@ -379,11 +359,6 @@ export default {
       //console.log(e);
       var result = this.$refs["formGeneral"].instance.validate();
       this.tabsData[0].isValid = result.isValid;
-    },
-    onCommunicationFieldDataChanged() {
-      //console.log(e);
-      var result = this.$refs["formCommunication"].instance.validate();
-      this.tabsData[1].isValid = result.isValid;
     },
   },
   created() {

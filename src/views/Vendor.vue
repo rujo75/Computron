@@ -390,7 +390,130 @@
             </div>
           </dx-data-grid>
         </div>
-        <div class="grid-tab" slot="BankAccountsTab"></div>
+        <div class="grid-tab" slot="BankAccountsTab">
+          <dx-data-grid
+            ref="bankAccountsGrid"
+            key-expr="bankAccountID"
+            :data-source="formData.bankAccounts"
+            :remote-operations="false"
+            :allow-column-resizing="true"
+            :allow-column-reordering="true"
+            :column-min-width="50"
+            :column-auto-width="true"
+            :row-alternation-enabled="false"
+            :hover-state-enabled="true"
+            :show-borders="true"
+            :focused-row-enabled="true"
+            :auto-navigate-to-focused-row="true"
+            :focused-row-key.sync="bankAccountsFocusedRowKey"
+            :state-storing="bankAccountsStateStoring"
+            column-resizing-mode="widget"
+            width="100%"
+            height="calc(100vh - 251px)"
+            @toolbar-preparing="onBankAccountsToolbarPreparing($event);"
+            @focused-row-changed="onBankAccountsFocusedRowChanged"
+          >
+            <dx-export
+              :enabled="true"
+              :allow-export-selected-data="false"
+              file-name="Bank Accounts"
+            />
+            <dx-column-chooser :enabled="true" />
+            <dx-column
+              data-field="bankAccountID"
+              caption="Bank Account ID"
+              data-type="string"
+              :width="300"
+              :visible="false"
+              cell-template="IDTemplate"
+            />
+            <dx-column
+              data-field="bankAccountCode"
+              caption="Bank Account Code"
+              data-type="string"
+              :width="130"
+              :visible="false"
+            />
+            <dx-column
+              data-field="bankName"
+              caption="Bank Name"
+              data-type="string"
+              :min-width="120"
+            />
+            <dx-column
+              data-field="bankBranchNo"
+              caption="Bank Branch No"
+              data-type="string"
+              :width="100"
+              cell-template="bankBranchNoTemplate"
+            />
+            <dx-column
+              data-field="bankAccountNo"
+              caption="Bank Account No"
+              data-type="string"
+              :width="100"
+            />
+            <dx-column
+              data-field="swiftCode"
+              caption="SWIFT Code"
+              data-type="string"
+              :width="100"
+              :visible="false"
+            />
+            <dx-column
+              data-field="iban"
+              caption="IBAN"
+              data-type="string"
+              :width="100"
+              :visible="false"
+            />
+            <dx-column
+              data-field="addressLine1"
+              caption="Address Line 1"
+              data-type="string"
+              :min-width="200"
+            />
+            <dx-column
+              data-field="addressLine2"
+              caption="Address Line 2"
+              data-type="string"
+              :min-width="200"
+              :visible="false"
+            />
+            <dx-column data-field="city" caption="City" data-type="string" :width="120" />
+            <dx-column data-field="postcode" caption="Postcode" data-type="string" :width="90" />
+            <dx-column
+              data-field="country"
+              caption="Country"
+              data-type="string"
+              :width="120"
+              :visible="false"
+            />
+            <dx-column data-field="state" caption="State" data-type="string" :width="120" />
+
+            <dx-column
+              data-field="active"
+              caption="Active"
+              data-type="boolean"
+              :width="80"
+              :visible="false"
+            />
+            <dx-load-panel :enabled="false" />
+            <dx-group-panel :visible="false" />
+            <dx-search-panel :visible="true" :width="250" />
+
+            <div slot="IDTemplate" slot-scope="{ data: item }">
+              <span
+                @click.stop.prevent="onIDClick(item);"
+                class="data-grid-hyperlink"
+              >{{ item.value }}</span>
+            </div>
+            <div
+              slot="bankBranchNoTemplate"
+              slot-scope="{ data: item }"
+            >{{ item.value | VMask(bankBranchNoMask) }}</div>
+          </dx-data-grid>
+        </div>
       </dx-tab-panel>
     </div>
   </div>
@@ -433,6 +556,10 @@ var editAddressesToolbarButtonRef = null;
 var copyAddressesToolbarButtonRef = null;
 var deleteAddressesToolbarButtonRef = null;
 
+var editBankAccountsToolbarButtonRef = null;
+var copyBankAccountsToolbarButtonRef = null;
+var deleteBankAccountsToolbarButtonRef = null;
+
 export default {
   props: {
     id: {
@@ -471,6 +598,7 @@ export default {
       formOriginalData: null,
       phoneNoMask: "(##) #### ####",
       mobileNoMask: "#### ### ###",
+      bankBranchNoMask: "###-###",
       tabsData: [
         {
           title: "General",
@@ -650,6 +778,53 @@ export default {
           localStorage.setItem(this.storageKey, JSON.stringify(state));
         },
       },
+      bankAccountsFocusedRowKey: "",
+      bankAccountsStateStoring: {
+        enabled: true,
+        storageKey: "VendorBankAccounts",
+        type: "custom",
+        savingTimeout: 0,
+        customLoad: function () {
+          //console.log("bankAccountsStateStoring customLoad");
+          //console.log(this.bankAccountsStateStoring);
+          var state = localStorage.getItem(
+            this.bankAccountsStateStoring.storageKey
+          );
+          if (state) {
+            state = JSON.parse(state);
+            //console.log(state);
+            let newFocusedRowKey = "";
+
+            // make sure state has focusedRowKey property
+            // eslint-disable-next-line no-prototype-builtins
+            if (!state.hasOwnProperty("focusedRowKey")) {
+              state.focusedRowKey = "";
+            }
+
+            // check the old key stored in the local storage
+            newFocusedRowKey = state.bankAccountsFocusedRowKey;
+            let index = this._.findIndex(this.formData.bankAccounts, {
+              addressID: newFocusedRowKey,
+            });
+            if (index === -1) {
+              // old key no longer exists
+              // check if we have any records
+              if (this.formData.bankAccounts.length > 0) {
+                // select the first row
+                newFocusedRowKey = this.formData.bankAccountID;
+              }
+            }
+
+            // assign new focused row key
+            state.bankAccountsFocusedRowKey = newFocusedRowKey;
+          }
+          return state;
+        }.bind(this),
+        customSave: function (state) {
+          //console.log("bankAccountsStateStoring customSave");
+          localStorage.setItem(this.storageKey, JSON.stringify(state));
+        },
+      },
     };
   },
   computed: {
@@ -671,6 +846,7 @@ export default {
           taxNo: "",
           contacts: [],
           addresses: [],
+          bankAccounts: [],
           active: true,
         };
         //console.log(newVendor);
@@ -704,6 +880,7 @@ export default {
             taxNo: vendor.taxNo,
             contacts: [],
             addresses: [],
+            bankAccounts: [],
             active: true,
           };
           // use new vendor
@@ -945,6 +1122,86 @@ export default {
         );
       }
     },
+    onBankAccountsToolbarPreparing(e) {
+      e.toolbarOptions.items.unshift(
+        {
+          location: "before",
+          widget: "dxButton",
+          options: {
+            icon: "fas fa-plus",
+            stylingMode: "text",
+            text: "Create",
+            focusStateEnabled: false,
+            disabled: false,
+            onClick: () => {
+              this.$router.push("/CreateVendor");
+            },
+          },
+        },
+        {
+          location: "before",
+          widget: "dxButton",
+          options: {
+            icon: "fas fa-edit",
+            stylingMode: "text",
+            text: "Edit",
+            focusStateEnabled: false,
+            disabled: true,
+            onInitialized: (e) => {
+              editBankAccountsToolbarButtonRef = e.component;
+            },
+            onClick: () => {
+              this.$router.push("/EditVendor/" + this.focusedRowKey);
+            },
+          },
+        },
+        {
+          location: "before",
+          widget: "dxButton",
+          options: {
+            icon: "fas fa-copy",
+            stylingMode: "text",
+            text: "Copy",
+            focusStateEnabled: false,
+            disabled: true,
+            onInitialized: (e) => {
+              copyBankAccountsToolbarButtonRef = e.component;
+            },
+            onClick: () => {
+              this.$router.push("/CopyVendor/" + this.focusedRowKey);
+            },
+          },
+        },
+        {
+          location: "before",
+          widget: "dxButton",
+          options: {
+            icon: "fas fa-trash-alt",
+            stylingMode: "text",
+            text: "Delete",
+            focusStateEnabled: false,
+            disabled: true,
+            onInitialized: (e) => {
+              deleteBankAccountsToolbarButtonRef = e.component;
+            },
+            onClick: () => {
+              this.$store.dispatch("deleteVendor", this.focusedRowKey);
+              this.focusedRowKey = "";
+            },
+          },
+        }
+      );
+    },
+    onBankAccountsFocusedRowChanged(e) {
+      //console.log("onBankAccountsFocusedRowChanged");
+      // save grid state in case it was manually set from the code
+      if (e.component.state()) {
+        localStorage.setItem(
+          this.bankAccountsStateStoring.storageKey,
+          JSON.stringify(e.component.state())
+        );
+      }
+    },
     setSelectedContact(e) {
       //console.log(e.itemData);
       this.formData.contactID = e.itemData.contactID;
@@ -1012,6 +1269,26 @@ export default {
             editAddressesToolbarButtonRef.option("disabled", false);
             copyAddressesToolbarButtonRef.option("disabled", false);
             deleteAddressesToolbarButtonRef.option("disabled", false);
+          }
+        }
+      },
+    },
+    bankAccountsFocusedRowKey: {
+      handler(value) {
+        //console.log("bankAccountsFocusedRowKey value changed: " + value);
+        if (value === "" || this.formData.bankAccounts.length === 0) {
+          editBankAccountsToolbarButtonRef.option("disabled", true);
+          copyBankAccountsToolbarButtonRef.option("disabled", true);
+          deleteBankAccountsToolbarButtonRef.option("disabled", true);
+        } else {
+          if (this.formData.bankAccounts.length === 0) {
+            editBankAccountsToolbarButtonRef.option("disabled", true);
+            copyBankAccountsToolbarButtonRef.option("disabled", true);
+            deleteBankAccountsToolbarButtonRef.option("disabled", true);
+          } else {
+            editBankAccountsToolbarButtonRef.option("disabled", false);
+            copyBankAccountsToolbarButtonRef.option("disabled", false);
+            deleteBankAccountsToolbarButtonRef.option("disabled", false);
           }
         }
       },
