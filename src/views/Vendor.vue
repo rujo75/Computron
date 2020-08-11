@@ -516,6 +516,54 @@
         </div>
       </dx-tab-panel>
     </div>
+    <dx-popup
+      ref="contactPopup"
+      :drag-enabled="true"
+      :close-on-outside-click="false"
+      :show-title="true"
+      :width="900"
+      :height="600"
+      class="popup"
+      title="Vendor Contact"
+      @showing="contactPopupShowing"
+      @shown="contactPopupShown"
+      @hiding="contactPopupHiding"
+    >
+      <div class="popup-form-container">
+        <dx-form ref="contactForm" :form-data="formContactData" :scrolling-enabled="true">
+          <dx-group-item :col-count="2" caption="Contact Information">
+            <dx-form-item data-field="contactID" :editor-options="{disabled: true}">
+              <dx-label text="Contact ID" />
+            </dx-form-item>
+            <dx-form-item data-field="contactCode" />
+          </dx-group-item>
+          <dx-group-item :col-count="2">
+            <dx-form-item data-field="contactName" />
+            <dx-form-item data-field="jobTitle" />
+            <dx-form-item data-field="department" />
+          </dx-group-item>
+          <dx-group-item :col-count="2" caption="Communication">
+            <dx-form-item data-field="phoneNo" />
+            <dx-form-item data-field="faxNo" />
+            <dx-form-item data-field="mobileNo" />
+            <dx-form-item data-field="email" />
+          </dx-group-item>
+          <dx-group-item :col-count="2">
+            <dx-form-item data-field="active" editor-type="dxCheckBox" />
+          </dx-group-item>
+        </dx-form>
+      </div>
+      <div align="right">
+        <dx-button
+          text="OK"
+          type="success"
+          :use-submit-behavior="true"
+          :width="80"
+          @click="saveContact"
+        />
+        <dx-button text="Cancel" :width="80" class="margin-left-10" @click="hideContactPopup" />
+      </div>
+    </dx-popup>
   </div>
 </template>
 
@@ -546,6 +594,7 @@ import {
   DxLookup, //DxDropDownOptions
 } from "devextreme-vue/lookup";
 import { DxButton } from "devextreme-vue";
+import { DxPopup } from "devextreme-vue/popup";
 import { getNewId } from "../store/common";
 
 var editContactsToolbarButtonRef = null;
@@ -590,12 +639,15 @@ export default {
     DxLookup,
     //DxDropDownOptions,
     DxButton,
+    DxPopup,
     DxExport,
   },
   data() {
     return {
       formData: null,
       formOriginalData: null,
+      formContactData: null,
+      formOriginalContactData: null,
       phoneNoMask: "(##) #### ####",
       mobileNoMask: "#### ### ###",
       bankBranchNoMask: "###-###",
@@ -964,7 +1016,8 @@ export default {
             focusStateEnabled: false,
             disabled: false,
             onClick: () => {
-              this.$router.push("/CreateVendor");
+              //this.$router.push("/CreateVendor");
+              this.createContact();
             },
           },
         },
@@ -981,7 +1034,8 @@ export default {
               editContactsToolbarButtonRef = e.component;
             },
             onClick: () => {
-              this.$router.push("/EditVendor/" + this.focusedRowKey);
+              //this.$router.push("/EditVendor/" + this.focusedRowKey);
+              this.editContact(this.contactsFocusedRowKey);
             },
           },
         },
@@ -998,7 +1052,8 @@ export default {
               copyContactsToolbarButtonRef = e.component;
             },
             onClick: () => {
-              this.$router.push("/CopyVendor/" + this.focusedRowKey);
+              //this.$router.push("/CopyVendor/" + this.focusedRowKey);
+              this.copyContact(this.contactsFocusedRowKey);
             },
           },
         },
@@ -1015,8 +1070,9 @@ export default {
               deleteContactsToolbarButtonRef = e.component;
             },
             onClick: () => {
-              this.$store.dispatch("deleteVendor", this.focusedRowKey);
-              this.focusedRowKey = "";
+              //this.$store.dispatch("deleteVendor", this.focusedRowKey);
+              //this.focusedRowKey = "";
+              this.deleteContact(this.contactsFocusedRowKey);
             },
           },
         }
@@ -1227,6 +1283,80 @@ export default {
       this.formData.email = e.itemData.email;
       this.formData.website = e.itemData.website;
     },
+    createContact() {
+      // create contact
+      let newContact = {
+        contactID: getNewId(),
+        contactCode: "",
+        contactName: "",
+        jobTitle: "",
+        department: "",
+        phoneNo: "",
+        faxNo: "",
+        mobileNo: "",
+        email: "",
+        active: true,
+      };
+      this.formContactData = newContact;
+      this.formOriginalContactData = this._.cloneDeep(this.formContactData);
+      this.showContactPopup();
+    },
+    editContact(id) {
+      //console.log(this.contactsFocusedRowKey);
+      let contact = this.formData.contacts.find(
+        (item) => item.contactID === id
+      );
+      if (contact) {
+        let newContact = {
+          contactID: contact.contactID,
+          contactCode: contact.contactCode,
+          contactName: contact.contactName,
+          jobTitle: contact.jobTitle,
+          department: contact.department,
+          phoneNo: contact.phoneNo,
+          faxNo: contact.faxNo,
+          mobileNo: contact.mobileNo,
+          email: contact.email,
+          active: true,
+        };
+        this.formContactData = newContact;
+        this.formOriginalContactData = this._.cloneDeep(this.formContactData);
+        this.showContactPopup();
+      }
+    },
+    copyContact(id) {
+      let contact = this.formData.contacts.find(
+        (item) => item.contactID === id
+      );
+      if (contact) {
+        let newContact = {
+          contactID: contact.contactID,
+          contactCode: contact.contactCode,
+          contactName: contact.contactName,
+          jobTitle: contact.jobTitle,
+          department: contact.department,
+          phoneNo: contact.phoneNo,
+          faxNo: contact.faxNo,
+          mobileNo: contact.mobileNo,
+          email: contact.email,
+          active: true,
+        };
+        this.formContactData = newContact;
+        this.formOriginalContactData = this._.cloneDeep(this.formContactData);
+        this.showContactPopup();
+      }
+    },
+    deleteContact() {},
+    showContactPopup() {
+      this.$refs["contactPopup"].instance.show();
+    },
+    hideContactPopup() {
+      this.$refs["contactPopup"].instance.hide();
+    },
+    contactPopupShowing() {},
+    contactPopupShown() {},
+    contactPopupHiding() {},
+    saveContact() {},
   },
   created() {
     //console.log("created");
@@ -1329,6 +1459,11 @@ export default {
 
 .form {
   height: calc(100vh - 257px);
+}
+
+.popup-form-container {
+  height: 453px;
+  margin-bottom: 20px;
 }
 
 .red {
