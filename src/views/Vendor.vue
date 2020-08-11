@@ -736,6 +736,7 @@ export default {
       },
       vendorCodePattern: /^[^\s]+$/,
       pageSizes: [10, 15, 20, 25, 50, 100],
+      contactFormStatus: "",
       contactsFocusedRowKey: "",
       contactsStateStoring: {
         enabled: true,
@@ -1299,6 +1300,7 @@ export default {
       };
       this.formContactData = newContact;
       this.formOriginalContactData = this._.cloneDeep(this.formContactData);
+      this.contactFormStatus = "NEW";
       this.showContactPopup();
     },
     editContact(id) {
@@ -1321,6 +1323,7 @@ export default {
         };
         this.formContactData = newContact;
         this.formOriginalContactData = this._.cloneDeep(this.formContactData);
+        this.contactFormStatus = "EDIT";
         this.showContactPopup();
       }
     },
@@ -1330,7 +1333,7 @@ export default {
       );
       if (contact) {
         let newContact = {
-          contactID: contact.contactID,
+          contactID: getNewId(),
           contactCode: contact.contactCode,
           contactName: contact.contactName,
           jobTitle: contact.jobTitle,
@@ -1343,6 +1346,7 @@ export default {
         };
         this.formContactData = newContact;
         this.formOriginalContactData = this._.cloneDeep(this.formContactData);
+        this.contactFormStatus = "COPY";
         this.showContactPopup();
       }
     },
