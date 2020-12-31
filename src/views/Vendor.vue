@@ -29,12 +29,12 @@
             @field-data-changed="onGeneralFieldDataChanged"
           >
             <dx-group-item :col-count="2" caption="Vendor Information">
-              <dx-form-item data-field="vendorID" :editor-options="{disabled: true}">
+              <dx-form-item data-field="vendorID" :editor-options="{readOnly: true}">
                 <dx-label text="Vendor ID" />
               </dx-form-item>
               <dx-form-item
                 data-field="vendorCode"
-                :editor-options="{disabled: this.currentRouteName === 'EditVendor'}"
+                :editor-options="{readOnly: this.currentRouteName === 'EditVendor'}"
               >
                 <dx-label text="Vendor Code" />
                 <dx-required-rule message="Vendor Code is required!" />
@@ -73,9 +73,9 @@
                 <dx-form-item template="addressTemplate">
                   <dx-label text="Address" />
                 </dx-form-item>
-                <dx-form-item data-field="addressLine1" :editor-options="{disabled: true}" />
-                <dx-form-item data-field="addressLine2" :editor-options="{disabled: true}" />
-                <dx-form-item data-field="city" :editor-options="{disabled: true}" />
+                <dx-form-item data-field="addressLine1" :editor-options="{readOnly: true}" />
+                <dx-form-item data-field="addressLine2" :editor-options="{readOnly: true}" />
+                <dx-form-item data-field="city" :editor-options="{readOnly: true}" />
                 <dx-form-item data-field="postcode" :editor-options="postcodeEditorOptions" />
                 <dx-form-item
                   data-field="country"
@@ -92,10 +92,10 @@
                 <dx-form-item template="contactTemplate">
                   <dx-label text="Contact" />
                 </dx-form-item>
-                <dx-form-item data-field="contactJobTitle" :editor-options="{disabled: true}">
+                <dx-form-item data-field="contactJobTitle" :editor-options="{readOnly: true}">
                   <dx-label text="Job Title" />
                 </dx-form-item>
-                <dx-form-item data-field="contactDepartment" :editor-options="{disabled: true}">
+                <dx-form-item data-field="contactDepartment" :editor-options="{readOnly: true}">
                   <dx-label text="Department" />
                 </dx-form-item>
                 <dx-form-item
@@ -110,7 +110,7 @@
                 <dx-form-item data-field="contactMobileNo" :editor-options="mobileNoEditorOptions">
                   <dx-label text="Mobile No" />
                 </dx-form-item>
-                <dx-form-item data-field="contactEmail" :editor-options="{disabled: true}">
+                <dx-form-item data-field="contactEmail" :editor-options="{readOnly: true}">
                   <dx-label text="Email" />
                 </dx-form-item>
               </dx-group-item>
@@ -532,7 +532,7 @@
       <div class="popup-form-container">
         <dx-form ref="contactForm" :form-data="formContactData" :scrolling-enabled="true">
           <dx-group-item :col-count="2" caption="Contact Information">
-            <dx-form-item data-field="contactID" :editor-options="{disabled: true}">
+            <dx-form-item data-field="contactID" :editor-options="{readOnly: true}">
               <dx-label text="Contact ID" />
             </dx-form-item>
             <dx-form-item data-field="contactCode" />
@@ -707,26 +707,26 @@ export default {
         displayExpr: "text",
         valueExpr: "id",
         showClearButton: true,
-        disabled: true,
+        readOnly: true,
       },
       postcodeEditorOptions: {
         mask: "0000",
-        disabled: true,
+        readOnly: true,
       },
       countryEditorOptions: {
         items: [{ id: "AUS", text: "Australia" }],
         displayExpr: "text",
         valueExpr: "id",
         showClearButton: true,
-        disabled: true,
+        readOnly: true,
       },
       telephoneNoEditorOptions: {
         mask: "(00) 0000 0000",
-        disabled: true,
+        readOnly: true,
       },
       mobileNoEditorOptions: {
         mask: "0000 000 000",
-        disabled: true,
+        readOnly: true,
       },
       taxNoEditorOptions: {
         mask: "00 000 000 000",
@@ -774,6 +774,7 @@ export default {
               }
             }
 
+            //console.log("newFocusedRowKey: " + newFocusedRowKey)
             // assign new focused row key
             state.contactsFocusedRowKey = newFocusedRowKey;
           }
