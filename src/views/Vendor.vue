@@ -761,7 +761,7 @@ export default {
             }
 
             // check the old key stored in the local storage
-            newFocusedRowKey = state.contactsFocusedRowKey;
+            newFocusedRowKey = state.focusedRowKey;
             let index = this._.findIndex(this.formData.contacts, {
               contactID: newFocusedRowKey,
             });
@@ -770,13 +770,13 @@ export default {
               // check if we have any records
               if (this.formData.contacts.length > 0) {
                 // select the first row
-                newFocusedRowKey = this.formData.contactID;
+                newFocusedRowKey = this.formData.contacts[0].contactID;
               }
             }
 
             //console.log("newFocusedRowKey: " + newFocusedRowKey)
             // assign new focused row key
-            state.contactsFocusedRowKey = newFocusedRowKey;
+            state.focusedRowKey = newFocusedRowKey;
           }
           return state;
         }.bind(this),
@@ -809,7 +809,7 @@ export default {
             }
 
             // check the old key stored in the local storage
-            newFocusedRowKey = state.addressesFocusedRowKey;
+            newFocusedRowKey = state.focusedRowKey;
             let index = this._.findIndex(this.formData.addresses, {
               addressID: newFocusedRowKey,
             });
@@ -818,12 +818,12 @@ export default {
               // check if we have any records
               if (this.formData.addresses.length > 0) {
                 // select the first row
-                newFocusedRowKey = this.formData.addressID;
+                newFocusedRowKey = this.formData.addresses[0].addressID;
               }
             }
 
             // assign new focused row key
-            state.addressesFocusedRowKey = newFocusedRowKey;
+            state.focusedRowKey = newFocusedRowKey;
           }
           return state;
         }.bind(this),
@@ -856,21 +856,23 @@ export default {
             }
 
             // check the old key stored in the local storage
-            newFocusedRowKey = state.bankAccountsFocusedRowKey;
+            newFocusedRowKey = state.focusedRowKey;
             let index = this._.findIndex(this.formData.bankAccounts, {
               addressID: newFocusedRowKey,
             });
+            console.log("index: " + index);
             if (index === -1) {
               // old key no longer exists
               // check if we have any records
               if (this.formData.bankAccounts.length > 0) {
                 // select the first row
-                newFocusedRowKey = this.formData.bankAccountID;
+                newFocusedRowKey = this.formData.bankAccounts[0].bankAccountID;
               }
             }
 
+            console.log("newFocusedRowKey: " + newFocusedRowKey);
             // assign new focused row key
-            state.bankAccountsFocusedRowKey = newFocusedRowKey;
+            state.focusedRowKey = newFocusedRowKey;
           }
           return state;
         }.bind(this),
