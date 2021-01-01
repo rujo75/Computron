@@ -4,7 +4,11 @@
       <DxItem #default location="before" locate-in-menu="never">
         <div class="toolbar-label">Favourites</div>
       </DxItem>
-      <DxItem :options="createFolderNavButtonOptions" location="after" widget="dxButton" />
+      <DxItem
+        :options="createFolderNavButtonOptions"
+        location="after"
+        widget="dxButton"
+      />
     </dx-toolbar>
     <div class="favourite-tree">
       <dx-tree-view
@@ -45,7 +49,10 @@
       <p>
         <!--:on-content-ready="validateForm"-->
         <dx-form ref="formFavouritesFolder" :form-data="formData">
-          <dx-form-item data-field="folderName" :validation-rules="validationRules.folderName" />
+          <dx-form-item
+            data-field="folderName"
+            :validation-rules="validationRules.folderName"
+          />
         </dx-form>
       </p>
       <div align="right">
@@ -56,7 +63,12 @@
           :width="80"
           @click="saveFavouritesFolder"
         />
-        <dx-button text="Cancel" :width="80" class="margin-left-10" @click="hidePoupForm" />
+        <dx-button
+          text="Cancel"
+          :width="80"
+          class="margin-left-10"
+          @click="hidePoupForm"
+        />
       </div>
     </dx-popup>
   </div>
@@ -82,7 +94,7 @@ export default {
     DxPopup,
     DxForm,
     DxFormItem,
-    DxContextMenu
+    DxContextMenu,
   },
   data() {
     return {
@@ -90,7 +102,7 @@ export default {
       favouritesData: [],
       formData: { id: "", folderName: "" },
       validationRules: {
-        folderName: [{ type: "required", message: "Folder name is required." }]
+        folderName: [{ type: "required", message: "Folder name is required." }],
       },
       createFolderNavButtonOptions: {
         icon: "fas fa-folder-plus",
@@ -102,15 +114,15 @@ export default {
           //alert("Create new favourites folder button has been clicked!");
           this.favouritesPopupMode = "new";
           this.$refs["popupFavouritesFolder"].instance.show();
-        }
-      }
+        },
+      },
     };
   },
   computed: {
     ...mapGetters([
       "getFavouritesData",
       "getFavouritesSelectedItemData",
-      "getBreadcrumbData"
+      "getBreadcrumbData",
     ]),
 
     favouritesContextMenuItems() {
@@ -119,18 +131,18 @@ export default {
         {
           text: "Create new folder",
           icon: "fas fa-folder-plus",
-          disabled: this.isCreateNewFavouriteFolderDisabled
+          disabled: this.isCreateNewFavouriteFolderDisabled,
         },
         {
           text: "Rename",
           icon: "fas fa-edit",
-          disabled: this.isRenameFavouriteDisabled
+          disabled: this.isRenameFavouriteDisabled,
         },
         {
           text: "Delete",
           icon: "fas fa-trash-alt",
-          disabled: this.isDeleteFavouriteDisabled
-        }
+          disabled: this.isDeleteFavouriteDisabled,
+        },
       ];
     },
     isCreateNewFavouriteFolderDisabled() {
@@ -158,7 +170,7 @@ export default {
       } else {
         return true;
       }
-    }
+    },
   },
   watch: {
     getFavouritesData: {
@@ -166,8 +178,8 @@ export default {
         //console.log("getFavouritesData changed!");
         this.favouritesData = this._.map(this.getFavouritesData);
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   methods: {
     createNewFavouritesFolder(name) {
@@ -179,7 +191,7 @@ export default {
         expanded: true,
         icon: "fas fa-folder",
         isFolder: true,
-        items: []
+        items: [],
       });
     },
     saveFavouritesFolder() {
@@ -194,7 +206,7 @@ export default {
           console.log(this.formData);
           this.$store.dispatch("updateFolderInFavouritesData", {
             id: this.formData.id,
-            text: this.formData.folderName
+            text: this.formData.folderName,
           });
         }
         this.hidePoupForm();
@@ -279,11 +291,11 @@ export default {
         }
       }
       return result;
-    }
+    },
   },
   created() {
     this.favouritesData = this.getFavouritesData;
-  }
+  },
 };
 </script>
 
@@ -292,6 +304,7 @@ export default {
   height: calc(100vh - 49px);
   width: 350px;
   border-left: 1px solid;
+  border-right: 2px solid;
 }
 
 .favourite-tree {

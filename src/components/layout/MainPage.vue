@@ -10,7 +10,8 @@
     height="calc(100vh - 72px)"
   >
     <template #listMenu>
-      <SideNavMenu />
+      <!-- <SideNavMenu />-->
+      <FavouritesNavMenu />
     </template>
     <div id="content" class="dx-theme-background-color">
       <dx-drawer
@@ -44,7 +45,7 @@ export default {
     DxDrawer,
     SideNavMenu,
     FavouritesNavMenu,
-    CenterPanel
+    CenterPanel,
   },
   data() {
     return {
@@ -53,27 +54,27 @@ export default {
       selectedPosition: "left",
       selectedPosition2: "right",
       selectedRevealMode: "slide",
-      closeOnOutsideClick: false
+      closeOnOutsideClick: false,
     };
   },
   methods: {},
   computed: {
     sideNavMenuOpenState: {
-      get: function() {
+      get: function () {
         return this.$store.getters.getSideNavMenuOpenState;
-      }
+      },
       //set: function() {}
     },
     favouritesNavMenuOpenState: {
-      get: function() {
+      get: function () {
         return this.$store.getters.getFavouritesNavMenuOpenState;
-      }
+      },
       //set: function() {}
-    }
+    },
   },
-  created: function() {
+  created: function () {
     //this.$router.push("/WorkQueue");
-  }
+  },
 };
 </script>
 
