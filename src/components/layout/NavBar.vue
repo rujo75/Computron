@@ -1,8 +1,8 @@
 <template>
   <dx-toolbar class="nav-toolbar dx-theme-border-color">
-    <DxItem #default location="before" locate-in-menu="never">
+    <!--<DxItem #default location="before" locate-in-menu="never">
       <div class="toolbar-label"><b>Computron</b> Financial</div>
-    </DxItem>
+    </DxItem>-->
     <DxItem
       :options="homeNavButtonOptions"
       location="before"
@@ -12,36 +12,43 @@
       :options="generalLedgerNavButtonOptions"
       location="before"
       widget="dxDropDownButton"
+      locateInMenu="auto"
     />
     <DxItem
       :options="accountsPayableNavButtonOptions"
       location="before"
       widget="dxDropDownButton"
+      locateInMenu="auto"
     />
     <DxItem
       :options="accountsReceivableNavButtonOptions"
       location="before"
       widget="dxDropDownButton"
+      locateInMenu="auto"
     />
     <DxItem
       :options="inventoryNavButtonOptions"
       location="before"
       widget="dxDropDownButton"
+      locateInMenu="auto"
     />
     <DxItem
       :options="reportsNavButtonOptions"
       location="before"
       widget="dxDropDownButton"
+      locateInMenu="auto"
     />
     <DxItem
       :options="contactsNavButtonOptions"
       location="before"
       widget="dxDropDownButton"
+      locateInMenu="auto"
     />
     <DxItem
       :options="administrationNavButtonOptions"
       location="before"
       widget="dxDropDownButton"
+      locateInMenu="auto"
     />
     <DxItem
       :options="searchNavButtonOptions"
@@ -147,8 +154,22 @@ export default {
         items: [
           { id: "1", name: "Customers", icon: "fas fa-store" },
           { id: "2", name: "Employees", icon: "fas fa-house-user" },
-          { id: "3", name: "Vendors", icon: "fas fa-industry" },
+          {
+            id: "3",
+            name: "Vendors",
+            icon: "fas fa-industry",
+            link: "/Vendors",
+          },
         ],
+        onItemClick: (e) => {
+          //console.log(e.itemData);
+          //alert("User navigation button has been clicked!");
+          //if (e.itemData.name === "Sign Out") {
+          // store.dispatch("setSingInVisible", true);
+          //store.dispatch("signOut");
+          this.$router.push(e.itemData.link);
+          //}
+        },
       },
       administrationNavButtonOptions: {
         icon: "fas fa-cogs",

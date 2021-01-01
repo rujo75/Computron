@@ -13,7 +13,8 @@
       <!-- <SideNavMenu />-->
       <FavouritesNavMenu />
     </template>
-    <div id="content" class="dx-theme-background-color">
+    <CenterPanel id="content" />
+    <!--<div id="content" class="dx-theme-background-color">
       <dx-drawer
         class="drawer"
         :opened-state-mode="selectedOpenMode"
@@ -29,7 +30,7 @@
         </template>
         <CenterPanel id="content" />
       </dx-drawer>
-    </div>
+    </div>-->
   </dx-drawer>
 </template>
 

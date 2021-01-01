@@ -1,4 +1,5 @@
 <template>
+  <!-- dx-theme-border-color -->
   <div class="favourites-panel dx-theme-border-color">
     <dx-toolbar class="favourites-toolbar dx-theme-border-color">
       <DxItem #default location="before" locate-in-menu="never">
@@ -303,13 +304,19 @@ export default {
 .favourites-panel {
   height: calc(100vh - 49px);
   width: 350px;
-  border-left: 1px solid;
-  border-right: 2px solid;
+  /* border-left: 1px solid yellow; */
+  border-right: 1px solid;
+  /* background: black; */
+  /* padding-right: 10px; */
+}
+
+.favourites-toolbar {
+  width: 350px;
 }
 
 .favourite-tree {
   padding: 10px;
-  /* background: red;*/
+  /* background: yellow; */
   height: calc(100vh - 96px);
 }
 
@@ -322,6 +329,7 @@ export default {
 .dx-toolbar {
   /* background-color: rgba(191, 191, 191, 0.15); */
   padding: 5px 10px;
+  border-right: 1px solid;
   border-bottom: 1px solid;
 }
 
