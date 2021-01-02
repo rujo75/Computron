@@ -1,5 +1,8 @@
 <template>
-  <dx-toolbar :data-source="getBreadcrumbDataSource" class="dx-theme-border-color"></dx-toolbar>
+  <dx-toolbar
+    :data-source="getBreadcrumbDataSource"
+    class="dx-theme-border-color"
+  ></dx-toolbar>
 </template>
 
 <script>
@@ -9,14 +12,14 @@ import { MenuData } from "./../../data/menus.js";
 export default {
   name: "breadcrumb",
   components: {
-    DxToolbar
+    DxToolbar,
   },
   data() {
     return {};
   },
   computed: {
     getBreadcrumbDataSource: {
-      get: function() {
+      get: function () {
         let result = [];
         let breadcrumbIds = this.$store.getters.getBreadcrumbData;
         //console.log(breadcrumbIds);
@@ -53,18 +56,18 @@ export default {
                 items: menuDetails.items,
                 onButtonClick: this.onButtonClick.bind(this),
                 onItemClick: this.onItemClick.bind(this),
-                onClick: function() {
+                onClick: function () {
                   alert("Breadcrumb Clicked!");
-                }
-              }
+                },
+              },
             };
             result.push(newButton);
           }
         }
         return result;
-      }
+      },
       //set: function() {}
-    }
+    },
   },
   methods: {
     findMenuById(object, id) {
@@ -109,8 +112,8 @@ export default {
           this.$router.push(e.itemData.link);
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -118,7 +121,7 @@ export default {
 .dx-toolbar {
   /* background-color: rgba(191, 191, 191, 0.15); */
   padding: 5px 10px;
-  border-bottom: 1px solid;
+  /* border-bottom: 1px solid; */
 }
 </style>
 

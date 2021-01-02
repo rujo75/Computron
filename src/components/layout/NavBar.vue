@@ -182,8 +182,8 @@ export default {
         items: [
           { id: "1", name: "Bank Accounts", icon: "fas fa-university" },
           { id: "2", name: "Companies", icon: "fas fa-building" },
-          { id: "3", name: "Settings", icon: "fas fa-cog" },
-          { id: "4", name: "Users", icon: "fas fa-users-cog" },
+          { id: "3", name: "Users", icon: "fas fa-users-cog" },
+          { id: "4", name: "Settings", icon: "fas fa-cog" },
         ],
       },
       searchNavButtonOptions: {

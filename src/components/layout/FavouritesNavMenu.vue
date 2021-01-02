@@ -303,7 +303,7 @@ export default {
 <style scoped>
 .favourites-panel {
   height: calc(100vh - 49px);
-  width: 350px;
+  width: 300px;
   /* border-left: 1px solid yellow; */
   border-right: 1px solid;
   /* background: black; */
@@ -311,7 +311,7 @@ export default {
 }
 
 .favourites-toolbar {
-  width: 350px;
+  width: 300px;
 }
 
 .favourite-tree {
