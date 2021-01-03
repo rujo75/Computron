@@ -17,6 +17,15 @@ export default {
   data() {
     return {};
   },
-  computed: {},
+  computed: {
+    getHeaderDataSource: {
+      get: function () {
+        let result = [];
+        //let breadcrumbIds = this.$store.getters.getBreadcrumbData;
+
+        return result;
+      },
+    },
+  },
 };
 </script>
