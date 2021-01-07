@@ -1,9 +1,9 @@
 <template>
   <dx-toolbar class="nav-toolbar dx-theme-border-color">
-    <!--<DxItem #default location="before" locate-in-menu="never">
+    <DxItem #default location="before" locate-in-menu="never">
       <div class="toolbar-label"><b>Computron</b> Financial</div>
-    </DxItem>-->
-    <DxItem
+    </DxItem>
+    <!--<DxItem
       :options="homeNavButtonOptions"
       location="before"
       widget="dxButton"
@@ -49,7 +49,7 @@
       location="before"
       widget="dxDropDownButton"
       locateInMenu="auto"
-    />
+    />-->
     <DxItem
       :options="searchNavButtonOptions"
       location="after"
@@ -270,7 +270,7 @@ export default {
 .toolbar-label,
 .toolbar-label > b {
   font-size: 18px;
-  margin-left: 0px;
+  margin-left: 2px;
   margin-right: 5px;
 }
 

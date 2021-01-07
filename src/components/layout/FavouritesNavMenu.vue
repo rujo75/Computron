@@ -111,6 +111,8 @@ export default {
         text: "",
         hint: "Create new folder",
         stylingMode: "text",
+        //width: 24,
+        //height: 24,
         onClick: () => {
           //alert("Create new favourites folder button has been clicked!");
           this.favouritesPopupMode = "new";
