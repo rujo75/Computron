@@ -18,12 +18,32 @@ export default {
     return {};
   },
   computed: {
+    getHeaderTitle: function () {
+      return "<div class='toolbar-label'><b>Home</b>" + "</div>";
+    },
+
     getHeaderDataSource: {
       get: function () {
-        let result = [];
-        //let breadcrumbIds = this.$store.getters.getBreadcrumbData;
-
-        return result;
+        return [
+          {
+            location: "before",
+            widget: "dxButton",
+            options: {
+              icon: "menu",
+              stylingMode: "text",
+              focusStateEnabled: false,
+              onClick: function () {
+                //alert("Clicked");
+                //store.commit("setWorkQueueOpenState");
+              },
+            },
+          },
+          {
+            location: "center",
+            locateInMenu: "never",
+            template: this.getHeaderTitle,
+          },
+        ];
       },
     },
   },

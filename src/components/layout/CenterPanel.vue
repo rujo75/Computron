@@ -1,21 +1,24 @@
 <template>
   <div class="dx-theme-background-color">
-    <Breadcrumb />
+    <!-- <Breadcrumb /> -->
+    <Header />
     <router-view class="router"></router-view>
   </div>
 </template>
 
 <script>
-import Breadcrumb from "./Breadcrumb.vue";
+//import Breadcrumb from "./Breadcrumb.vue";
+import Header from "./Header.vue";
 
 export default {
   name: "centerPanel",
   components: {
-    Breadcrumb
+    //Breadcrumb
+    Header,
   },
   data() {
     return {};
-  }
+  },
 };
 </script>
 
