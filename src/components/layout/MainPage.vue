@@ -11,7 +11,7 @@
   >
     <template #listMenu>
       <!-- <SideNavMenu />-->
-      <FavouritesNavMenu />
+      <FavouritesPanel />
     </template>
     <CenterPanel id="content" />
     <!--<div id="content" class="dx-theme-background-color">
@@ -36,16 +36,16 @@
 
 <script>
 import { DxDrawer } from "devextreme-vue";
-import SideNavMenu from "./SideNavMenu.vue";
-import FavouritesNavMenu from "./FavouritesNavMenu.vue";
+//import SideNavMenu from "./SideNavMenu.vue";
+import FavouritesPanel from "./FavouritesPanel.vue";
 import CenterPanel from "./CenterPanel.vue";
 
 export default {
   name: "mainPage",
   components: {
     DxDrawer,
-    SideNavMenu,
-    FavouritesNavMenu,
+    //SideNavMenu,
+    FavouritesPanel,
     CenterPanel,
   },
   data() {

@@ -12,7 +12,6 @@ import NavBar from "./components/layout/NavBar";
 import MainPage from "./components/layout/MainPage";
 import StatusBar from "./components/layout/StatusBar";
 import SignIn from "./components/layout/SignIn";
-import { dbUsersRef } from "./firebase";
 import { locale } from "devextreme/localization";
 
 export default {
@@ -39,7 +38,7 @@ export default {
     this.locale = this.getLocale();
     //console.log(this.locale);
     locale(this.locale);
-    this.$store.dispatch("setUsersRef", dbUsersRef);
+    //this.$store.dispatch("setUsersRef", dbUsersRef);
   },
   mounted() {
     // Navigate to Home page
@@ -141,7 +140,8 @@ body {
   color: #2a2a2a;
 }
 
-.fa-edit {
+.fa-edit,
+.fa-star {
   color: #f0c066;
 }
 

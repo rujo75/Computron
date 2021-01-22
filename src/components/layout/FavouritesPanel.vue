@@ -1,17 +1,21 @@
 <template>
   <!-- dx-theme-border-color -->
   <div class="favourites-panel dx-theme-border-color">
-    <dx-toolbar class="favourites-toolbar dx-theme-border-color">
-      <DxItem #default location="before" locate-in-menu="never">
+    <dx-toolbar
+      class="favourites-toolbar dx-theme-border-color"
+      :items="toolbarItems"
+    >
+      <!--<DxItem #default location="before" locate-in-menu="never">
         <div class="toolbar-label">Favourites</div>
-      </DxItem>
-      <DxItem
+      </DxItem>-->
+      <!--<DxItem
         :options="createFolderNavButtonOptions"
-        location="after"
+        location="before"
         widget="dxButton"
-      />
+      />-->
     </dx-toolbar>
     <div class="favourite-tree">
+      <!-- @item-context-menu="favouritesItemContextMenu" -->
       <dx-tree-view
         id="favouritesTree"
         :items="favouritesData"
@@ -20,20 +24,24 @@
         width="100%"
         height="calc(100vh - 139px)"
         no-data-text="No favourites to display"
+        :select-by-click="false"
+        selection-mode="single"
+        selected-expr="isSelected"
+        items-expr="items"
+        expanded-expr="expanded"
+        :focus-state-enabled="false"
         :active-state-enabled="false"
         :hover-state-enabled="true"
-        :focus-state-enabled="false"
-        class="panel-tree"
+        :item-template="itemTemplate"
         @item-click="favouritesItemClick"
-        @item-context-menu="favouritesItemContextMenu"
       />
-      <dx-context-menu
+      <!--<dx-context-menu
         :data-source="favouritesContextMenuItems"
         :width="200"
         target="#favouritesTree"
         @item-click="favouritesContextItemClick"
         @hiding="favouritesContextHiding"
-      />
+      />-->
     </div>
     <dx-popup
       ref="popupFavouritesFolder"
@@ -76,26 +84,26 @@
 </template>
 
 <script>
-import { DxToolbar, DxItem } from "devextreme-vue/toolbar";
+import { DxToolbar } from "devextreme-vue/toolbar";
 import { DxTreeView, DxButton } from "devextreme-vue";
 import { DxPopup } from "devextreme-vue/popup";
 import { DxForm, DxItem as DxFormItem } from "devextreme-vue/form";
-import { DxContextMenu } from "devextreme-vue/context-menu";
+//import { DxContextMenu } from "devextreme-vue/context-menu";
 import { mapGetters } from "vuex";
 import { MenuData } from "./../../data/menus.js";
 import { getNewId } from "./../../store/common.js";
 
 export default {
-  name: "favouritesNavMenu",
+  name: "favouritesPanel",
   components: {
     DxToolbar,
-    DxItem,
+    //DxItem,
     DxTreeView,
     DxButton,
     DxPopup,
     DxForm,
     DxFormItem,
-    DxContextMenu,
+    //DxContextMenu,
   },
   data() {
     return {
@@ -128,6 +136,46 @@ export default {
       "getBreadcrumbData",
     ]),
 
+    toolbarItems: function () {
+      return [
+        {
+          widget: "dxButton",
+          location: "before",
+          options: {
+            icon: "fas fa-plus",
+            stylingMode: "text",
+            hint: "Add new favourite",
+            focusStateEnabled: false,
+            //disabled: this.disableNewButton,
+            //onClick: this.onAddNewQueryClick.bind(this),
+          },
+        },
+        {
+          widget: "dxButton",
+          location: "after",
+          options: {
+            icon: "fas fa-star",
+            stylingMode: "text",
+            hint: "Set as default",
+            focusStateEnabled: false,
+            disabled: this.disableDefaultButton,
+            onClick: this.onSetDefaultFavouriteClick.bind(this),
+          },
+        },
+        {
+          widget: "dxButton",
+          location: "after",
+          options: {
+            icon: "fas fa-trash-alt",
+            stylingMode: "text",
+            hint: "Remove favourite",
+            focusStateEnabled: false,
+            //disabled: this.disableDeleteButton,
+            //onClick: this.onDeleteQueryClick.bind(this),
+          },
+        },
+      ];
+    },
     favouritesContextMenuItems() {
       //console.log(this.favouritesSelectedItemData);
       return [
@@ -174,6 +222,18 @@ export default {
         return true;
       }
     },
+    disableDefaultButton: function () {
+      //console.log("disableDefaultButton");
+      if (this.getFavouritesSelectedItemData) {
+        if (this.getFavouritesSelectedItemData.isDefault) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return true;
+      }
+    },
   },
   watch: {
     getFavouritesData: {
@@ -185,6 +245,35 @@ export default {
     },
   },
   methods: {
+    itemTemplate: function (itemData, itemIndex, element) {
+      // display default flag
+      /*let template = "<div>" + itemData.text;
+      if (itemData.isDefault) {
+        template =
+          template + "<i class='fas fa-star tree-item-default-icon'></i>";
+      }
+      template = template + "<div>";*/
+
+      let template =
+        "<div style='display: table; width: 100%; padding-top: 2px;'>";
+      template =
+        template +
+        "<i class='" +
+        itemData.icon +
+        " dx-icon' style='text-align: left; display: table-cell'></i>";
+      template =
+        template +
+        "<span style='text-align: left; display: table-cell; padding-left: 5px;'>" +
+        itemData.text +
+        "</span>";
+      if (itemData.isDefault) {
+        template =
+          template +
+          "<i class='fas fa-star dx-icon' style='text-align: right; display: table-cell; font-size: 16px'></i>";
+      }
+      template = template + "</div>";
+      return template;
+    },
     createNewFavouritesFolder(name) {
       const newId = getNewId();
       //const newItemId = getNewId();
@@ -230,10 +319,11 @@ export default {
       this.$refs["formFavouritesFolder"].instance.resetValues();
     },
     favouritesItemClick(e) {
-      this.$store.dispatch("setFavouritesSelectedItemData", e.itemData);
       //console.log(e.itemData);
       if (!e.itemData.isFolder) {
         // Favourite item clicked on
+        this.$store.dispatch("selectFavouriteItemById", e.itemData.id);
+        this.$store.dispatch("setFavouritesSelectedItemData", e.itemData);
         if (e.itemData.link) {
           // Check new link is different from current link
           if (this.$route.path !== e.itemData.link) {
@@ -294,6 +384,20 @@ export default {
         }
       }
       return result;
+    },
+    onSetDefaultFavouriteClick(e) {
+      //alert("Set default favourite");
+      // get current item
+      if (this.getFavouritesSelectedItemData) {
+        let currentItemId = this.getFavouritesSelectedItemData.id;
+        //console.log(currentItemId);
+        // update items in store
+        this.$store.dispatch("setDefaultFavouriteItem", currentItemId);
+        // refresh treeveiw
+        //this.$refs["favouritesTree"].instance.repaint();
+      }
+      // set focus to treeview
+      //this.$refs["favouritesTree"].instance.focus();
     },
   },
   created() {

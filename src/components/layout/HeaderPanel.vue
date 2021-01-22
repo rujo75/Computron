@@ -7,10 +7,12 @@
 
 <script>
 import { DxToolbar } from "devextreme-vue/toolbar";
+import { store } from "../../store/store";
+import { mapGetters } from "vuex";
 //import { MenuData } from "./../../data/menus.js";
 
 export default {
-  name: "header",
+  name: "headerPanel",
   components: {
     DxToolbar,
   },
@@ -18,8 +20,18 @@ export default {
     return {};
   },
   computed: {
+    ...mapGetters(["getFavouritesSelectedItemData"]),
+
     getHeaderTitle: function () {
-      return "<div class='toolbar-label'><b>Home</b>" + "</div>";
+      if (this.getFavouritesSelectedItemData) {
+        return (
+          "<div class='toolbar-label'><b>" +
+          this.getFavouritesSelectedItemData.text +
+          "</b></div>"
+        );
+      } else {
+        return "<div class='toolbar-label'><b></b></div>";
+      }
     },
 
     getHeaderDataSource: {
@@ -29,12 +41,13 @@ export default {
             location: "before",
             widget: "dxButton",
             options: {
-              icon: "menu",
+              icon: "fas fa-bars",
               stylingMode: "text",
               focusStateEnabled: false,
+              hint: "Show/Hide favourites panel",
               onClick: function () {
                 //alert("Clicked");
-                //store.commit("setWorkQueueOpenState");
+                store.commit("toggleSideNavMenuOpenState");
               },
             },
           },

@@ -56,7 +56,7 @@
       widget="dxButton"
       class="nav-button"
     />
-    <DxItem
+    <!--<DxItem
       :options="getSideNavButtonOptions"
       location="after"
       widget="dxButton"
@@ -65,7 +65,7 @@
       :options="getFavouritesNavButtonOptions"
       location="after"
       widget="dxButton"
-    />
+    />-->
     <DxItem
       :options="userProfileNavButtonOptions"
       location="after"

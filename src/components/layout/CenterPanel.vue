@@ -1,23 +1,27 @@
 <template>
   <div class="dx-theme-background-color">
     <!-- <Breadcrumb /> -->
-    <Header />
+    <HeaderPanel />
     <router-view class="router"></router-view>
   </div>
 </template>
 
 <script>
 //import Breadcrumb from "./Breadcrumb.vue";
-import Header from "./Header.vue";
+import HeaderPanel from "./HeaderPanel.vue";
 
 export default {
   name: "centerPanel",
   components: {
     //Breadcrumb
-    Header,
+    HeaderPanel,
   },
   data() {
     return {};
+  },
+  created: function () {
+    // select a favourite based on the rules
+    this.$store.dispatch("selectFavouriteItem");
   },
 };
 </script>
