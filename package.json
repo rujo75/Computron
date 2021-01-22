@@ -11,7 +11,7 @@
     "@vue/cli-plugin-babel": "4.5.10",
     "devextreme": "20.2.4",
     "devextreme-vue": "20.2.4",
-    "lodash": "4.17.20",
+    "lodash": "4.17.19",
     "v-mask": "^2.2.1",
     "vue": "2.6.12",
     "vue-lodash": "2.0.2",
