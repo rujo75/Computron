@@ -1,6 +1,3 @@
-import { firebaseAuth } from "../../firebase";
-import { firestoreAction } from "vuexfire";
-import { dbUsersRef } from "../../firebase";
 import notify from "devextreme/ui/notify";
 import _ from "lodash";
 
@@ -129,22 +126,33 @@ const mutations = {
 };
 
 const actions = {
-  setUsersRef: firestoreAction((context) => {
+  /*setUsersRef: firestoreAction((context) => {
     return context.bindFirestoreRef(
       "firebaseUsers",
       dbUsersRef.orderBy("lastname")
     );
-  }),
+  }),*/
 
   signIn: async ({ commit }, user) => {
     try {
       state.signInLoading = true;
-      const userData = await firebaseAuth.signInWithEmailAndPassword(
+      /*const userData = await firebaseAuth.signInWithEmailAndPassword(
         user.email,
         user.password
-      );
+      );*/
+      const user = {
+        userID: "185bad2d-0a16-4e6b-a6a1-49ac2d380c57",
+        userCode: "1",
+        userName: "drusmir",
+        fullName: "Dal Rusmir",
+        email: "drusmir@tpg.com",
+        active: true,
+        expiryDate: "2020-06-30",
+        password: "123456",
+        mustChangePassword: false
+      };
       state.signInLoading = false;
-      commit("userStatus", userData.user);
+      commit("userStatus", user);
       //console.log(userData.user)
     } catch (error) {
       const errorCode = error.code;

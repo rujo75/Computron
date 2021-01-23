@@ -16,6 +16,8 @@ const state = {
           icon: "fas fa-home",
           link: "/",
           isFolder: false,
+          isSelected: true,
+          isDefault: true,
           items: []
         },
         {
@@ -28,6 +30,14 @@ const state = {
           items: []
         }
       ]
+    },
+    {
+      id: "842b43c5-cd8f-46b8-adbb-9558ff9466a7",
+      text: "Shared Favourites",
+      expanded: true,
+      icon: "fas fa-folder",
+      isFolder: true,
+      items: []
     }
   ],
   favouritesSelectedItemData: null,
@@ -103,6 +113,89 @@ const mutations = {
   },
   setLastSelectedFavouriteFolder: function (state, data) {
     state.lastSelectedFavouriteFolder = data;
+  },
+  selectFavouriteItemById: function (state, id) {
+    for (let i = 0; i < state.favouritesData.length; i++) {
+      for (let j = 0; j < state.favouritesData[i].items.length; j++) {
+        let item = state.favouritesData[i].items[j];
+        //console.log(item);
+        if (item.id === id && !item.isSelected) {
+          // set the item to be default
+          item.isSelected = true;
+          Vue.set(state.favouritesData[i].items, j, item);
+        } else if (item.id !== id && item.isSelected) {
+          // item is was set to default but now we need to make it not default
+          item.isSelected = false;
+          Vue.set(state.favouritesData[i].items, j, item);
+        }
+      }
+    }
+  },
+  selectFavouriteItem: function (state) {
+    let firstFavourite = null;
+    let defaultFavourite = null;
+    let selectedFavourite = null;
+
+    // sort favourites
+    if (state.favouritesData[0].items.length > 0) {
+      // sort private favourites by Name
+      state.favouritesData[0].items.sort((a, b) => (a.text > b.text ? 1 : -1));
+    }
+    if (state.favouritesData[1].items.length > 0) {
+      // sort shared favourites by Name
+      state.favouritesData[1].items.sort((a, b) => (a.text > b.text ? 1 : -1));
+    }
+
+    // find favourite to select based on the rules
+    for (var i = 0; i < state.favouritesData.length; i++) {
+      for (var j = 0; j < state.favouritesData[i].items.length; j++) {
+        if (!firstFavourite) {
+          firstFavourite = state.favouritesData[i].items[j];
+        }
+        if (state.favouritesData[i].items[j].IsDefault === true) {
+          defaultFavourite = state.favouritesData[i].items[j];
+        }
+        if (state.favouritesData[i].items[j].IsSelected === true) {
+          selectedFavourite = state.favouritesData[i].items[j];
+        }
+      }
+    }
+
+    // select the favourite
+    if (selectedFavourite) {
+      // select selected favourite
+      selectedFavourite.isSelected = true;
+      state.favouritesSelectedItemData = selectedFavourite;
+    } else if (defaultFavourite) {
+      // select default favourite
+      defaultFavourite.isSelected = true;
+      state.favouritesSelectedItemData = defaultFavourite;
+    } else if (firstFavourite) {
+      // select first found favourite
+      firstFavourite.isSelected = true;
+      state.favouritesSelectedItemData = firstFavourite;
+    }
+  },
+  setDefaultFavouriteItem: function (state, id) {
+    for (let i = 0; i < state.favouritesData.length; i++) {
+      for (let j = 0; j < state.favouritesData[i].items.length; j++) {
+        let item = state.favouritesData[i].items[j];
+        //console.log(item);
+        if (item.id === id && !item.isDefault) {
+          // set the item to be default
+          item.isDefault = true;
+        } else if (item.id !== id && item.isDefault) {
+          // item is was set to default but now we need to make it not default
+          item.isDefault = false;
+        }
+      }
+    }
+    // Also check favouritesSelectedItemData and update if needed
+    if (state.favouritesSelectedItemData) {
+      if (!state.favouritesSelectedItemData.isDefault) {
+        state.favouritesSelectedItemData.isDefault = true;
+      }
+    }
   }
 };
 
@@ -127,6 +220,15 @@ const actions = {
   },
   setLastSelectedFavouriteFolder({ commit }, data) {
     commit("setLastSelectedFavouriteFolder", data);
+  },
+  selectFavouriteItemById({ commit }, id) {
+    commit("selectFavouriteItemById", id);
+  },
+  selectFavouriteItem({ commit }) {
+    commit("selectFavouriteItem");
+  },
+  setDefaultFavouriteItem({ commit }, id) {
+    commit("setDefaultFavouriteItem", id);
   }
 };
 
