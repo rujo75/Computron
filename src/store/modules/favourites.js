@@ -196,6 +196,17 @@ const mutations = {
         state.favouritesSelectedItemData.isDefault = true;
       }
     }
+  },
+  deleteFavouriteItem: function (state, id) {
+    for (let i = 0; i < state.favouritesData.length; i++) {
+      for (let j = 0; j < state.favouritesData[i].items.length; j++) {
+        let item = state.favouritesData[i].items[j];
+        //console.log(item);
+        if (item.id === id) {
+          state.favouritesData[i].items.splice(j, 1);
+        }
+      }
+    }
   }
 };
 
@@ -229,6 +240,9 @@ const actions = {
   },
   setDefaultFavouriteItem({ commit }, id) {
     commit("setDefaultFavouriteItem", id);
+  },
+  deleteFavouriteItem({ commit }, id) {
+    commit("deleteFavouriteItem", id);
   }
 };
 

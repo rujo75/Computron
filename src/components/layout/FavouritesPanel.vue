@@ -92,6 +92,7 @@ import { DxForm, DxItem as DxFormItem } from "devextreme-vue/form";
 import { mapGetters } from "vuex";
 import { MenuData } from "./../../data/menus.js";
 import { getNewId } from "./../../store/common.js";
+import { confirm } from "devextreme/ui/dialog";
 
 export default {
   name: "favouritesPanel",
@@ -170,8 +171,8 @@ export default {
             stylingMode: "text",
             hint: "Remove favourite",
             focusStateEnabled: false,
-            //disabled: this.disableDeleteButton,
-            //onClick: this.onDeleteQueryClick.bind(this),
+            disabled: this.disableDeleteButton,
+            onClick: this.onDeleteFavouriteClick.bind(this),
           },
         },
       ];
@@ -230,6 +231,14 @@ export default {
         } else {
           return false;
         }
+      } else {
+        return true;
+      }
+    },
+    disableDeleteButton: function () {
+      //console.log("disableDeleteButton");
+      if (this.getFavouritesSelectedItemData) {
+        return false;
       } else {
         return true;
       }
@@ -393,11 +402,23 @@ export default {
         //console.log(currentItemId);
         // update items in store
         this.$store.dispatch("setDefaultFavouriteItem", currentItemId);
-        // refresh treeveiw
-        //this.$refs["favouritesTree"].instance.repaint();
       }
-      // set focus to treeview
-      //this.$refs["favouritesTree"].instance.focus();
+    },
+    onDeleteFavouriteClick(e) {
+      let favourite = this.getFavouritesSelectedItemData;
+      let result = confirm(
+        "Are you sure you want to delete this favourite?",
+        "Delete Favourite"
+      );
+      result.then((dialogResult) => {
+        if (dialogResult) {
+          //console.log("Yes");
+          this.$store.dispatch("deleteFavouriteItem", favourite.id);
+          this.$store.dispatch("setFavouritesSelectedItemData", null);
+          // select another favourite based on the rules
+          this.$store.dispatch("selectFavouriteItem");
+        }
+      });
     },
   },
   created() {
