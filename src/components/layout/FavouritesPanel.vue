@@ -43,7 +43,7 @@
         @hiding="favouritesContextHiding"
       />-->
     </div>
-    <dx-popup
+    <!--<dx-popup
       ref="popupFavouritesFolder"
       :drag-enabled="true"
       :close-on-outside-click="false"
@@ -56,7 +56,6 @@
       @hiding="popupFormHiding"
     >
       <p>
-        <!--:on-content-ready="validateForm"-->
         <dx-form ref="formFavouritesFolder" :form-data="formData">
           <dx-form-item
             data-field="folderName"
@@ -79,6 +78,57 @@
           @click="hidePoupForm"
         />
       </div>
+    </dx-popup>-->
+    <dx-popup
+      ref="popupAddFavouriteItem"
+      :drag-enabled="true"
+      :close-on-outside-click="false"
+      :show-title="true"
+      :width="450"
+      :height="600"
+      class="popup"
+      title="Add New Favourite"
+      @shown="popupFormShown"
+      @hiding="popupFormHiding"
+    >
+      <p>
+        <!--:on-content-ready="validateForm"-->
+        <dx-tree-view
+          id="addFavouriteTree"
+          :items="getAvailableFavouritesData"
+          key-expr="id"
+          display-expr="text"
+          width="100%"
+          :height="445"
+          no-data-text="No favourites to display"
+          :select-by-click="true"
+          selection-mode="multiple"
+          items-expr="items"
+          expanded-expr="expanded"
+          :focus-state-enabled="false"
+          :active-state-enabled="false"
+          :hover-state-enabled="true"
+          :show-check-boxes-mode="true"
+          :search-enabled="true"
+          search-mode="contains"
+        >
+        </dx-tree-view>
+      </p>
+      <div align="right">
+        <dx-button
+          text="OK"
+          type="success"
+          :use-submit-behavior="true"
+          :width="80"
+          @click="addFavourite"
+        />
+        <dx-button
+          text="Cancel"
+          :width="80"
+          class="margin-left-10"
+          @click="hidePoupForm"
+        />
+      </div>
     </dx-popup>
   </div>
 </template>
@@ -87,7 +137,7 @@
 import { DxToolbar } from "devextreme-vue/toolbar";
 import { DxTreeView, DxButton } from "devextreme-vue";
 import { DxPopup } from "devextreme-vue/popup";
-import { DxForm, DxItem as DxFormItem } from "devextreme-vue/form";
+//import { DxForm, DxItem as DxFormItem } from "devextreme-vue/form";
 //import { DxContextMenu } from "devextreme-vue/context-menu";
 import { mapGetters } from "vuex";
 import { MenuData } from "./../../data/menus.js";
@@ -102,19 +152,20 @@ export default {
     DxTreeView,
     DxButton,
     DxPopup,
-    DxForm,
-    DxFormItem,
+    //DxForm,
+    //DxFormItem,
     //DxContextMenu,
   },
   data() {
     return {
-      favouritesPopupMode: "new",
+      //favouritesPopupMode: "new",
       favouritesData: [],
-      formData: { id: "", folderName: "" },
-      validationRules: {
+      newFavouritesData: [],
+      //formData: { id: "", folderName: "" },
+      /*validationRules: {
         folderName: [{ type: "required", message: "Folder name is required." }],
-      },
-      createFolderNavButtonOptions: {
+      },*/
+      /*createFolderNavButtonOptions: {
         icon: "fas fa-folder-plus",
         focusStateEnabled: false,
         text: "",
@@ -125,14 +176,15 @@ export default {
         onClick: () => {
           //alert("Create new favourites folder button has been clicked!");
           this.favouritesPopupMode = "new";
-          this.$refs["popupFavouritesFolder"].instance.show();
+          this.$refs["popupAddFavouriteItem"].instance.show();
         },
-      },
+      },*/
     };
   },
   computed: {
     ...mapGetters([
       "getFavouritesData",
+      "getAvailableFavouritesData",
       "getFavouritesSelectedItemData",
       "getBreadcrumbData",
     ]),
@@ -148,7 +200,7 @@ export default {
             hint: "Add new favourite",
             focusStateEnabled: false,
             //disabled: this.disableNewButton,
-            //onClick: this.onAddNewQueryClick.bind(this),
+            onClick: this.onAddNewFavouriteClick.bind(this),
           },
         },
         {
@@ -252,6 +304,13 @@ export default {
       },
       deep: true,
     },
+    getAvailableFavouritesData: {
+      handler() {
+        console.log("getAvailableFavouritesData changed!");
+        this.newFavouritesData = this._.map(this.getAvailableFavouritesData);
+      },
+      deep: true,
+    },
   },
   methods: {
     itemTemplate: function (itemData, itemIndex, element) {
@@ -313,19 +372,20 @@ export default {
         this.hidePoupForm();
       }
     },
+    addFavourite() {},
     hidePoupForm() {
-      this.$refs["popupFavouritesFolder"].instance.hide();
+      this.$refs["popupAddFavouriteItem"].instance.hide();
     },
     validateForm(e) {
       e.component.validate();
     },
     popupFormShown() {
-      this.$refs["formFavouritesFolder"].instance
+      /*this.$refs["formFavouritesFolder"].instance
         .getEditor("folderName")
-        .focus();
+        .focus();*/
     },
     popupFormHiding() {
-      this.$refs["formFavouritesFolder"].instance.resetValues();
+      /*this.$refs["formFavouritesFolder"].instance.resetValues();*/
     },
     favouritesItemClick(e) {
       //console.log(e.itemData);
@@ -393,6 +453,9 @@ export default {
         }
       }
       return result;
+    },
+    onAddNewFavouriteClick(e) {
+      this.$refs["popupAddFavouriteItem"].instance.show();
     },
     onSetDefaultFavouriteClick(e) {
       //alert("Set default favourite");

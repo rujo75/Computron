@@ -40,12 +40,50 @@ const state = {
       items: []
     }
   ],
+  availableFavouritesData: [
+    {
+      id: "842b43c5-cd8f-46b8-adbb-9558ff9466a6",
+      text: "General",
+      expanded: true,
+      icon: "fas fa-folder",
+      isFolder: true,
+      items: [
+        {
+          id: "32f3f40c-f730-4e94-bc8d-c30d221c2223",
+          text: "Home",
+          expanded: false,
+          icon: "fas fa-home",
+          link: "/",
+          isFolder: false,
+          items: []
+        },
+        {
+          id: "c8980fa8-e3a9-412a-9b0c-a940217e1c2e",
+          text: "Vendors",
+          expanded: false,
+          icon: "fas fa-industry",
+          link: "/Vendors",
+          isFolder: false,
+          items: []
+        }
+      ]
+    }
+    /*{
+      id: "842b43c5-cd8f-46b8-adbb-9558ff9466a7",
+      text: "Shared Favourites",
+      expanded: true,
+      icon: "fas fa-folder",
+      isFolder: true,
+      items: []
+    }*/
+  ],
   favouritesSelectedItemData: null,
   lastSelectedFavouriteFolder: null
 };
 
 const getters = {
   getFavouritesData: (state) => state.favouritesData,
+  getAvailableFavouritesData: (state) => state.availableFavouritesData,
   getFavouritesSelectedItemData: (state) => state.favouritesSelectedItemData,
   getLastSelectedFavouriteFolder: (state) => state.lastSelectedFavouriteFolder
 };
