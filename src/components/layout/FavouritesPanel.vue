@@ -43,8 +43,8 @@
         @hiding="favouritesContextHiding"
       />-->
     </div>
-    <!--<dx-popup
-      ref="popupFavouritesFolder"
+    <dx-popup
+      ref="popupCreateFolderItem"
       :drag-enabled="true"
       :close-on-outside-click="false"
       :show-title="true"
@@ -52,11 +52,11 @@
       :height="200"
       class="popup"
       title="Favourites Folder"
-      @shown="popupFormShown"
-      @hiding="popupFormHiding"
+      @shown="popupCreateFolderItemShown"
+      @hiding="popupCreateFolderItemHiding"
     >
       <p>
-        <dx-form ref="formFavouritesFolder" :form-data="formData">
+        <dx-form ref="formFolderData" :form-data="formFolderData">
           <dx-form-item
             data-field="folderName"
             :validation-rules="validationRules.folderName"
@@ -69,16 +69,16 @@
           type="success"
           :use-submit-behavior="true"
           :width="80"
-          @click="saveFavouritesFolder"
+          @click="newFolderItemOKClick"
         />
         <dx-button
           text="Cancel"
           :width="80"
           class="margin-left-10"
-          @click="hidePoupForm"
+          @click="newFolderItemCancelClick"
         />
       </div>
-    </dx-popup>-->
+    </dx-popup>
     <dx-popup
       ref="popupAddFavouriteItem"
       :drag-enabled="true"
@@ -88,8 +88,6 @@
       :height="600"
       class="popup"
       title="Add New Favourite"
-      @shown="popupFormShown"
-      @hiding="popupFormHiding"
     >
       <p>
         <!--:on-content-ready="validateForm"-->
@@ -108,7 +106,7 @@
           :focus-state-enabled="false"
           :active-state-enabled="false"
           :hover-state-enabled="true"
-          :show-check-boxes-mode="true"
+          show-check-boxes-mode="normal"
           :search-enabled="true"
           search-mode="contains"
         >
@@ -120,13 +118,13 @@
           type="success"
           :use-submit-behavior="true"
           :width="80"
-          @click="addFavourite"
+          @click="addFavouriteItemOKClick"
         />
         <dx-button
           text="Cancel"
           :width="80"
           class="margin-left-10"
-          @click="hidePoupForm"
+          @click="addFavouriteItemCancelClick"
         />
       </div>
     </dx-popup>
@@ -137,10 +135,10 @@
 import { DxToolbar } from "devextreme-vue/toolbar";
 import { DxTreeView, DxButton } from "devextreme-vue";
 import { DxPopup } from "devextreme-vue/popup";
-//import { DxForm, DxItem as DxFormItem } from "devextreme-vue/form";
+import { DxForm, DxItem as DxFormItem } from "devextreme-vue/form";
 //import { DxContextMenu } from "devextreme-vue/context-menu";
 import { mapGetters } from "vuex";
-import { MenuData } from "./../../data/menus.js";
+//import { MenuData } from "./../../data/menus.js";
 import { getNewId } from "./../../store/common.js";
 import { confirm } from "devextreme/ui/dialog";
 
@@ -152,19 +150,19 @@ export default {
     DxTreeView,
     DxButton,
     DxPopup,
-    //DxForm,
-    //DxFormItem,
+    DxForm,
+    DxFormItem,
     //DxContextMenu,
   },
   data() {
     return {
-      //favouritesPopupMode: "new",
+      folderPopupMode: "new",
       favouritesData: [],
       newFavouritesData: [],
-      //formData: { id: "", folderName: "" },
-      /*validationRules: {
+      formFolderData: { id: "", folderName: "" },
+      validationRules: {
         folderName: [{ type: "required", message: "Folder name is required." }],
-      },*/
+      },
       /*createFolderNavButtonOptions: {
         icon: "fas fa-folder-plus",
         focusStateEnabled: false,
@@ -175,7 +173,7 @@ export default {
         //height: 24,
         onClick: () => {
           //alert("Create new favourites folder button has been clicked!");
-          this.favouritesPopupMode = "new";
+          this.folderPopupMode = "new";
           this.$refs["popupAddFavouriteItem"].instance.show();
         },
       },*/
@@ -191,6 +189,31 @@ export default {
 
     toolbarItems: function () {
       return [
+        {
+          widget: "dxButton",
+          location: "before",
+          options: {
+            icon: "fas fa-folder-plus",
+            stylingMode: "text",
+            hint: "Create new folder",
+            focusStateEnabled: false,
+            //disabled: this.disableNewButton,
+            onClick: this.onCreateNewFolderClick.bind(this),
+          },
+        },
+        {
+          widget: "dxButton",
+          location: "before",
+          options: {
+            icon: "fas fa-pencil-alt",
+            stylingMode: "text",
+            hint: "Rename folder",
+            focusStateEnabled: false,
+            disabled: true,
+            //disabled: this.disableNewButton,
+            //onClick: this.onRenameFolderClick.bind(this),
+          },
+        },
         {
           widget: "dxButton",
           location: "before",
@@ -354,38 +377,41 @@ export default {
         items: [],
       });
     },
-    saveFavouritesFolder() {
-      var result = this.$refs["formFavouritesFolder"].instance.validate();
+    newFolderItemOKClick() {
+      var result = this.$refs["formFolderData"].instance.validate();
       //console.log(result);
       if (result.isValid) {
-        if (this.favouritesPopupMode === "new") {
+        if (this.folderPopupMode === "new") {
           // Create new folder
-          this.createNewFavouritesFolder(this.formData.folderName);
+          this.createNewFavouritesFolder(this.formFolderData.folderName);
         } else {
           // Update folder
-          console.log(this.formData);
+          console.log(this.formFolderData);
           this.$store.dispatch("updateFolderInFavouritesData", {
-            id: this.formData.id,
-            text: this.formData.folderName,
+            id: this.formFolderData.id,
+            text: this.formFolderData.folderName,
           });
         }
-        this.hidePoupForm();
+        this.newFolderItemCancelClick();
       }
     },
-    addFavourite() {},
-    hidePoupForm() {
+    newFolderItemCancelClick() {
+      this.$refs["popupCreateFolderItem"].instance.hide();
+    },
+    addFavouriteItemOKClick() {},
+    addFavouriteItemCancelClick() {
       this.$refs["popupAddFavouriteItem"].instance.hide();
     },
     validateForm(e) {
       e.component.validate();
     },
-    popupFormShown() {
-      /*this.$refs["formFavouritesFolder"].instance
+    popupCreateFolderItemShown() {
+      this.$refs["popupCreateFolderItem"].instance
         .getEditor("folderName")
-        .focus();*/
+        .focus();
     },
-    popupFormHiding() {
-      /*this.$refs["formFavouritesFolder"].instance.resetValues();*/
+    popupCreateFolderItemHiding() {
+      this.$refs["popupCreateFolderItem"].instance.resetValues();
     },
     favouritesItemClick(e) {
       //console.log(e.itemData);
@@ -396,9 +422,9 @@ export default {
         if (e.itemData.link) {
           // Check new link is different from current link
           if (this.$route.path !== e.itemData.link) {
-            let menu = this.findMenuById(MenuData, e.itemData.menuId);
+            //let menu = this.findMenuById(MenuData, e.itemData.menuId);
             // store current path
-            this.$store.dispatch("setCurrentPath", menu.path);
+            //this.$store.dispatch("setCurrentPath", menu.path);
             // Re-route to new link
             this.$router.push(e.itemData.link);
           }
@@ -414,15 +440,15 @@ export default {
       if (e.itemData) {
         if (e.itemData.text === "Create new folder") {
           // Create new folder
-          this.favouritesPopupMode = "new";
+          this.folderPopupMode = "new";
           this.$refs["popupFavouritesFolder"].instance.show();
         } else if (e.itemData.text === "Rename") {
           // Rename folder
-          this.favouritesPopupMode = "edit";
+          this.folderPopupMode = "edit";
           //console.log(this.getFavouritesSelectedItemData);
-          this.formData.id = this.getFavouritesSelectedItemData.id;
-          this.formData.folderName = this.getFavouritesSelectedItemData.text;
-          //console.log(this.formData);
+          this.formFolderData.id = this.getFavouritesSelectedItemData.id;
+          this.formFolderData.folderName = this.getFavouritesSelectedItemData.text;
+          //console.log(this.formFolderData);
           this.$refs["popupFavouritesFolder"].instance.show();
         } else if (e.itemData.text === "Delete") {
           // Delete favourite item
@@ -453,6 +479,11 @@ export default {
         }
       }
       return result;
+    },
+    onCreateNewFolderClick(e) {
+      //alert("Create new favourites folder button has been clicked!");
+      this.folderPopupMode = "new";
+      this.$refs["popupCreateFolderItem"].instance.show();
     },
     onAddNewFavouriteClick(e) {
       this.$refs["popupAddFavouriteItem"].instance.show();
@@ -486,6 +517,7 @@ export default {
   },
   created() {
     this.favouritesData = this.getFavouritesData;
+    this.$store.dispatch("selectFavouriteItem");
   },
 };
 </script>

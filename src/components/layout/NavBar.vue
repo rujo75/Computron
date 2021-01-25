@@ -267,13 +267,6 @@ export default {
 </script>
 
 <style scoped>
-.toolbar-label,
-.toolbar-label > b {
-  font-size: 18px;
-  margin-left: 2px;
-  margin-right: 5px;
-}
-
 .dx-toolbar {
   /* background-color: rgba(191, 191, 191, 0.15); */
   padding: 5px 10px;

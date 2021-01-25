@@ -21,7 +21,7 @@ export default {
   },
   created: function () {
     // select a favourite based on the rules
-    this.$store.dispatch("selectFavouriteItem");
+    //this.$store.dispatch("selectFavouriteItem");
   },
 };
 </script>

@@ -28,16 +28,26 @@ const state = {
           link: "/Vendors",
           isFolder: false,
           items: []
+        },
+        {
+          id: "Companies",
+          text: "Companies",
+          expanded: false,
+          icon: "fas fa-building",
+          link: "/Companies",
+          isFolder: false,
+          items: []
+        },
+        {
+          id: "Users",
+          text: "Users",
+          expanded: false,
+          icon: "fas fa-users-cog",
+          link: "/Users",
+          isFolder: false,
+          items: []
         }
       ]
-    },
-    {
-      id: "842b43c5-cd8f-46b8-adbb-9558ff9466a7",
-      text: "Shared Favourites",
-      expanded: true,
-      icon: "fas fa-folder",
-      isFolder: true,
-      items: []
     }
   ],
   availableFavouritesData: [
@@ -56,7 +66,16 @@ const state = {
           link: "/",
           isFolder: false,
           items: []
-        },
+        }
+      ]
+    },
+    {
+      id: "842b43c5-cd8f-46b8-adbb-9558ff9466a7",
+      text: "Purchasing",
+      expanded: true,
+      icon: "fas fa-folder",
+      isFolder: true,
+      items: [
         {
           id: "c8980fa8-e3a9-412a-9b0c-a940217e1c2e",
           text: "Vendors",
@@ -68,14 +87,6 @@ const state = {
         }
       ]
     }
-    /*{
-      id: "842b43c5-cd8f-46b8-adbb-9558ff9466a7",
-      text: "Shared Favourites",
-      expanded: true,
-      icon: "fas fa-folder",
-      isFolder: true,
-      items: []
-    }*/
   ],
   favouritesSelectedItemData: null,
   lastSelectedFavouriteFolder: null
@@ -174,44 +185,40 @@ const mutations = {
     let defaultFavourite = null;
     let selectedFavourite = null;
 
-    // sort favourites
-    if (state.favouritesData[0].items.length > 0) {
-      // sort private favourites by Name
-      state.favouritesData[0].items.sort((a, b) => (a.text > b.text ? 1 : -1));
-    }
-    if (state.favouritesData[1].items.length > 0) {
-      // sort shared favourites by Name
-      state.favouritesData[1].items.sort((a, b) => (a.text > b.text ? 1 : -1));
-    }
+    //console.log("selectFavouriteItem");
 
-    // find favourite to select based on the rules
-    for (var i = 0; i < state.favouritesData.length; i++) {
-      for (var j = 0; j < state.favouritesData[i].items.length; j++) {
-        if (!firstFavourite) {
-          firstFavourite = state.favouritesData[i].items[j];
-        }
-        if (state.favouritesData[i].items[j].IsDefault === true) {
-          defaultFavourite = state.favouritesData[i].items[j];
-        }
-        if (state.favouritesData[i].items[j].IsSelected === true) {
-          selectedFavourite = state.favouritesData[i].items[j];
+    if (state.favouritesData) {
+      //console.log(state.favouritesData);
+
+      // find the favourite to select based on the rules
+      for (var i = 0; i < state.favouritesData.length; i++) {
+        for (var j = 0; j < state.favouritesData[i].items.length; j++) {
+          if (!firstFavourite) {
+            firstFavourite = state.favouritesData[i].items[j];
+          }
+          if (state.favouritesData[i].items[j].IsDefault === true) {
+            defaultFavourite = state.favouritesData[i].items[j];
+          }
+          if (state.favouritesData[i].items[j].IsSelected === true) {
+            selectedFavourite = state.favouritesData[i].items[j];
+          }
         }
       }
-    }
 
-    // select the favourite
-    if (selectedFavourite) {
-      // select selected favourite
-      selectedFavourite.isSelected = true;
-      state.favouritesSelectedItemData = selectedFavourite;
-    } else if (defaultFavourite) {
-      // select default favourite
-      defaultFavourite.isSelected = true;
-      state.favouritesSelectedItemData = defaultFavourite;
-    } else if (firstFavourite) {
-      // select first found favourite
-      firstFavourite.isSelected = true;
-      state.favouritesSelectedItemData = firstFavourite;
+      // select the favourite
+      if (selectedFavourite) {
+        // select selected favourite
+        selectedFavourite.isSelected = true;
+        state.favouritesSelectedItemData = selectedFavourite;
+      } else if (defaultFavourite) {
+        // select default favourite
+        defaultFavourite.isSelected = true;
+        state.favouritesSelectedItemData = defaultFavourite;
+      } else if (firstFavourite) {
+        // select first found favourite
+        firstFavourite.isSelected = true;
+        state.favouritesSelectedItemData = firstFavourite;
+      }
     }
   },
   setDefaultFavouriteItem: function (state, id) {

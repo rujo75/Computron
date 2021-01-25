@@ -175,4 +175,11 @@ body {
 .dx-toolbar-text-auto-hide .dx-button .dx-icon {
   color: #1ca8dd;
 }
+
+.toolbar-label,
+.toolbar-label > b {
+  font-size: 18px;
+  margin-left: 2px;
+  margin-right: 5px;
+}
 </style>
